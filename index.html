@@ -71,23 +71,31 @@
     position: relative;
     width: min(1100px, 96vw);
     margin: 0 auto;
-    aspect-ratio: 16/9;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,.6);
+    background: #0d0805;
   }
-  #stage-shelf .bg {
+  .shelf-scene {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  .shelf-scene .bg {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
+    object-position: center 55%;
   }
   /* —— Bücherwand spines (data-driven) —— */
   .shelf-rows {
     position: absolute;
-    left: 16%;
+    left: 15%;
     right: 10%;
-    bottom: 26%;
-    height: 38%;
+    bottom: 20.5%;
+    height: 42%;
     z-index: 4;
     display: flex;
     flex-direction: column-reverse; /* bottom shelf first */
@@ -109,10 +117,10 @@
     height: 100%;
     min-height: 140px;
     pointer-events: auto;
-    padding: 0 2px 2px;
+    padding: 0 2px 0;
   }
   .spine {
-    --spine-w: clamp(34px, 4.2vw, 52px);
+    --spine-w: clamp(36px, 4.4vw, 54px);
     width: var(--spine-w);
     height: 100%;
     position: relative;
@@ -129,7 +137,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 8% 0 6%;
+    padding: 5% 0 1%;
     overflow: hidden;
     border: 1px solid rgba(0,0,0,.35);
     border-left-color: rgba(255,220,150,.12);
@@ -170,14 +178,27 @@
     transform: translateY(-6px) translateX(4px);
   }
   .spine.soon {
-    opacity: .72;
-    filter: grayscale(.15) brightness(.9);
+    opacity: .88;
+    filter: none;
     cursor: default;
+  }
+  .spine.soon::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,.28);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .spine.soon .spine-emblem { z-index: 3; }
+  .spine.soon .spine-titles { opacity: .72; }
+  .spine.soon .spine-emblem {
+    opacity: 1;
+    filter: saturate(1.05) brightness(1.05);
   }
   .spine-emblem {
     position: relative;
     z-index: 2;
-    width: 68%;
+    width: 58%;
     aspect-ratio: 1;
     border-radius: 50%;
     border: 1.5px solid #c9a227;
@@ -189,7 +210,7 @@
       radial-gradient(circle at 35% 30%, #3a2818, #1a100a 70%);
     overflow: hidden;
     flex-shrink: 0;
-    margin-bottom: 10%;
+    margin-bottom: 6%;
   }
   .spine-emblem img {
     width: 100%; height: 100%;
@@ -211,25 +232,55 @@
     border: 1px solid rgba(201,162,39,.28);
     box-shadow: inset 0 0 4px rgba(0,0,0,.5);
   }
-  .spine-title {
+  .spine-titles {
     position: relative;
     z-index: 2;
-    flex: 1;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3px;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+  .spine-title,
+  .spine-subtitle {
     writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
     color: #f0e0a8;
-    font-size: clamp(.62rem, 1.25vw, .85rem);
-    letter-spacing: .12em;
     font-weight: 600;
     text-shadow: 0 1px 2px rgba(0,0,0,.85);
-    line-height: 1.1;
     text-align: center;
-    max-height: 100%;
-    overflow: hidden;
-    padding: 0 1px;
+    white-space: nowrap;
+    overflow: visible;
+    line-height: 1;
+    padding: 0;
   }
-  .spine.soon .spine-title { color: #d4b86a; opacity: .85; }
+  .spine-title {
+    font-size: clamp(.72rem, 1.45vw, .95rem);
+    letter-spacing: .18em;
+  }
+  .spine-subtitle {
+    font-size: clamp(.36rem, .72vw, .5rem);
+    letter-spacing: .06em;
+    font-weight: 500;
+    color: #e8d08acc;
+    opacity: .92;
+    max-height: 100%;
+  }
+  .spine.soon .spine-title { color: #d4b86a; opacity: .9; }
+  .spine.soon .spine-subtitle { color: #c9a22799; }
+  .spine.has-subtitle { --spine-w: clamp(40px, 4.8vw, 58px); }
+  .spine .spine-emblem img,
+  .spine .spine-emblem object {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .spine-accent {
     /* tiny gold line under emblem */
     position: relative; z-index: 2;
@@ -587,26 +638,72 @@
       overflow-wrap: anywhere;
     }
     header p { font-size: .78rem; }
-    #stage-shelf, #stage-table { aspect-ratio: 4/3; width: 96vw; min-height: 0; }
+    #stage-shelf {
+      width: 96vw;
+      aspect-ratio: auto;
+      height: auto;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      border-radius: 8px;
+    }
+    #stage-table { aspect-ratio: 4/3; width: 96vw; min-height: 0; }
     .stage { min-height: 0; }
+    .shelf-scene {
+      aspect-ratio: 5/6;
+      width: 100%;
+      border-radius: 8px 8px 0 0;
+      flex-shrink: 0;
+    }
+    .shelf-scene .bg {
+      object-fit: cover;
+      object-position: center 48%;
+    }
+    /* Folio below shelf image on mobile */
+    #stage-shelf .folio-keeper {
+      position: static;
+      width: 100%;
+      max-width: none;
+      left: auto; top: auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: .65rem;
+      padding: .7rem .75rem .85rem;
+      background: linear-gradient(180deg, #1a100a, #0d0805);
+      border-top: 1px solid #5a3a2244;
+      border-radius: 0 0 8px 8px;
+      box-sizing: border-box;
+      pointer-events: auto;
+      z-index: 6;
+    }
+    #stage-shelf .folio-medallion { width: 56px; flex-shrink: 0; }
+    #stage-shelf .folio-speech {
+      flex: 1;
+      max-width: none;
+      font-size: .68rem;
+      padding: .4rem .5rem;
+    }
     .shelf-rows {
-      left: 6%;
-      right: 4%;
-      bottom: 20%;
-      height: 42%;
+      left: 8%;
+      right: 5%;
+      bottom: 18%;
+      height: 52%;
       top: auto;
       gap: 3%;
       overflow-x: auto;
     }
     .spine-row {
-      min-height: 150px;
+      min-height: 180px;
       height: 100%;
-      gap: 5px;
+      gap: 6px;
     }
     .spine {
-      --spine-w: clamp(38px, 10vw, 52px);
+      --spine-w: clamp(44px, 11.5vw, 58px);
     }
-    .spine-title { font-size: .68rem; letter-spacing: .08em; }
+    .spine.has-subtitle { --spine-w: clamp(50px, 13vw, 66px); }
+    .spine-title { font-size: .82rem; letter-spacing: .14em; }
+    .spine-subtitle { font-size: .5rem; letter-spacing: .08em; }
     #book-on-table {
       width: min(78vw, 72%);
       height: auto;
@@ -688,7 +785,10 @@
   </div>
 
   <div class="stage" id="stage-shelf">
-    <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand"/>
+    <div class="shelf-scene">
+      <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand"/>
+      <div class="shelf-rows" id="shelf-rows" aria-label="Bücherwand"></div>
+    </div>
     <aside class="folio-keeper" aria-label="Folio">
       <div class="folio-medallion">
         <img src="assets/folio_portrait.jpg" alt="Folio"/>
@@ -698,7 +798,6 @@
         <button type="button" class="folio-speak-btn" id="btn-folio-gruss" title="Folio sprechen lassen" aria-label="Folio sprechen lassen">🔊</button>
       </div>
     </aside>
-    <div class="shelf-rows" id="shelf-rows" aria-label="Bücherwand"></div>
   </div>
 
   <div class="stage" id="stage-table">
@@ -1690,7 +1789,8 @@ He is not one of them. He is the one who keeps them.`
 const VOLUMES = [
   {
     id: "lilli",
-    title: { de: "LILLI · Die Klinge aus dem Norden", en: "LILLI · The Blade from the North" },
+    title: { de: "LILLI", en: "LILLI" },
+    subtitle: { de: "Die Klinge aus dem Norden", en: "The Blade from the North" },
     color: "linear-gradient(90deg, #2a1810 0%, #5a3a22 22%, #3a2418 45%, #1a100a 70%, #0d0805 100%)",
     status: "ready",
     href: "table",
@@ -1699,26 +1799,29 @@ const VOLUMES = [
   {
     id: "maya",
     title: { de: "MAYA", en: "MAYA" },
+    subtitle: null,
     color: "linear-gradient(90deg, #1a1410 0%, #3a2a20 30%, #241810 60%, #120c08 100%)",
     status: "soon",
     href: null,
-    emblem: null
+    emblem: "assets/emblem_maya.svg"
   },
   {
     id: "piri",
     title: { de: "PIRI", en: "PIRI" },
+    subtitle: null,
     color: "linear-gradient(90deg, #181210 0%, #342418 28%, #20140e 55%, #100a06 100%)",
     status: "soon",
     href: null,
-    emblem: null
+    emblem: "assets/emblem_piri.svg"
   },
   {
     id: "filli",
     title: { de: "FILLI", en: "FILLI" },
+    subtitle: null,
     color: "linear-gradient(90deg, #1c120e 0%, #3a281c 25%, #261810 58%, #120a08 100%)",
     status: "soon",
     href: null,
-    emblem: null
+    emblem: "assets/emblem_filli.svg"
   }
 ];
 const SPINES_PER_ROW = 14; // desktop; mobile uses fewer via CSS width
@@ -1744,12 +1847,14 @@ function renderSpines() {
       btn.dataset.id = vol.id;
       btn.style.background = vol.color;
       const title = (vol.title && vol.title[lang]) || vol.id;
+      const subtitle = vol.subtitle ? (vol.subtitle[lang] || vol.subtitle.de || "") : "";
       const tip = vol.status === "ready"
-        ? (u.openTitle || title)
+        ? (u.openTitle || (subtitle ? title + " · " + subtitle : title))
         : (u.soonFull || u.soon);
       btn.title = tip;
       btn.setAttribute("aria-label", tip);
       if (vol.status !== "ready") btn.setAttribute("aria-disabled", "true");
+      if (subtitle) btn.classList.add("has-subtitle");
 
       const emblem = document.createElement("div");
       emblem.className = "spine-emblem" + (vol.emblem ? "" : " empty");
@@ -1765,10 +1870,19 @@ function renderSpines() {
       accent.className = "spine-accent";
       btn.appendChild(accent);
 
+      const titles = document.createElement("div");
+      titles.className = "spine-titles";
       const t = document.createElement("span");
       t.className = "spine-title";
       t.textContent = title;
-      btn.appendChild(t);
+      titles.appendChild(t);
+      if (subtitle) {
+        const s = document.createElement("span");
+        s.className = "spine-subtitle";
+        s.textContent = subtitle;
+        titles.appendChild(s);
+      }
+      btn.appendChild(titles);
 
       if (vol.status === "ready") {
         btn.addEventListener("click", () => {

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="bg" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#3a2818"/><stop offset="100%" stop-color="#1a100a"/></radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffe9a0"/><stop offset="45%" stop-color="#c9a227"/><stop offset="100%" stop-color="#8a6a3a"/></linearGradient>
+    <linearGradient id="wing" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3c4"/><stop offset="55%" stop-color="#e8b84a"/><stop offset="100%" stop-color="#a67c1a"/></linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="62" fill="url(#bg)"/>
+  <!-- phoenix body -->
+  <ellipse cx="64" cy="72" rx="10" ry="18" fill="url(#gold)"/>
+  <!-- head -->
+  <circle cx="64" cy="48" r="8" fill="#ffe9a0"/>
+  <path d="M64 40 L68 32 L64 36 L60 32 Z" fill="#c9a227"/>
+  <!-- wings -->
+  <path d="M54 58 C28 48 18 70 30 88 C38 78 48 72 56 70 Z" fill="url(#wing)" opacity=".95"/>
+  <path d="M74 58 C100 48 110 70 98 88 C90 78 80 72 72 70 Z" fill="url(#wing)" opacity=".95"/>
+  <!-- tail flames -->
+  <path d="M58 88 C50 100 46 112 52 118 C56 108 60 100 64 94 C68 100 72 108 76 118 C82 112 78 100 70 88 Z" fill="url(#gold)"/>
+  <!-- glow -->
+  <circle cx="64" cy="64" r="48" fill="none" stroke="#c9a227" stroke-width="1.5" opacity=".35"/>
+</svg>

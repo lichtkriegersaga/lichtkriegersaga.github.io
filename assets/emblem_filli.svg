@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="bg" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#1e2a18"/><stop offset="100%" stop-color="#0c140a"/></radialGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b6e87a"/>
+      <stop offset="40%" stop-color="#4a9a3a"/>
+      <stop offset="100%" stop-color="#1e5a28"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="62" fill="url(#bg)"/>
+  <!-- stem -->
+  <path d="M64 108 C62 90 60 70 64 40" fill="none" stroke="#2a4a20" stroke-width="3" stroke-linecap="round"/>
+  <!-- leaf -->
+  <path d="M64 38 C88 42 108 62 96 86 C84 104 64 98 64 98 C64 98 44 104 32 86 C20 62 40 42 64 38 Z" fill="url(#leaf)"/>
+  <!-- vein -->
+  <path d="M64 46 C64 60 64 78 64 96" fill="none" stroke="#d8f0a8" stroke-width="1.6" opacity=".7"/>
+  <path d="M64 58 C74 62 82 70 86 78" fill="none" stroke="#d8f0a8" stroke-width="1.2" opacity=".55"/>
+  <path d="M64 58 C54 62 46 70 42 78" fill="none" stroke="#d8f0a8" stroke-width="1.2" opacity=".55"/>
+  <path d="M64 74 C72 78 78 84 80 90" fill="none" stroke="#d8f0a8" stroke-width="1" opacity=".45"/>
+  <path d="M64 74 C56 78 50 84 48 90" fill="none" stroke="#d8f0a8" stroke-width="1" opacity=".45"/>
+  <circle cx="64" cy="64" r="48" fill="none" stroke="#6aaa4a" stroke-width="1.5" opacity=".4"/>
+</svg>

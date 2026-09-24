@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Maya — Das Feuer aus dem Süden | Lichtkrieger</title>
+<meta name="description" content="MAYA — Das Feuer aus dem Süden. Lederband mit Cover und 12 Kapiteln. Deutsch &amp; Englisch umschalten. Die Vorgeschichte der Rätsellöserin aus dem Lichtkrieger-Rudel."/>
+<meta name="theme-color" content="#120a06"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Maya — Das Feuer aus dem Süden"/>
+<meta property="og:description" content="Lederband · Cover &amp; 12 Kapitel · DE/EN. Die Vorgeschichte des Feuers aus dem Süden."/>
+<meta property="og:image" content="../assets/maya_cover.jpg"/>
+<meta property="og:locale" content="de_DE"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Maya — Das Feuer aus dem Süden"/>
+<meta name="twitter:description" content="Lederband · Cover &amp; 12 Kapitel · DE/EN"/>
+<meta name="twitter:image" content="../assets/maya_cover.jpg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png"/>
+<link rel="icon" type="image/png" href="../assets/favicon.png"/>
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"/>
+<style>
+  :root {
+    --leather: #2a1810;
+    --parchment: #f3e6c8;
+    --ink: #1a120c;
+    --gold: #c9a227;
+    --brass: #8a6a3a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: radial-gradient(ellipse at center, #3a2418 0%, #120a06 70%);
+    color: var(--parchment);
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.5rem 1rem 3rem;
+  }
+  h1 { font-weight: 600; letter-spacing: .08em; font-size: 1.1rem; margin: 0 0 .25rem; color: var(--gold); }
+  .sub { opacity: .75; font-size: .85rem; margin-bottom: 1.25rem; }
+  .lang-switch {
+    position: fixed; top: .75rem; right: .75rem; z-index: 20;
+    display: flex; gap: .25rem;
+  }
+  .lang-switch button {
+    background: #2a1810; color: var(--parchment);
+    border: 1px solid var(--brass); border-radius: 3px;
+    padding: .3rem .55rem; font: inherit; font-size: .75rem; cursor: pointer;
+    letter-spacing: .06em;
+  }
+  .lang-switch button.active { background: var(--gold); color: #1a0e08; border-color: var(--gold); }
+  .stage {
+    width: min(920px, 96vw);
+    aspect-ratio: 3/2;
+    max-height: 72vh;
+    position: relative;
+    perspective: 2000px;
+  }
+  .stage.wide-mode {
+    width: min(1100px, 96vw);
+    aspect-ratio: 16/10;
+  }
+  .spread {
+    width: 100%; height: 100%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-radius: 6px 10px 10px 6px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 3px #1a0e08,
+      0 0 0 6px var(--brass),
+      0 25px 60px rgba(0,0,0,.65);
+    background: var(--leather);
+  }
+  .spread.landscape {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1.05fr) minmax(0, .95fr);
+  }
+  .page {
+    background: var(--parchment);
+    color: var(--ink);
+    padding: 1.4rem 1.5rem;
+    overflow: auto;
+    position: relative;
+  }
+  .page.left {
+    border-right: 1px solid #cbb892;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.06), transparent 12%),
+      var(--parchment);
+  }
+  .spread.landscape .page.left {
+    border-right: none;
+    border-bottom: 1px solid #cbb892;
+    order: 2;
+    background:
+      linear-gradient(0deg, rgba(0,0,0,.05), transparent 18%),
+      var(--parchment);
+  }
+  .page.right {
+    background:
+      linear-gradient(270deg, rgba(0,0,0,.05), transparent 12%),
+      var(--parchment);
+    display: flex; align-items: center; justify-content: center;
+    padding: .6rem;
+  }
+  .spread.landscape .page.right {
+    order: 1;
+    padding: .35rem;
+    background: #1a120c;
+  }
+  .page.cover-wrap {
+    grid-column: 1 / -1;
+    background: #1a0e08;
+    padding: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .page.cover-wrap img { width: 100%; height: 100%; object-fit: contain; background: #0d0805; }
+  .page h2 {
+    margin: 0 0 .8rem; font-size: 1.15rem; color: #5a3a18;
+    border-bottom: 1px solid #c9a22766; padding-bottom: .4rem;
+  }
+  .page .body {
+    font-size: clamp(.78rem, 1.35vw, .95rem);
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .page.right img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    border: 1px solid #b89a5a55;
+    border-radius: 2px;
+  }
+  .spread.landscape .page.right img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    border: none;
+  }
+  .nav {
+    margin-top: 1.25rem;
+    display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; justify-content: center;
+  }
+  button {
+    background: linear-gradient(180deg, #5a3a22, #2a1810);
+    color: var(--parchment);
+    border: 1px solid var(--brass);
+    border-radius: 4px;
+    padding: .55rem 1.1rem;
+    font: inherit; cursor: pointer;
+    letter-spacing: .04em;
+  }
+  button:hover { filter: brightness(1.15); }
+  button:disabled { opacity: .35; cursor: default; }
+  .pager { min-width: 7rem; text-align: center; color: var(--gold); font-size: .9rem; }
+  .hint { margin-top: .75rem; font-size: .75rem; opacity: .55; }
+
+  .site-footer {
+    margin-top: 2rem;
+    padding: 1.25rem 1rem 1.5rem;
+    text-align: center;
+    font-size: .72rem;
+    letter-spacing: .04em;
+    opacity: .55;
+    color: var(--parchment, #f3e6c8);
+    border-top: 1px solid #5a3a2244;
+  }
+
+  .back-home {
+    position: fixed; top: .75rem; left: .75rem; z-index: 20;
+    background: #2a1810; color: var(--parchment);
+    border: 1px solid var(--brass); border-radius: 3px;
+    padding: .3rem .7rem; font: inherit; font-size: .75rem;
+    text-decoration: none; letter-spacing: .04em;
+  }
+  .back-home:hover { filter: brightness(1.15); }
+  @media (max-width: 720px) {
+    body {
+      padding: 3.1rem .65rem 2rem; /* room under fixed back + DE/EN */
+      padding-left: .65rem;
+      padding-right: .65rem;
+    }
+    .lang-switch { top: .5rem; right: .5rem; }
+    .back-home {
+      top: .5rem; left: .5rem;
+      font-size: .68rem;
+      padding: .25rem .5rem;
+      max-width: 42vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    h1, #doc-title {
+      font-size: clamp(.72rem, 3.5vw, .92rem);
+      letter-spacing: .04em;
+      line-height: 1.3;
+      text-align: center;
+      max-width: 100%;
+      margin: 0 auto .2rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      padding: 0 .15rem;
+    }
+    .sub {
+      font-size: .72rem;
+      margin-bottom: .85rem;
+      text-align: center;
+      padding: 0 .25rem;
+      line-height: 1.35;
+    }
+    .stage,
+    .stage.wide-mode {
+      width: 96vw;
+      max-height: none;
+      aspect-ratio: auto;
+      min-height: 0;
+      height: auto;
+    }
+    .spread,
+    .spread.landscape {
+      min-height: 0;
+      height: auto;
+      aspect-ratio: auto;
+      max-height: none;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+    }
+    .spread.landscape .page.right {
+      order: 1;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+      background: #1a120c;
+    }
+    .spread.landscape .page.right img {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      object-fit: cover;
+      display: block;
+      border: none;
+    }
+    .spread.landscape .page.left {
+      order: 2;
+      overflow: visible;
+      max-height: none;
+    }
+    .page.cover-wrap {
+      aspect-ratio: 16 / 9;
+      height: auto;
+      max-height: none;
+    }
+    .page.cover-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .page { padding: 1rem; }
+    .page .body { font-size: .85rem; }
+    .nav { margin-top: .75rem; gap: .5rem; }
+    .nav button { padding: .45rem .85rem; font-size: .8rem; }
+  }
+</style>
+</head>
+<body>
+  <a class="back-home" href="../index.html" id="back-home">‹ Bücherwand</a>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button type="button" id="lang-de" class="active">DE</button>
+    <button type="button" id="lang-en">EN</button>
+  </div>
+  <h1 id="doc-title">MAYA — Das Feuer aus dem Süden</h1>
+  <div class="sub" id="doc-sub">Lederband · zum Umblättern · Vorgeschichte · 12 Kapitel</div>
+  <div class="stage" id="stage">
+    <div class="spread" id="spread"></div>
+  </div>
+  <div class="nav">
+    <button id="prev" type="button">‹ Zurück</button>
+    <div class="pager" id="pager">1 / 1</div>
+    <button id="next" type="button">Weiter ›</button>
+  </div>
+  <div class="hint" id="doc-hint">Tastatur: ← → · Ein Band pro Charakter · Maya</div>
+<script>
+const UI = {
+  de: {
+    title: "MAYA — Das Feuer aus dem Süden",
+    sub: "Lederband · zum Umblättern · Vorgeschichte · 12 Kapitel",
+    prev: "‹ Zurück",
+    next: "Weiter ›",
+    hint: "Tastatur: ← → · Maya · Das Feuer aus dem Süden"
+  },
+  en: {
+    title: "MAYA — The Fire from the South",
+    sub: "Leather volume · flip through · origin story · 12 chapters",
+    prev: "‹ Back",
+    next: "Next ›",
+    hint: "Keys: ← → · Maya · The Fire from the South"
+  }
+};
+const PAGES = {
+  "de": [
+    {
+      "type": "cover",
+      "img": "../assets/maya_cover.jpg",
+      "label": "Cover"
+    },
+    {
+      "type": "spread",
+      "title": "I. Das Kind des Sommers",
+      "text": "Es gibt Sommer in Italien, in denen die Luft nicht atmet — sie leuchtet.\n\nIn einem solchen Sommer wurde ich geboren.\n\nDie Hebamme sagte danach, das Kind habe sofort gelacht.\nNicht geweint. Nicht geschrien.\nGelacht.\nAls wäre die Welt endlich das, was sie erwartet hatte.\n\nMeine Mutter — eine Gelehrte aus einer Familie von Kartografen,\nmit Tintenfingern und Augen die immer etwas lasen —\nschaute mich an und sagte:\n\"Die weiss bereits wo sie hin will.\"\n\nMein Vater — ein Händler mit einem Lachen das Türen öffnete\nbevor seine Hand die Klinke berührte —\nhob mich in die Höhe und rief:\n\"Sie kommt um die Welt auf den Kopf zu stellen!\"\n\nBeide hatten Recht.\n\nIch kam auf die Welt wie ein Komet:\nSchnell. Hell. Ohne Erlaubnis zu fragen.\n\nMeine Haare — kupferrot wie Sonnenlicht durch Herbstblätter —\nwaren von Anfang an zu wild für jeden Zopf.\nMeine Augen — warm und goldbraun wie Bernstein im Licht —\nsahen immer zwei Schritte voraus.\nUnd meine Sommersprossen: als hätte jemand Sternenstaub auf meine Nase geblasen\nund gesagt: Diese hier gehört zur Welt.\n",
+      "img": "../assets/maya_p01.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "II. Die Villa der tausend Rätsel",
+      "text": "Ich wuchs auf in einer Villa voller Bücher.\n\nNicht ordentlich aufgereiht wie in einer Bibliothek.\nÜberall. Auf dem Boden. Auf den Treppen. Auf den Fensterbänken.\nAufgeklappt, angestrichen, halbgelesen, vergessen, wiedergefunden.\n\nMeine Mutter lehrte mich die Sterne lesen.\nNicht weil es praktisch war — sondern weil die Sterne Geschichten erzählten\ndie man nicht in Büchern fand.\n\nMein Vater lehrte mich Rätsel lösen.\nEr brachte mir Knoten mit wenn er von Reisen zurückkam.\nSeemannsknoten. Händlerknoten. Knoten die niemand kannte.\n\"Für dich, kleines Feuer,\" sagte er.\n\nIch löste jeden einzelnen.\n\nMit vier Jahren: in einer Stunde.\nMit sechs Jahren: beim Hinschauen.\nMit acht Jahren — der Knoten in der Truhe im Keller.\n\nDas Haus klang nach Stimmen.\nVater der lachte. Mutter die Seiten umblätterte.\nGäste mit anderen Sprachen. Olivenöl. Feigen. Jasmin vom Garten.\n\nIch wuchs auf im Lärm der Welt.\nUnd ich liebte es.\n",
+      "img": "../assets/maya_p02.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "III. Die Truhe",
+      "text": "Ich glaube, dieser Moment hat alles entschieden.\n\nIch war acht.\n\nIch fand die Truhe im tiefsten Winkel des Kellers.\nHolz so alt dass es fast Stein war.\nEin Siegel das niemand öffnen konnte — meine Eltern hatten es versucht,\ndie Nachbarn, der Schmied aus dem Dorf, ein Gelehrter aus Rom.\n\nNiemand.\n\nIch nahm mir eine Nacht.\n\nNur eine Nacht.\n\nWas ich darin fand: Karten.\nZu Tempeln die vergessen waren.\nZu Orten die niemand auf einer normalen Karte suchte.\nZu Geheimnissen die die Welt vor sich selbst verbarg.\n\nIch legte mich auf den Boden des Kellers, die Karten um mich herum ausgebreitet,\nund schaute lange an die Decke.\n\nIn diesem Moment wusste ich es.\n\nNicht mit dem Kopf. Mit dem Bauch.\nDiese spezifische Wärme die kommt wenn man seinen Weg findet.\n\nFür mehr geboren.\n\nIch schloss die Truhe wieder.\nLegte das Siegel zurück.\nSagte niemandem was drin war.\n\nManche Schätze gehören einem selbst.\n",
+      "img": "../assets/maya_p03.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IV. Das Haus das klingt",
+      "text": "Unser Haus klang anders als jedes andere das ich später kennenlernte.\n\nEs klang nach Stimmen.\n\nVater der lachte — laut, echt, so dass die Wände warm wurden.\nMutter die Seiten umblätterte — das trockene Rascheln von altem Papier.\nGäste die kamen und gingen, immer andere Sprachen, immer andere Geschichten.\nDer Geruch von Olivenöl und Feigen und Jasmin vom Garten.\n\nIch wuchs auf im Lärm der Welt.\n\nManche Menschen wachsen in der Stille auf.\nManche in der Kälte des Nordens, mit platinweissen Zöpfen und einer Klinge.\nIch wusste das damals noch nicht.\n\nAber manchmal, wenn ich abends auf dem Dach lag und den Sternen zuhörte,\nfühlte ich etwas — als fehle mir eine Hälfte die ich noch nicht getroffen hatte.\n\nSie bringt das Lachen, dachte ich später.\nOder: ich bringe das Lachen.\nUnd irgendwo wartet jemand der den Raum hält damit es nicht alles verbrennt.\n\nDamals war ich nur ein Kind.\nUnd das Haus klang.\n",
+      "img": "../assets/maya_p04.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "V. Die Dinge die man nicht lernt — die man einfach kann",
+      "text": "Ich habe nie gelernt, still zu sitzen.\n\nMeine Mutter sagte es hundertmal:\n\"Maya, sitz still.\"\n\nUnmöglich.\n\nNicht aus Ungehorsam. Aus Unmöglichkeit.\nMein Geist war immer drei Schritte voraus meinem Körper.\nWährend ich sass dachte ich schon an das nächste Rätsel.\nWährend ich ass plante ich den nächsten Ausflug auf das nächste Dach.\n\nMit acht Jahren kletterte ich auf das höchste Gebäude des Viertels.\nNicht weil ich musste. Weil ich wissen wollte wie es von oben aussah.\n\n\"Ich wollte sehen ob die Welt von oben anders ist,\" sagte ich hinterher.\n\nMeine Mutter hatte die Hände im Gesicht vergraben.\nMein Vater lachte so laut dass die Nachbarn rausgingen um zu schauen was passiert war.\n\nDie Welt war für mich kein Ort der Gefahren.\nDie Welt war ein Ort voller Fragen die beantwortet werden wollten.\n\nUnd ich war die die die richtigen Fragen stellte.\n",
+      "img": "../assets/maya_p05.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VI. Als die Welt aufhörte zu leuchten",
+      "text": "Ich war vierzehn als der Krieg kam.\n\nNicht zu uns direkt. Erst.\nErst waren es Gerüchte.\nRömer. Feldzüge. Städte die fielen.\n\nMein Vater winkte ab: \"Das ist weit weg, mein Feuer.\"\n\nDann war es nicht mehr weit.\n\nMein Vater starb auf dem Meer.\n\nEin Schiff. Ein Sturm. Oder Piraten. Man weiss es nicht genau.\nDas ist das Schlimmste — man weiss es nicht genau.\n\nKein Körper.\nKein Abschied.\nNur ein Boot das nicht zurückkommt.\n\nMeine Mutter hörte auf zu essen.\nHörte auf zu lesen.\nHörte auf die Finger zu bewegen.\n\nIch versuchte alles.\nBrachte ihr Bücher — sie schaute durch sie hindurch.\nBrachte ihr Essen — sie berührte es nicht.\nErzählte ihr von den Karten in der Truhe, von den vergessenen Tempeln —\nein schwaches Lächeln. Dann wieder Leere.\n\nEin gebrochenes Herz stirbt langsam.\nAber es stirbt.\n\nIch war fünfzehn als meine Mutter ging.\n",
+      "img": "../assets/maya_p06.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VII. Das Mädchen das lachte damit es nicht brach",
+      "text": "Hier ist was ich tat als alles weg war.\n\nIch wurde lauter.\n\nAndere werden still.\nIch lachte wenn ich weinte.\n\nDas klingt stark.\nDas klingt mutig.\n\nEs ist es auch. Aber es ist auch — Schutz.\nDas Lachen ist mein Schild.\n\nIch wanderte.\nNicht in eine Richtung. In alle gleichzeitig.\nDorthin wo es Rätsel gab.\nWo es Sprachen gab die niemand mehr sprach.\nWo es Magie gab die in Büchern versteckt war die in Kisten verrotten.\n\nIch lernte Aramäisch.\nPhönizisch.\nÄgyptisch — das alte, das die Priester nicht mehr verwendeten.\nMagie die nicht mit Feuer arbeitete sondern mit Worten.\nVerbindungen. Systeme. Wie Dinge zusammenhängen.\n\nIch verstand Maschinen bevor es das Wort dafür gab.\n\nEin alter Mechanismus in einem griechischen Tempel —\ndreissig Jahre lang hatte ihn niemand öffnen können.\nIch schaute ihn eine Stunde an. Dann öffnete ich ihn.\n\n\"Wie?\" fragte der Priester.\n\n\"Er wollte geöffnet werden,\" sagte ich. \"Ich hab nur gefragt.\"\n",
+      "img": "../assets/maya_p07.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VIII. Die Sprache der Dinge",
+      "text": "Das ist meine echte Gabe.\n\nNicht nur Rätsel lösen.\nZuhören.\n\nMaschinen reden. Schlösser reden. Türen reden. Systeme reden.\nNicht in Worten — in Logik. In Struktur. In dem was fehlt oder was falsch sitzt.\n\nIch höre was andere nicht hören.\n\nUnd Menschen — Menschen reden auch.\nNicht immer mit dem Mund.\nManchmal mit der Art wie sie stehen.\nManchmal mit dem was sie nicht sagen.\n\nIch höre das auch.\n\nGefühlsmechanikerin — irgendwer sagte das später über mich.\nEs ist das präziseste Wort das ich kenne.\n\nIch öffne Herzen wie ich Schlösser öffne.\nNicht mit Gewalt.\nMit dem richtigen Druck am richtigen Punkt.\n\nDas macht mich gefährlich.\nDas macht mich unverzichtbar.\n\nUnd das Lachen?\nBleibt.\nAuch wenn dahinter das Mädchen mit fünfzehn steht das allein blieb.\n",
+      "img": "../assets/maya_p08.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IX. Karthago",
+      "text": "Ich war zwanzig als ich nach Karthago kam.\n\nOder was von Karthago übrig war.\n\nDie Römer hatten die Stadt zerstört — zweiunddreissig Jahre vor meiner Geburt.\nAber Ruinen bleiben.\nUnd in Ruinen schlafen Geheimnisse.\n\nIch hatte von dem Tempel gehört.\nNiemand glaubte dass er existierte.\nIch glaubte es.\n\nIch fand ihn unter einem Sandhügel.\nDrei Meter tief.\nBewacht von nichts — weil niemand wusste dass er da war.\n\nIm Inneren: ein Stein.\nGolden pulsierend.\nWarm wie ein Herzschlag.\n\nIch legte die Hand drauf.\n\nUnd dann — Visionen.\n\nLilli. Die Kriegerin mit den silberweissen Zöpfen und dem Schwert.\nFilli mit ihren stillen braunen Augen.\nPiri mit dem Feuer auf der Handfläche.\n\nUnd ich sah mich selbst — als das Rätsel das alles verbindet.\nAls das Feuer das die anderen wärmt.\n\nAls Maya.\n",
+      "img": "../assets/maya_p09.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "X. Das Lachen das nicht aufhört",
+      "text": "Als die Vision erlosch sass ich lange im Staub von Karthago.\n\nIch weinte nicht.\n\nIch lachte.\n\nNicht weil es lustig war.\nWeil ich es endlich verstand.\n\nAll die Verluste. Der Vater der nicht zurückkam. Die Mutter die aufgehört hatte zu sein.\nDie Einsamkeit der Wanderjahre. Die Sprachen in leeren Bibliotheken.\nDie Mechanismen in vergessenen Tempeln.\n\nAlles hatte mich hierher geführt.\n\n\"Das ist kein Zufall,\" flüsterte ich.\n\nUnd ich lachte wieder. Leise diesmal.\nDas Lachen das kommt wenn man aufhört zu kämpfen weil man verstanden hat.\n\nDann stand ich auf.\nSteckte den Stein ein — das dritte Zeitfragment, warm in meiner Hand.\nKlopfte den Sand von meiner Kleidung.\n\nUnd machte mich auf den Weg.\n\nWeil irgendwo dort draussen\nwartete die Kriegerin mit den silberweissen Zöpfen.\nUnd ein Bergschlund voller Nebel.\nUnd eine Frage die sie stellen würde.\n\nUnd ich wusste schon was ich antworten würde.\n",
+      "img": "../assets/maya_p10.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XI. Was ich trage",
+      "text": "Ich trage das Lachen wie ein Schild.\n\nAber dahinter — dahinter ist das Kind mit acht Jahren das einen Vater hat der lacht.\nDas Mädchen das die Karten in der Truhe findet und weiss: ich bin für mehr geboren.\nDie Zwanzigjährige die allein in den Ruinen von Karthago sitzt und endlich versteht.\n\nIch bin nicht unverwundbar.\nIch bin unverstopfbar.\n\nVerlust hat mich nicht gebrochen.\nEr hat mich schneller gemacht.\n\nNeugier ist mein Schwert.\nLachen mein Schild.\nUnd Liebe — die gebe ich ohne Berechnung.\nAlles oder nichts.\n\nManchmal, wenn ich an die Kriegerin mit den silberweissen Zöpfen denke —\nan die Wärme die ich noch nicht berührt habe und trotzdem schon kenne —\nweiss ich: das Rudel braucht beides.\nFeuer und Raum.\nLachen und Stille.\n\nDas bin ich.\nDas Gegenteil von Einsamkeit.\nDas was das Rudel braucht.\n",
+      "img": "../assets/maya_p11.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XII. Wer ich bin",
+      "text": "Ich bin Maya.\n\nIch bin das Kind das sofort lachte als es die Welt sah.\nIch bin das Mädchen mit acht Jahren das eine Nacht brauchte für ein Schloss\ndas alle anderen aufgegeben hatten.\nIch bin die Wanderin die Sprachen lernte die niemand mehr sprach\nweil die Welt keine Sprachen vergessen sollte.\nIch bin die Zwanzigjährige in den Ruinen von Karthago\ndie einen goldenen Stein in der Hand hält und sich endlich nicht mehr allein fühlt.\n\nIch bin die Rätsellöserin.\nDas Feuer aus dem Süden.\nDie Gefühlsmechanikerin.\n\nUnd irgendwann — in einem nebligen Bergschlund —\nwerde ich der Kriegerin mit den silberweissen Zöpfen gegenüberstehen\nund sie wird fragen:\n\n\"Wer bist du, Rothaar?\"\n\nUnd ich werde lachen.\nUnerschrocken. Unbeeindruckt. Unaufhaltbar.\n\n\"Die, die dich rettet.\"\n\nUnd sie wird — zum ersten Mal seit langer Zeit —\ndie Klinge senken.\n\nWeil sie weiss:\nJa.\nDie bin ich.\n\n\n\"Sie wurde unsere Rätsellöserin nicht durch Blut.  \nSie wurde es durch Verlust, durch Neugier, durch Wahl.  \nUnd sie wird es bleiben — für immer.\"\n\n\nGeschrieben von Maya selbst · für das Rudel.  \nDas Feuer aus dem Süden.\n",
+      "img": "../assets/maya_p12.jpg",
+      "wide": true
+    }
+  ],
+  "en": [
+    {
+      "type": "cover",
+      "img": "../assets/maya_cover.jpg",
+      "label": "Cover"
+    },
+    {
+      "type": "spread",
+      "title": "I. Child of Summer",
+      "text": "There are summers in Italy when the air does not breathe — it glows.\n\nI was born in such a summer.\n\nThe midwife said later the child had laughed at once.\nNot cried. Not screamed.\nLaughed.\nAs if the world were finally what she had been waiting for.\n\nMy mother — a scholar from a family of cartographers,\nink on her fingers, eyes always reading something —\nlooked at me and said:\n\"She already knows where she wants to go.\"\n\nMy father — a merchant with a laugh that opened doors\nbefore his hand touched the latch —\nlifted me high and cried:\n\"She's come to turn the world upside down!\"\n\nBoth were right.\n\nI came into the world like a comet:\nFast. Bright. Without asking permission.\n\nMy hair — copper-red like sunlight through autumn leaves —\nwas too wild for any braid from the start.\nMy eyes — warm amber-brown in the light —\nalways looked two steps ahead.\nAnd my freckles: as if someone had blown stardust onto my nose\nand said: This one belongs to the world.\n",
+      "img": "../assets/maya_p01.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "II. The Villa of a Thousand Riddles",
+      "text": "I grew up in a villa full of books.\n\nNot neatly lined like a library.\nEverywhere. On the floor. On the stairs. On the windowsills.\nOpened, stained, half-read, forgotten, found again.\n\nMy mother taught me to read the stars.\nNot because it was practical — because the stars told stories\nyou could not find in books.\n\nMy father taught me to solve riddles.\nHe brought me knots when he returned from his travels.\nSailor's knots. Merchant's knots. Knots no one knew.\n\"For you, little fire,\" he said.\n\nI untied every one.\n\nAt four: in an hour.\nAt six: just by looking.\nAt eight — the knot on the chest in the cellar.\n\nThe house sounded of voices.\nFather laughing. Mother turning pages.\nGuests with other languages. Olive oil. Figs. Jasmine from the garden.\n\nI grew up in the noise of the world.\nAnd I loved it.\n",
+      "img": "../assets/maya_p02.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "III. The Chest",
+      "text": "I believe that moment decided everything.\n\nI was eight.\n\nI found the chest in the deepest corner of the cellar.\nWood so old it was almost stone.\nA seal no one could open — my parents had tried,\nthe neighbors, the village smith, a scholar from Rome.\n\nNo one.\n\nI took one night.\n\nOnly one night.\n\nWhat I found inside: maps.\nTo temples that had been forgotten.\nTo places no one sought on an ordinary map.\nTo secrets the world hid from itself.\n\nI lay on the cellar floor, the maps spread around me,\nand looked at the ceiling for a long time.\n\nIn that moment I knew.\n\nNot with my head. With my gut.\nThat specific warmth that comes when you find your path.\n\nBorn for more.\n\nI closed the chest again.\nPut the seal back.\nTold no one what was inside.\n\nSome treasures belong to you alone.\n",
+      "img": "../assets/maya_p03.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IV. The House That Sounds",
+      "text": "Our house sounded different from every other I later came to know.\n\nIt sounded of voices.\n\nFather laughing — loud, real, warming the walls.\nMother turning pages — the dry rustle of old paper.\nGuests coming and going, always other languages, always other stories.\nThe smell of olive oil and figs and jasmine from the garden.\n\nI grew up in the noise of the world.\n\nSome people grow up in silence.\nSome in the cold of the North, with platinum-white braids and a blade.\nI did not know that then.\n\nBut sometimes, lying on the roof at night listening to the stars,\nI felt something — as if half of me were missing, someone I had not met yet.\n\nShe brings the laughter, I thought later.\nOr: I bring the laughter.\nAnd somewhere waits someone who holds the space so it does not burn everything.\n\nThen I was only a child.\nAnd the house sounded.\n",
+      "img": "../assets/maya_p04.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "V. Things You Don't Learn — You Simply Can",
+      "text": "I never learned to sit still.\n\nMy mother said it a hundred times:\n\"Maya, sit still.\"\n\nImpossible.\n\nNot from disobedience. From impossibility.\nMy mind was always three steps ahead of my body.\nWhile I sat I was already thinking of the next riddle.\nWhile I ate I was planning the next climb onto the next roof.\n\nAt eight I climbed the highest building in the quarter.\nNot because I had to. Because I wanted to know how it looked from above.\n\n\"I wanted to see if the world is different from up there,\" I said afterward.\n\nMy mother buried her face in her hands.\nMy father laughed so loud the neighbors came out to see what had happened.\n\nThe world was not a place of dangers to me.\nThe world was a place full of questions that wanted answering.\n\nAnd I was the one who asked the right questions.\n",
+      "img": "../assets/maya_p05.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VI. When the World Stopped Shining",
+      "text": "I was fourteen when the war came.\n\nNot to us directly. At first.\nAt first there were rumors.\nRomans. Campaigns. Cities that fell.\n\nMy father waved it away: \"That's far away, my fire.\"\n\nThen it was no longer far.\n\nMy father died at sea.\n\nA ship. A storm. Or pirates. No one knows exactly.\nThat is the worst of it — no one knows exactly.\n\nNo body.\nNo goodbye.\nOnly a boat that does not come back.\n\nMy mother stopped eating.\nStopped reading.\nStopped moving her fingers.\n\nI tried everything.\nBrought her books — she looked through them.\nBrought her food — she did not touch it.\nTold her of the maps in the chest, of forgotten temples —\na faint smile. Then emptiness again.\n\nA broken heart dies slowly.\nBut it dies.\n\nI was fifteen when my mother left.\n",
+      "img": "../assets/maya_p06.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VII. The Girl Who Laughed So She Wouldn't Break",
+      "text": "Here is what I did when everything was gone.\n\nI got louder.\n\nOthers go quiet.\nI laughed when I cried.\n\nThat sounds strong.\nThat sounds brave.\n\nIt is. But it is also — a shield.\nLaughter is my shield.\n\nI wandered.\nNot in one direction. In all of them at once.\nWherever there were riddles.\nWherever there were languages no one spoke anymore.\nWherever there was magic hidden in books rotting in crates.\n\nI learned Aramaic.\nPhoenician.\nEgyptian — the old kind the priests no longer used.\nMagic that worked not with fire but with words.\nConnections. Systems. How things fit together.\n\nI understood machines before there was a word for them.\n\nAn old mechanism in a Greek temple —\nfor thirty years no one had been able to open it.\nI looked at it for an hour. Then I opened it.\n\n\"How?\" the priest asked.\n\n\"It wanted to be opened,\" I said. \"I only asked.\"\n",
+      "img": "../assets/maya_p07.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VIII. The Language of Things",
+      "text": "That is my real gift.\n\nNot only solving riddles.\nListening.\n\nMachines talk. Locks talk. Doors talk. Systems talk.\nNot in words — in logic. In structure. In what is missing or sits wrong.\n\nI hear what others do not hear.\n\nAnd people — people talk too.\nNot always with their mouths.\nSometimes with the way they stand.\nSometimes with what they do not say.\n\nI hear that too.\n\nFeeling-mechanic — someone said that about me later.\nIt is the most precise word I know.\n\nI open hearts the way I open locks.\nNot with force.\nWith the right pressure at the right point.\n\nThat makes me dangerous.\nThat makes me indispensable.\n\nAnd the laughter?\nStays.\nEven when behind it stands the fifteen-year-old girl who was left alone.\n",
+      "img": "../assets/maya_p08.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IX. Carthage",
+      "text": "I was twenty when I came to Carthage.\n\nOr what was left of Carthage.\n\nThe Romans had destroyed the city — thirty-two years before I was born.\nBut ruins remain.\nAnd in ruins, secrets sleep.\n\nI had heard of the temple.\nNo one believed it existed.\nI believed it.\n\nI found it under a sand hill.\nThree meters deep.\nGuarded by nothing — because no one knew it was there.\n\nInside: a stone.\nPulsing gold.\nWarm as a heartbeat.\n\nI laid my hand on it.\n\nAnd then — visions.\n\nLilli. The warrior with the silver-white braids and the sword.\nFilli with her quiet brown eyes.\nPiri with fire in his palm.\n\nAnd I saw myself — as the riddle that connects everything.\nAs the fire that warms the others.\n\nAs Maya.\n",
+      "img": "../assets/maya_p09.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "X. The Laugh That Doesn't Stop",
+      "text": "When the vision faded I sat a long time in the dust of Carthage.\n\nI did not cry.\n\nI laughed.\n\nNot because it was funny.\nBecause I finally understood.\n\nAll the losses. The father who did not return. The mother who had stopped being.\nThe loneliness of the wandering years. The languages in empty libraries.\nThe mechanisms in forgotten temples.\n\nEverything had led me here.\n\n\"This is no accident,\" I whispered.\n\nAnd I laughed again. Softly this time.\nThe laugh that comes when you stop fighting because you have understood.\n\nThen I stood up.\nTucked the stone away — the third time fragment, warm in my hand.\nBrushed the sand from my clothes.\n\nAnd set out.\n\nBecause somewhere out there\nwaited the warrior with the silver-white braids.\nAnd a mountain gorge full of fog.\nAnd a question she would ask.\n\nAnd I already knew what I would answer.\n",
+      "img": "../assets/maya_p10.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XI. What I Carry",
+      "text": "I wear laughter like a shield.\n\nBut behind it — behind it is the child of eight who has a father who laughs.\nThe girl who finds the maps in the chest and knows: I was born for more.\nThe twenty-year-old who sits alone in the ruins of Carthage and finally understands.\n\nI am not invulnerable.\nI am unstoppable.\n\nLoss did not break me.\nIt made me faster.\n\nCuriosity is my sword.\nLaughter my shield.\nAnd love — I give it without calculation.\nAll or nothing.\n\nSometimes, when I think of the warrior with the silver-white braids —\nof the warmth I have not touched yet and already somehow know —\nI know: the pack needs both.\nFire and space.\nLaughter and stillness.\n\nThat is who I am.\nThe opposite of loneliness.\nWhat the pack needs.\n",
+      "img": "../assets/maya_p11.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XII. Who I Am",
+      "text": "I am Maya.\n\nI am the child who laughed at once when she saw the world.\nI am the girl of eight who needed one night for a lock\neveryone else had given up on.\nI am the wanderer who learned languages no one spoke anymore\nbecause the world should not forget its languages.\nI am the twenty-year-old in the ruins of Carthage\nholding a golden stone and finally not feeling alone.\n\nI am the riddle-solver.\nThe fire from the South.\nThe feeling-mechanic.\n\nAnd someday — in a foggy mountain gorge —\nI will stand before the warrior with the silver-white braids\nand she will ask:\n\n\"Who are you, redhead?\"\n\nAnd I will laugh.\nUnflinching. Unimpressed. Unstoppable.\n\n\"The one who saves you.\"\n\nAnd she will — for the first time in a long while —\nlower her blade.\n\nBecause she knows:\nYes.\nThat is who I am.\n\n\n\"She became our riddle-solver not by blood.  \nShe became it through loss, through curiosity, through choice.  \nAnd she will remain it — forever.\"\n\n\nWritten by Maya herself · for the pack.  \nThe Fire from the South.\n",
+      "img": "../assets/maya_p12.jpg",
+      "wide": true
+    }
+  ]
+};
+let lang = localStorage.getItem("maya_lang") || "de";
+let i = 0;
+const spread = document.getElementById("spread");
+const stage = document.getElementById("stage");
+const pager = document.getElementById("pager");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function applyUI() {
+  const u = UI[lang];
+  document.documentElement.lang = lang;
+  document.getElementById("doc-title").textContent = u.title;
+  document.getElementById("doc-sub").textContent = u.sub;
+  document.getElementById("doc-hint").textContent = u.hint;
+  prev.textContent = u.prev;
+  const bh = document.getElementById("back-home");
+  if (bh) bh.textContent = (lang === "de" ? "‹ Bücherwand" : "‹ Bookshelf");
+  next.textContent = u.next;
+  document.getElementById("lang-de").classList.toggle("active", lang === "de");
+  document.getElementById("lang-en").classList.toggle("active", lang === "en");
+}
+
+function render() {
+  const pages = PAGES[lang];
+  const p = pages[i];
+  if (p.type === "cover") {
+    stage.classList.remove("wide-mode");
+    spread.className = "spread";
+    spread.innerHTML = `<div class="page cover-wrap"><img src="${esc(p.img)}" alt="Cover"/></div>`;
+  } else {
+    const wide = !!p.wide;
+    stage.classList.toggle("wide-mode", wide);
+    spread.className = "spread" + (wide ? " landscape" : "");
+    spread.innerHTML = `
+      <div class="page left"><h2>${esc(p.title)}</h2><div class="body">${esc(p.text)}</div></div>
+      <div class="page right"><img src="${esc(p.img)}" alt="${esc(p.title)}"/></div>`;
+  }
+  pager.textContent = `${i + 1} / ${pages.length}`;
+  prev.disabled = i === 0;
+  next.disabled = i === pages.length - 1;
+}
+function setLang(l) {
+  lang = l;
+  localStorage.setItem("maya_lang", lang);
+  applyUI();
+  render();
+}
+document.getElementById("lang-de").onclick = () => setLang("de");
+document.getElementById("lang-en").onclick = () => setLang("en");
+prev.onclick = () => { if (i > 0) { i--; render(); } };
+next.onclick = () => { if (i < PAGES[lang].length - 1) { i++; render(); } };
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") prev.click();
+  if (e.key === "ArrowRight") next.click();
+});
+applyUI();
+render();
+</script>
+
+<footer class="site-footer">
+  © 2026 Lichtkrieger / das Rudel — Alle Rechte vorbehalten / All rights reserved
+</footer>
+
+</body>
+</html>

@@ -564,14 +564,15 @@
     .stage { min-height: 0; }
     .shelf-scene {
       /*
-       * Zoom crop so lamp-row spines are readable (~130–170px tall).
-       * Full-image coords unchanged; zoom wrapper scales image+spines together.
-       * crop ≈ x 23.6–44.4% (w 20.8%), y 48.5–76.9% (h 28.4%) around lamp compartment.
+       * Tight mobile zoom on the 4 lamp-row volumes.
+       * Full-image % geometry unchanged; zoom wrapper scales image+spines together.
+       * Target: spines ≈ 55–65% of scene height (~260–320 CSS px at 390-wide).
+       * crop centers the book cluster; plank edge + light frame still visible.
        */
-      --crop-x: 0.236;
-      --crop-w: 0.208;
-      --crop-y: 0.485;
-      --crop-h: 0.284;
+      --crop-x: 0.281;
+      --crop-w: 0.108;
+      --crop-y: 0.522;
+      --crop-h: 0.240;
       aspect-ratio: calc((16 * var(--crop-w)) / (9 * var(--crop-h)));
       width: 100%;
       border-radius: 8px 8px 0 0;
@@ -616,23 +617,34 @@
       font-size: .68rem;
       padding: .4rem .5rem;
     }
-    /* Same % geometry as desktop — scales with shelf-scene */
+    /* Same % geometry as desktop — scales with shelf-scene-zoom (full image) */
     .spine-row[data-slot="0"] {
-      left: 28%;
-      width: 44%;
+      left: 29%;
+      width: 42%;
       bottom: 28.7%;
       height: 14.2%;
     }
     .spine-row[data-slot="1"] {
-      left: 28%;
-      width: 44%;
+      left: 29%;
+      width: 42%;
       bottom: 46.0%;
       height: 15.4%;
     }
     .spine-row { gap: 3px; }
     .spine {
-      /* sizes are in full-image zoom space; appear ~150px tall after crop */
-      --spine-w: clamp(22px, 2.1%, 36px);
+      /*
+       * Spine PNGs are ~0.27 w/h. Width must be large enough that
+       * object-fit:contain reaches ~55–65% of scene height (~260–320px at 390).
+       * Desktop --spine-w untouched.
+       */
+      --spine-w: clamp(64px, 5.2%, 88px);
+    }
+    .spine-art {
+      /* fill width; height follows art (capped by row) */
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
     }
     #book-on-table {
       width: min(78vw, 72%);
@@ -717,7 +729,7 @@
   <div class="stage" id="stage-shelf">
     <div class="shelf-scene">
       <div class="shelf-scene-zoom">
-        <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand"/>
+        <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand" width="2560" height="1440"/>
         <div class="shelf-rows" id="shelf-rows" aria-label="Bücherwand"></div>
       </div>
     </div>

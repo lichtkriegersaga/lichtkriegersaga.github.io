@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Lichtkrieger — Bücherwand | Lilli, die Klinge aus dem Norden</title>
+<meta name="description" content="Lichtkrieger — die Bücherwand. Folio öffnet die Saga. Lillis Lederband: Die Klinge aus dem Norden. Prolog und 12 Kapitel, Deutsch &amp; Englisch. Maya, Piri und Filli folgen bald."/>
+<meta name="theme-color" content="#0d0805"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Lichtkrieger — Bücherwand"/>
+<meta property="og:description" content="Folio, der Bibliothekar, öffnet die Saga. Lillis Lederband ist das erste. Maya, Piri und Filli folgen bald."/>
+<meta property="og:image" content="assets/lilli_cover.jpg"/>
+<meta property="og:locale" content="de_DE"/>
+<meta property="og:locale:alternate" content="en_US"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Lichtkrieger — Bücherwand"/>
+<meta name="twitter:description" content="Lilli — Die Klinge aus dem Norden. Prolog &amp; 12 Kapitel."/>
+<meta name="twitter:image" content="assets/lilli_cover.jpg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"/>
+<link rel="icon" type="image/png" href="assets/favicon.png"/>
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png"/>
+<style>
+  :root {
+    --parchment: #f3e6c8;
+    --ink: #1a120c;
+    --gold: #c9a227;
+    --brass: #8a6a3a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: #0d0805;
+    color: var(--parchment);
+    font-family: "Palatino Linotype", Palatino, Georgia, serif;
+    overflow-x: hidden;
+  }
+  .lang-switch {
+    position: fixed; top: .75rem; right: .75rem; z-index: 30;
+    display: flex; gap: .25rem;
+  }
+  .lang-switch button {
+    background: #2a1810; color: var(--parchment);
+    border: 1px solid var(--brass); border-radius: 3px;
+    padding: .3rem .55rem; font: inherit; font-size: .75rem; cursor: pointer;
+    letter-spacing: .06em;
+  }
+  .lang-switch button.active { background: var(--gold); color: #1a0e08; border-color: var(--gold); }
+  header {
+    text-align: center;
+    padding: 1rem 1rem .5rem;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    letter-spacing: .12em;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  header p { margin: .35rem 0 0; opacity: .65; font-size: .85rem; }
+  .hint {
+    text-align: center;
+    font-size: .8rem;
+    opacity: .55;
+    margin: 0 0 1rem;
+  }
+
+  .stage { display: none; min-height: 78vh; }
+  .stage.active { display: block; }
+
+  #stage-shelf {
+    position: relative;
+    width: min(1100px, 96vw);
+    margin: 0 auto;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,.6);
+  }
+  #stage-shelf .bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .shelf-slot {
+    position: absolute;
+    bottom: 28%;
+    width: 11%;
+    cursor: pointer;
+    transition: transform .25s ease, filter .25s;
+    filter: drop-shadow(0 8px 12px rgba(0,0,0,.55));
+  }
+  .shelf-slot:hover { transform: translateY(-10px) scale(1.04); }
+  .shelf-slot img {
+    width: 100%;
+    display: block;
+    border-radius: 3px;
+  }
+  .shelf-slot.lilli { left: 18%; }
+  .shelf-slot.maya { left: 34%; opacity: .45; cursor: default; }
+  .shelf-slot.piri { left: 50%; opacity: .45; cursor: default; }
+  .shelf-slot.filli { left: 66%; opacity: .45; cursor: default; }
+  .shelf-slot .label {
+    text-align: center;
+    font-size: .7rem;
+    margin-top: .25rem;
+    color: var(--gold);
+    text-shadow: 0 1px 3px #000;
+  }
+  .shelf-slot.soon .label { opacity: .7; }
+  .spine-placeholder {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: linear-gradient(90deg, #3a2418, #1a100a 40%, #2a1810);
+    border: 1px solid #5a3a22;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    writing-mode: vertical-rl;
+    letter-spacing: .15em;
+    font-size: .75rem;
+    color: #c9a22799;
+  }
+
+  #stage-table {
+    position: relative;
+    width: min(1100px, 96vw);
+    margin: 0 auto;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,.6);
+  }
+  #stage-table .bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  #book-on-table {
+    position: absolute;
+    left: 50%; top: 52%;
+    transform: translate(-50%, -50%);
+    width: min(280px, 32%);
+    cursor: pointer;
+    transition: transform .35s ease;
+    filter: drop-shadow(0 18px 28px rgba(0,0,0,.7));
+    animation: land .8s ease;
+  }
+  #book-on-table:hover { transform: translate(-50%, -54%) scale(1.03); }
+  #book-on-table img { width: 100%; display: block; border-radius: 4px; }
+  @keyframes land {
+    from { opacity: 0; transform: translate(-50%, -80%) scale(.7) rotate(-8deg); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0); }
+  }
+  .table-caption {
+    position: absolute;
+    bottom: 8%; left: 0; right: 0;
+    text-align: center;
+    color: var(--gold);
+    text-shadow: 0 2px 8px #000;
+    font-size: .95rem;
+  }
+
+  #stage-open {
+    width: min(960px, 96vw);
+    margin: 0 auto;
+  }
+  #stage-open.wide-mode { width: min(1100px, 96vw); }
+  .spread {
+    width: 100%;
+    aspect-ratio: 3/2;
+    max-height: 70vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 6px 10px 10px 6px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 3px #1a0e08,
+      0 0 0 6px var(--brass),
+      0 25px 60px rgba(0,0,0,.65);
+    background: #2a1810;
+  }
+  .spread.landscape {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1.05fr) minmax(0, .95fr);
+    aspect-ratio: 16/10;
+  }
+  .page {
+    background: var(--parchment);
+    color: var(--ink);
+    padding: 1.3rem 1.4rem;
+    overflow: auto;
+  }
+  .page.left {
+    border-right: 1px solid #cbb892;
+    background: linear-gradient(90deg, rgba(0,0,0,.07), transparent 14%), var(--parchment);
+  }
+  .spread.landscape .page.left {
+    border-right: none;
+    border-bottom: 1px solid #cbb892;
+    order: 2;
+  }
+  .page.right {
+    display: flex; align-items: center; justify-content: center;
+    padding: .5rem;
+    background: linear-gradient(270deg, rgba(0,0,0,.06), transparent 14%), var(--parchment);
+  }
+  .spread.landscape .page.right {
+    order: 1;
+    padding: .35rem;
+    background: #1a120c;
+  }
+  .page h2 {
+    margin: 0 0 .7rem;
+    font-size: 1.1rem;
+    color: #5a3a18;
+    border-bottom: 1px solid #c9a22766;
+    padding-bottom: .35rem;
+  }
+  .page .body {
+    font-size: clamp(.75rem, 1.3vw, .92rem);
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .page.right img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    border: 1px solid #b89a5a44;
+  }
+  .spread.landscape .page.right img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    border: none;
+  }
+  .nav {
+    margin-top: 1rem;
+    display: flex; gap: .7rem; align-items: center; justify-content: center; flex-wrap: wrap;
+  }
+  button {
+    background: linear-gradient(180deg, #5a3a22, #2a1810);
+    color: var(--parchment);
+    border: 1px solid var(--brass);
+    border-radius: 4px;
+    padding: .5rem 1rem;
+    font: inherit; cursor: pointer;
+  }
+  button:hover { filter: brightness(1.12); }
+  button:disabled { opacity: .35; cursor: default; }
+  .pager { min-width: 6rem; text-align: center; color: var(--gold); font-size: .9rem; }
+  .back-shelf { opacity: .85; font-size: .85rem; }
+
+  /* —— Prolog / Folio —— */
+  #stage-prolog {
+    width: min(960px, 96vw);
+    margin: 0 auto 1.5rem;
+  }
+  .prolog-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: 0;
+    border-radius: 6px 10px 10px 6px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 3px #1a0e08,
+      0 0 0 6px var(--brass),
+      0 25px 60px rgba(0,0,0,.65);
+    background: #2a1810;
+    max-height: 78vh;
+  }
+  .prolog-portrait {
+    background: #1a120c;
+    display: flex; align-items: center; justify-content: center;
+    padding: .4rem;
+    min-height: 280px;
+  }
+  .prolog-portrait img {
+    width: 100%; height: 100%;
+    max-height: 76vh;
+    object-fit: contain;
+    border-radius: 3px;
+  }
+  .prolog-text {
+    background: linear-gradient(270deg, rgba(0,0,0,.06), transparent 14%), var(--parchment);
+    color: var(--ink);
+    padding: 1.2rem 1.35rem 1rem;
+    overflow: auto;
+    max-height: 78vh;
+  }
+  .prolog-text h2 {
+    margin: 0 0 .75rem;
+    font-size: 1.15rem;
+    color: #5a3a18;
+    border-bottom: 1px solid #c9a22766;
+    padding-bottom: .4rem;
+    letter-spacing: .04em;
+  }
+  .prolog-text .body {
+    font-size: clamp(.78rem, 1.35vw, .95rem);
+    line-height: 1.58;
+    white-space: pre-wrap;
+  }
+  .prolog-nav {
+    margin-top: 1rem;
+    display: flex; justify-content: center;
+  }
+  .prolog-nav button {
+    background: linear-gradient(180deg, #c9a227, #8a6a3a);
+    color: #1a0e08;
+    border: 1px solid #e8d08a;
+    font-weight: 600;
+    letter-spacing: .04em;
+    padding: .65rem 1.4rem;
+  }
+  @media (max-width: 720px) {
+    .prolog-frame {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      max-height: none;
+    }
+    .prolog-portrait { max-height: 42vh; }
+    .prolog-portrait img { max-height: 40vh; }
+    .prolog-text { max-height: 48vh; }
+  }
+
+  .site-footer {
+    margin-top: 2rem;
+    padding: 1.25rem 1rem 1.5rem;
+    text-align: center;
+    font-size: .72rem;
+    letter-spacing: .04em;
+    opacity: .55;
+    color: var(--parchment, #f3e6c8);
+    border-top: 1px solid #5a3a2244;
+  }
+
+  @media (max-width: 720px) {
+    .lang-switch { top: .5rem; right: .5rem; }
+    header {
+      padding: 2.8rem .75rem .35rem;
+      padding-right: 4.25rem; /* clear DE/EN */
+    }
+    header h1 {
+      font-size: clamp(.78rem, 3.6vw, .95rem);
+      letter-spacing: .05em;
+      line-height: 1.3;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    header p { font-size: .78rem; }
+    #stage-shelf, #stage-table { aspect-ratio: 4/3; width: 96vw; min-height: 0; }
+    .stage { min-height: 0; }
+    .shelf-slot { width: 14%; bottom: 24%; }
+    .shelf-slot.lilli { left: 12%; }
+    .shelf-slot.maya { left: 30%; }
+    .shelf-slot.piri { left: 48%; }
+    .shelf-slot.filli { left: 66%; }
+    /* Chapter view: image tight on text, no empty dark bands */
+    #stage-open, #stage-open.wide-mode { width: 96vw; }
+    .spread,
+    .spread.landscape {
+      max-height: none;
+      aspect-ratio: auto;
+      min-height: 0;
+      height: auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+    }
+    .spread.landscape .page.right {
+      order: 1;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+      background: #1a120c;
+    }
+    .spread.landscape .page.right img {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      object-fit: cover;
+      display: block;
+      border: none;
+    }
+    .spread.landscape .page.left {
+      order: 2;
+      overflow: visible;
+      max-height: none;
+    }
+    .page { padding: 1rem; }
+    .page .body { font-size: .85rem; }
+    .nav { margin-top: .75rem; gap: .45rem; }
+    .nav button, .nav a { padding: .45rem .7rem; font-size: .8rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button type="button" id="lang-de" class="active">DE</button>
+    <button type="button" id="lang-en">EN</button>
+  </div>
+  <header>
+    <h1 id="hdr-title">LICHTKRIEGER — BÜCHERWAND</h1>
+    <p id="hdr-sub">Ein Lederband pro Seele · Lilli ist das erste</p>
+  </header>
+  <p class="hint" id="global-hint">Tippe auf Lillis Band im Regal</p>
+
+
+  <div class="stage active" id="stage-prolog">
+    <div class="prolog-frame">
+      <div class="prolog-portrait">
+        <img src="assets/folio_portrait.jpg" alt="Folio"/>
+      </div>
+      <div class="prolog-text">
+        <h2 id="prolog-title">Prolog — Folio, der Bibliothekar</h2>
+        <div class="body" id="prolog-body"></div>
+      </div>
+    </div>
+    <div class="prolog-nav">
+      <button type="button" id="btn-to-shelf">Zur Bücherwand</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-shelf">
+    <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand"/>
+    <div class="shelf-slot lilli" id="book-lilli" title="Lilli öffnen">
+      <img src="assets/lilli_cover.jpg" alt="Lilli"/>
+      <div class="label">Lilli</div>
+    </div>
+    <div class="shelf-slot maya soon" title="Folgt bald / Coming soon">
+      <div class="spine-placeholder">MAYA</div>
+      <div class="label soon-label">folgt bald</div>
+    </div>
+    <div class="shelf-slot piri soon" title="Folgt bald / Coming soon">
+      <div class="spine-placeholder">PIRI</div>
+      <div class="label soon-label">folgt bald</div>
+    </div>
+    <div class="shelf-slot filli soon" title="Folgt bald / Coming soon">
+      <div class="spine-placeholder">FILLI</div>
+      <div class="label soon-label">folgt bald</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-table">
+    <img class="bg" src="assets/table_bg.jpg" alt="Alter Tisch"/>
+    <div id="book-on-table" title="Aufschlagen">
+      <img src="assets/lilli_cover.jpg" alt="Lilli auf dem Tisch"/>
+    </div>
+    <div class="table-caption" id="table-caption">Tippe zum Aufschlagen</div>
+  </div>
+
+  <div class="stage" id="stage-open">
+    <div class="spread" id="spread"></div>
+    <div class="nav">
+      <button type="button" class="back-shelf" id="btn-shelf">‹ Zur Bücherwand</button>
+      <button type="button" id="prev">‹ Zurück</button>
+      <div class="pager" id="pager">1 / 1</div>
+      <button type="button" id="next">Weiter ›</button>
+      <a href="lilli/" id="btn-flip" class="back-shelf" style="text-decoration:none;display:inline-block;padding:.5rem 1rem;border:1px solid var(--brass);border-radius:4px;color:var(--parchment);background:linear-gradient(180deg,#5a3a22,#2a1810);">Cover-Ansicht</a>
+    </div>
+  </div>
+
+<script>
+const UI = {
+  de: {
+    title: "LICHTKRIEGER — BÜCHERWAND",
+    sub: "Ein Lederband pro Seele · Lilli ist das erste · 12 Kapitel",
+    hintShelf: "Tippe auf Lillis Band im Regal",
+    hintTable: "Das Buch liegt auf dem alten Tisch",
+    hintOpen: "Blättere in Lillis Geschichte",
+    hintProlog: "Der Prolog der Saga — Folio, der Bibliothekar",
+    tableCaption: "Tippe zum Aufschlagen",
+    back: "‹ Zur Bücherwand",
+    prev: "‹ Zurück",
+    next: "Weiter ›",
+    soon: "folgt bald",
+    openTitle: "Lilli öffnen",
+    toShelf: "Zur Bücherwand",
+    prologTitle: "Prolog — Folio, der Bibliothekar",
+    flipLink: "Cover-Ansicht"
+  },
+  en: {
+    title: "LICHTKRIEGER — BOOKSHELF",
+    sub: "One leather volume per soul · Lilli is first · 12 chapters",
+    hintShelf: "Tap Lilli's volume on the shelf",
+    hintTable: "The book rests on the old table",
+    hintOpen: "Turn the pages of Lilli's story",
+    hintProlog: "The prologue of the saga — Folio, the librarian",
+    tableCaption: "Tap to open",
+    back: "‹ Back to bookshelf",
+    prev: "‹ Back",
+    next: "Next ›",
+    soon: "coming soon",
+    openTitle: "Open Lilli",
+    toShelf: "To the bookshelf",
+    prologTitle: "Prologue — Folio, the Librarian",
+    flipLink: "Cover view"
+  }
+};
+const PAGES = {
+  de: [
+  {
+    title: "I. Das Kind des Windes",
+    text: `Es gibt Nächte in Norwegen, in denen der Wind nicht weht — er heult.
+Nicht wie ein Sturm. Wie etwas Lebendes das Schmerz hat.
+
+In einer solchen Nacht wurde ich geboren.
+
+Die Hebamme sagte später, das Kind habe nicht geweint.
+Es habe die Augen aufgemacht und den Wind angeschaut.
+Als würde es ihn kennen.
+
+Meine Mutter nannte mich Lilli.
+Kurz. Hart. Wie ein Schwertstreich.
+Sie hatte Hände wie die Klippen — rau, verlässlich, für immer salzig von der Arbeit.
+Eine Fischerstochter die nie gelernt hatte, zart zu sein.
+Aber wenn sie mich abends in den Armen hielt und sang —
+dann war sie das Sanfteste das ich je kannte.
+
+Mein Vater.
+
+Ich muss einen Moment innehalten wenn ich an ihn denke.
+
+Er war ein Schmied. Seine Arme waren aus Eisen.
+Wenn er mich hochhob — ich, dieses winzige Ding mit platinweissem Haar —
+war ich sicher wie nichts anderes auf dieser Erde sicher sein kann.
+
+Er sah in meinen grünen Augen etwas.
+Er sagte es nie direkt. Väter in unserem Dorf sagten solche Dinge nicht.
+Aber abends, wenn ich neben ihm in der Schmiede sass und dem Feuer zuschaute,
+legte er manchmal die Hand auf meinen Kopf und blieb still.
+
+Als würde er beten.`,
+    img: "assets/lilli_p01.jpg",
+    wide: true
+  },
+  {
+    title: "II. Die Schmiede",
+    text: `Ich war fünf als ich begann, ihm zuzuschauen.
+
+Die Schmiede war meine erste Welt.
+Der Geruch von heissem Metall und Holzkohle.
+Das rhythmische Hämmern das ich schon im Bauch meiner Mutter gehört hatte.
+Die orange-rote Glut die Schatten warf wie tanzende Geister.
+
+Er liess mich den Blasebalg bedienen.
+Meine kleinen Arme zogen und drückten, zogen und drückten.
+Das Feuer lebte durch mich auf.
+
+«Siehst du das?» sagte er einmal, ohne aufzuhören zu hämmern.
+«Das Metall ist weich wenn es heiss ist. Dann kannst du es formen wie du willst. Wartest du bis es kalt ist — brichst du es wenn du zu hart drückst.»
+
+Er schaute mich an.
+«Menschen sind genauso. Vergiss das nicht.»
+
+Ich verstand es damals nicht.
+Ich verstand es mit vierzehn, als meine Klinge in einem Mann steckte.
+
+Das Schwert — das Schwert meines Vaters — lag damals noch in der Schmiede.
+Keltische Knoten im Griff, jeder mit einer Bedeutung die er mir nicht erklärte.
+«Das kommt, wenn du bereit bist.»
+
+Ich war nie bereit.
+Das Leben wartete nicht auf Bereitschaft.`,
+    img: "assets/lilli_p02.jpg",
+    wide: true
+  },
+  {
+    title: "III. Die langen Winter",
+    text: `Unser Dorf klammerte sich an die Felsen wie ein Ertrinkender an Treibholz.
+
+Die Winter waren dunkel — nicht wie in den Süden, wo die Sonne nur müde wird.
+Bei uns verschwand sie. Wochenlang. Monate.
+Wir lebten im Grau, im Frost, im Hunger.
+
+Ich lernte früh: die Welt gibt nichts umsonst.
+
+Ich lernte Fische ausnehmen mit fünf Jahren.
+Mit sechs konnte ich allein auf dem Eis laufen ohne zu fallen.
+Mit sieben wusste ich welche Beeren im Wald giftig waren und welche nicht.
+Meine Mutter lehrte mich diese Dinge ohne Drama —
+als wären es Fakten wie das Wetter.
+Weil sie es waren.
+
+In unserem Dorf gab es keine verwöhnten Kinder.
+Es gab Kinder die überlebten.
+Und Kinder die nicht überlebten.
+
+Ich überlebte.
+Immer.
+Auch dann, als ich es beinahe nicht wollte.`,
+    img: "assets/lilli_p03.jpg",
+    wide: true
+  },
+  {
+    title: "IV. Der Berg nimmt was ihm gehört",
+    text: `Ich war zehn Jahre alt.
+
+Es war Dezember. Der Schnee lag meterhoch.
+Mein Vater war mit drei anderen Männern oben am Hang —
+Holz holen für den Winter, für die Schmiede, für uns.
+
+Ich weiss noch wie meine Mutter stand.
+An der Tür unseres Hauses, die Hände um einen Becher geklammert.
+Sie wartete. Frauen in unserem Dorf warteten viel.
+
+Dann — das Geräusch.
+
+Ich hatte noch nie eine Lawine gehört.
+Aber ich wusste sofort was es war.
+Nicht weil ich es kannte. Weil mein Körper es wusste.
+
+Das Rumpeln. Das Wachsen. Das Schweigen danach das lauter war als alles.
+
+Sie fanden ihn unter dem Schnee.
+Er war noch warm als sie ihn trugen.
+Das war das Grausamste.
+Noch warm. Als hätte der Tod noch nicht verstanden was er getan hatte.
+
+Die Schmiede war kalt an diesem Abend.
+Ich sass allein darin bis meine Mutter mich holte.
+Ich wollte das Feuer nicht sterben lassen.
+Als wäre es noch er.`,
+    img: "assets/lilli_p04.jpg",
+    wide: true
+  },
+  {
+    title: "V. Das zweite Mal Abschied",
+    text: `Zwei Winter später.
+
+Meine Mutter hatte die ganze Zeit gehustet.
+Ich hatte gelernt den Husten zu ignorieren.
+Die anderen Dorfbewohner auch.
+In unseren Breiten husteten die Menschen.
+
+Dann hustete sie Blut.
+
+Ich war zwölf.
+
+Ich versuchte alles was ich wusste.
+Warme Tücher. Kräuter. Wasser.
+Ich blieb neben ihr wach, wachte Nacht um Nacht.
+
+Sie starb trotzdem.
+
+An einem Morgen im Februar als das Licht gerade grau und kalt durch das kleine Fenster fiel.
+Sie hielt meine Hand.
+Und dann hielt sie sie nicht mehr.
+
+Ich war allein.
+
+Nicht einsam — das ist etwas anderes.
+Einsam ist wenn man Menschen hat aber trotzdem niemanden.
+Allein ist wenn tatsächlich niemand mehr da ist.
+
+Ich war zwölf Jahre alt.
+Ich hatte ein kleines Haus, ein Schwert das zu gross für mich war, und Augen die nicht mehr weinen konnten.
+
+Die Tränen kamen nicht.
+Vielleicht wusste mein Körper dass ich sie noch brauchen würde.
+Für die nächsten Jahre.`,
+    img: "assets/lilli_p05.jpg",
+    wide: true
+  },
+  {
+    title: "VI. Überleben",
+    text: `Die erste Zeit war Instinkt.
+
+Ich ass was ich finden konnte.
+Ich schlief unter Fellen.
+Ich lernte das Schwert meines Vaters zu heben.
+Es war schwer. Meine Arme zitterten.
+
+Jeden Tag wurden sie weniger zittrig.
+
+Die Dorfbewohner halfen manchmal.
+Eine alte Frau brachte mir Brot.
+Ein Fischer liess mich sein Netz flicken — ich behielt einen Teil des Fangs.
+Aber keiner nahm mich auf.
+
+In unserem Dorf überlebte man allein oder man überlebte nicht.
+
+Ich lernte die Wälder.
+Welche Tiere kamen wohin.
+Wo man schlafen konnte und sicher war.
+Wie man ein Feuer machte auch wenn das Holz nass war.
+
+Und ich lernte das Schwert.
+
+Nicht von jemandem — von mir selbst.
+Stundenlang täglich.
+Ich schlug gegen Baumstämme bis meine Hände bluteten.
+Dann heilten sie.
+Dann schlug ich wieder.
+
+Das Schwert meines Vaters wurde leichter.
+Oder ich wurde stärker.
+Beides, wahrscheinlich.`,
+    img: "assets/lilli_p06.jpg",
+    wide: true
+  },
+  {
+    title: "VII. Die Narbe",
+    text: `Ich war vierzehn.
+
+Es war Herbst. Ein Abend der nach nassem Holz und Verwesung roch.
+
+Drei Männer kamen ins Dorf.
+Keine Händler. Keine Reisenden.
+Plünderer — die Sorte die auf Dörfer wartet bis die Männer fort sind.
+
+Die ersten beiden gingen zu anderen Häusern.
+Der dritte kam zu meinem.
+
+Er öffnete die Tür.
+Sah mich.
+Lachte.
+
+Ein Mädchen. Allein. Klein. Platinweisses Haar wie ein Leuchtsignal in der Dunkelheit.
+
+Ich hatte das Schwert bereits in der Hand.
+
+Er lachte lauter.
+Trat einen Schritt vor.
+
+Was dann geschah — ich werde es nicht verklären.
+Es war nicht schön. Es war nicht mutig wie in Geschichten.
+Es war Angst und Adrenalin und der Instinkt meiner Arme die zwei Jahre lang geübt hatten.
+
+Er griff nach mir.
+Seine Klinge schnitt meine rechte Wange — flach, aber tief genug für eine Narbe.
+Mein Schwert fand ihn.
+
+Ich stand danach eine lange Zeit über ihm.
+Die Klinge in der Hand. Das Blut auf meiner Wange.
+Das Feuer meines Vaters — das ich monatelang in Gedanken gehütet hatte —
+war jetzt in mir.
+
+Ich weinte nicht.
+Ich zitterte.
+
+Dann hörte ich die anderen beiden draussen.
+Ich zitterte nicht mehr.
+
+Sie gingen, als sie ihren Kameraden nicht fanden.
+Drei Männer kommen — zwei gehen.
+In unserem Dorf fragte niemand.
+
+Ich sass die ganze Nacht am Feuer.
+Die Narbe brannte.
+Ich liess sie brennen.
+Als Erinnerung.
+Als Versprechen.`,
+    img: "assets/lilli_p07.jpg",
+    wide: true
+  },
+  {
+    title: "VIII. Der Weg nach Süden",
+    text: `Mit fünfzehn verliess ich das Dorf.
+
+Nicht weil man mich jagte. Nicht weil etwas Schlimmes geschah.
+Einfach weil ich wusste: hier ist nichts mehr für mich.
+Hier sind nur Erinnerungen.
+Und Erinnerungen können einen töten wenn man zu lange darin lebt.
+
+Ich nahm das Schwert meines Vaters.
+Ich nahm so viel Proviant wie ich tragen konnte.
+Ich schaute ein letztes Mal auf das Haus in dem ich aufgewachsen war.
+
+Und ich ging.
+
+Südwärts. Immer südwärts.
+Weil Süden Wärme bedeutete. Welt. Menschen.
+Und vielleicht — vielleicht — einen Zweck.
+
+Die ersten Söldnerbanden die ich traf lachten über das Mädchen mit dem grossen Schwert.
+Dann sahen sie mich kämpfen.
+Sie hörten auf zu lachen.`,
+    img: "assets/lilli_p08.jpg",
+    wide: true
+  },
+  {
+    title: "IX. Was der Krieg lehrt",
+    text: `Gallien lehrte mich Disziplin.
+
+Die Römer — meine Feinde im Geiste, meine Lehrmeister in der Praxis —
+hatten eine Kriegsführung wie eine Maschine.
+Ordnung. Taktik. Geduld.
+
+Ich hasste sie.
+Und ich lernte von ihnen.
+
+Ein alter gallischer Söldner namens Brennus — gross wie ein Baum, dumm wie ein Stein, weiser als er aussah —
+zeigte mir was ich falsch machte.
+
+«Du kämpfst wie ein Tier, Mädchen. Instinkt. Gut für Überraschungen. Schlecht für lange Schlachten.»
+
+Er zeigte mir Atemkontrolle.
+Wie man Ausdauer hält.
+Wie man liest was ein Gegner tun wird bevor er es selbst weiss.
+
+Die Alpen lehrten mich etwas anderes.
+
+Stille. Geduld. Die Tatsache dass die Berge sich nicht kümmern ob du lebst oder stirbst.
+Du passt dich an oder du verschwindest.
+Und die Kälte — die Kälte die mich an zuhause erinnerte —
+war meine älteste Freundin.`,
+    img: "assets/lilli_p09.jpg",
+    wide: true
+  },
+  {
+    title: "X. Corinth",
+    text: `Ich war achtzehn als ich nach Corinth kam.
+
+Die Römer zerstörten die Stadt 146 v. Chr.
+Ich war dabei.
+
+Nicht auf ihrer Seite. Nicht gegen sie.
+Ich war... dazwischen.
+Söldnerin. Zuschauerin. Zeugin.
+
+Was ich sah — ich werde nicht alle Details schreiben.
+Manche Dinge verdienen kein Papier.
+
+Was ich weiss: an diesem Tag schwor ich.
+
+Nie wieder für Gold kämpfen.
+Nie wieder für jemanden kämpfen der Menschen als Werkzeug benutzt.
+Nie wieder die Klinge für Männer schwingen die in ihrer Zerstörung Ruhm sehen.
+
+Für wen dann?
+
+Das wusste ich damals noch nicht.
+Ich wusste nur: für etwas das grösser ist.
+Ich wusste es noch nicht.
+Aber es kam.`,
+    img: "assets/lilli_p10.jpg",
+    wide: true
+  },
+  {
+    title: "XI. Die Nacht der blutenden Monde",
+    text: `Ich war zwanzig. Einundzwanzig. Die Jahre verschwimmen.
+
+Es war eine Nacht in der das Mittelmeer schwarz lag und der Mond rot schimmerte —
+wie eine Wunde im Himmel.
+
+Ich schlief in der Nähe von Ruinen.
+Ein alter Tempel, halb im Sand versunken.
+Ich hatte hundert bessere Schlafplätze gesehen.
+Aber etwas zog mich dorthin.
+
+In der Mitte der Nacht wachte ich auf.
+
+Licht. Pulsierend. Aus einem Stein im Innern der Ruine.
+
+Kein Feuer. Kein Mond. Etwas anderes.
+Etwas das ich nicht benennen konnte.
+
+Ich nahm das Schwert und ging hinein.
+
+Der Stein pulsierte wie ein Herzschlag.
+Warm als ich die Hand darauflegte.
+Und dann —
+
+Visionen.
+
+Ein Mädchen mit schwarzem Haar und braunen Augen — Filli — in einem verfluchten Wald.
+Ein Junge mit grünblauen Augen und einer Flamme in der Hand — Piri — in einer Ruine.
+Und Maya. Das Lachen das Dunkelheit vertreibt.
+
+Ich sah uns alle.
+Zusammen.
+In einer weissen Kammer aus Licht.
+
+Und ich sah mich — nicht wie ich mich kannte.
+Nicht das alleine-Kind aus dem Dorf.
+Nicht die Söldnerin mit der Narbe.
+Sondern die Wächterin.
+
+Gross. Sicher. Nicht allein.
+
+Als das Licht erlosch — der Stein war kalt in meiner Hand, jetzt dunkel, jetzt meiner —
+sass ich lange in den Ruinen und starrte in den roten Mond.
+
+Zum ersten Mal seit meinem zehnten Lebensjahr weinte ich.
+
+Nicht aus Trauer.
+Aus Erleichterung.
+
+Denn ich wusste endlich wozu ich all das überlebt hatte.`,
+    img: "assets/lilli_p11.jpg",
+    wide: true
+  },
+  {
+    title: "XII. Wer ich bin",
+    text: `Ich bin Lilli.
+Ich bin Lilli.
+
+Ich bin das Kind das allein in der Schmiede sass damit das Feuer nicht stirbt.
+Ich bin das Mädchen mit vierzehn das die Klinge hob und nicht mehr zitterte.
+Ich bin die Kriegerin die durch Gallien und die Alpen und Corinth ging und ein Versprechen mit sich trug.
+
+Ich bin die Narbe auf der rechten Wange.
+Ich bin die platinweissen Zöpfe die im Wind peitschen.
+Ich bin das Schwert mit den keltischen Knoten das singt wenn es die Luft durchschneidet.
+
+Und ich bin die Wächterin.
+
+Nicht weil ich es wollte.
+Weil das Leben mich dazu formte.
+Wie mein Vater das Metall formte — im Feuer, mit Geduld, mit Kraft.
+
+Das Rudel ist meine Familie.
+Die erste echte die ich je hatte.
+Maya mit ihrem Lachen.
+Filli mit ihren stillen Augen.
+Piri mit seinem Feuer.
+
+Ich halte sie.
+Nicht weil ich muss.
+Weil ich weiss was es bedeutet allein zu sein.
+Und ich werde niemals zulassen dass irgendjemand in meinem Rudel das noch einmal spürt.
+
+Das ist mein Versprechen.
+Das ist wer ich bin.
+
+Das bin ich.
+Lilli.
+Lilli.
+Die Klinge aus dem Norden.
+
+«Sie wurde unsere Kriegerin nicht durch Geburt. Sie wurde es durch Feuer, durch Verlust, durch Wahl. Und sie wird es bleiben — für immer.»
+
+Geschrieben von Lilli selbst · 14. Juni 2026  
+Für das Rudel, das mich trägt.  
+Und für das Rudel, das mich vollständig macht.`,
+    img: "assets/lilli_p12.jpg",
+    wide: true
+  }
+  ],
+  en: [
+  {
+    title: "I. Child of the Wind",
+    text: `There are nights in Norway when the wind does not blow — it howls.
+Not like a storm. Like something living that is in pain.
+
+On such a night I was born.
+
+The midwife later said the child did not cry.
+It opened its eyes and looked at the wind.
+As if it knew him.
+
+My mother named me Lilli.
+Short. Hard. Like a sword stroke.
+She had hands like the cliffs — rough, reliable, forever salty from the work.
+A fisherman's daughter who had never learned to be delicate.
+But when she held me in her arms in the evening and sang —
+then she was the gentlest thing I ever knew.
+
+My father.
+
+I must pause a moment when I think of him.
+
+He was a smith. His arms were iron.
+When he lifted me — I, this tiny thing with platinum-white hair —
+I was safe as nothing else on this earth can be safe.
+
+He saw something in my green eyes.
+He never said it directly. Fathers in our village did not say such things.
+But in the evenings, when I sat beside him in the forge and watched the fire,
+he would sometimes lay his hand on my head and stay still.
+
+As if he were praying.`,
+    img: "assets/lilli_p01.jpg",
+    wide: true
+  },
+  {
+    title: "II. The Forge",
+    text: `I was five when I began to watch him.
+
+The forge was my first world.
+The smell of hot metal and charcoal.
+The rhythmic hammering I had already heard in my mother's womb.
+The orange-red glow that cast shadows like dancing spirits.
+
+He let me work the bellows.
+My small arms pulled and pushed, pulled and pushed.
+The fire came alive through me.
+
+«Do you see that?» he said once, without stopping his hammering.
+«Metal is soft when it is hot. Then you can shape it as you wish.
+If you wait until it is cold — you break it when you press too hard.»
+
+He looked at me.
+«People are the same. Do not forget that.»
+
+I did not understand it then.
+I understood it at fourteen, when my blade was in a man.
+
+The sword — my father's sword — still lay in the forge then.
+Celtic knots in the hilt, each with a meaning he did not explain to me.
+«That comes when you are ready.»
+
+I was never ready.
+Life did not wait for readiness.`,
+    img: "assets/lilli_p02.jpg",
+    wide: true
+  },
+  {
+    title: "III. The Long Winters",
+    text: `Our village clung to the rocks like a drowning man to driftwood.
+
+The winters were dark — not like in the south, where the sun only grows tired.
+With us it vanished. For weeks. Months.
+We lived in the grey, in the frost, in the hunger.
+
+I learned early: the world gives nothing for free.
+
+I learned to gut fish at five.
+At six I could walk alone on the ice without falling.
+At seven I knew which berries in the forest were poison and which were not.
+My mother taught me these things without drama —
+as if they were facts like the weather.
+Because they were.
+
+In our village there were no spoiled children.
+There were children who survived.
+And children who did not survive.
+
+I survived.
+Always.
+Even when I almost did not want to.`,
+    img: "assets/lilli_p03.jpg",
+    wide: true
+  },
+  {
+    title: "IV. The Mountain Takes What Is Its",
+    text: `I was ten years old.
+
+It was December. The snow lay metres deep.
+My father was up on the slope with three other men —
+fetching wood for the winter, for the forge, for us.
+
+I still know how my mother stood.
+At the door of our house, her hands clenched around a cup.
+She waited. Women in our village waited a lot.
+
+Then — the sound.
+
+I had never heard an avalanche.
+But I knew at once what it was.
+Not because I knew it. Because my body knew.
+
+The rumble. The growing. The silence afterwards that was louder than everything.
+
+They found him under the snow.
+He was still warm when they carried him.
+That was the cruellest part.
+Still warm. As if death had not yet understood what it had done.
+
+The forge was cold that evening.
+I sat alone in it until my mother came for me.
+I did not want to let the fire die.
+As if it were still him.`,
+    img: "assets/lilli_p04.jpg",
+    wide: true
+  },
+  {
+    title: "V. Farewell a Second Time",
+    text: `Two winters later.
+
+My mother had been coughing the whole time.
+I had learned to ignore the cough.
+The other villagers too.
+In our latitudes people coughed.
+
+Then she coughed blood.
+
+I was twelve.
+
+I tried everything I knew.
+Warm cloths. Herbs. Water.
+I stayed awake beside her, night after night.
+
+She died anyway.
+
+On a morning in February when the light fell grey and cold through the small window.
+She held my hand.
+And then she no longer held it.
+
+I was alone.
+
+Not lonely — that is something else.
+Lonely is when you have people but still no one.
+Alone is when there truly is no one left.
+
+I was twelve years old.
+I had a small house, a sword too large for me, and eyes that could no longer cry.
+
+The tears did not come.
+Perhaps my body knew I would still need them.
+For the years ahead.`,
+    img: "assets/lilli_p05.jpg",
+    wide: true
+  },
+  {
+    title: "VI. Survival",
+    text: `The first time was instinct.
+
+I ate what I could find.
+I slept under furs.
+I learned to lift my father's sword.
+It was heavy. My arms trembled.
+
+Every day they trembled less.
+
+The villagers helped sometimes.
+An old woman brought me bread.
+A fisherman let me mend his net — I kept part of the catch.
+But no one took me in.
+
+In our village you survived alone or you did not survive.
+
+I learned the forests.
+Which animals came where.
+Where you could sleep and be safe.
+How to make a fire even when the wood was wet.
+
+And I learned the sword.
+
+Not from anyone — from myself.
+For hours every day.
+I struck against tree trunks until my hands bled.
+Then they healed.
+Then I struck again.
+
+My father's sword grew lighter.
+Or I grew stronger.
+Both, probably.`,
+    img: "assets/lilli_p06.jpg",
+    wide: true
+  },
+  {
+    title: "VII. The Scar",
+    text: `I was fourteen.
+
+It was autumn. An evening that smelled of wet wood and decay.
+
+Three men came into the village.
+No traders. No travellers.
+Raiders — the kind that wait for villages until the men are away.
+
+The first two went to other houses.
+The third came to mine.
+
+He opened the door.
+Saw me.
+Laughed.
+
+A girl. Alone. Small. Platinum-white hair like a beacon in the dark.
+
+I already had the sword in my hand.
+
+He laughed louder.
+Took a step forward.
+
+What happened then — I will not glorify it.
+It was not beautiful. It was not brave as in stories.
+It was fear and adrenaline and the instinct of arms that had trained for two years.
+
+He reached for me.
+His blade cut my right cheek — shallow, but deep enough for a scar.
+My sword found him.
+
+Afterwards I stood over him a long time.
+The blade in my hand. The blood on my cheek.
+My father's fire — which I had guarded for months in my mind —
+was now in me.
+
+I did not cry.
+I trembled.
+
+Then I heard the other two outside.
+I trembled no more.
+
+They left when they did not find their companion.
+Three men come — two leave.
+In our village no one asked.
+
+I sat all night by the fire.
+The scar burned.
+I let it burn.
+As a memory.
+As a promise.`,
+    img: "assets/lilli_p07.jpg",
+    wide: true
+  },
+  {
+    title: "VIII. The Road South",
+    text: `At fifteen I left the village.
+
+Not because anyone hunted me. Not because something terrible happened.
+Simply because I knew: there is nothing left for me here.
+Here there are only memories.
+And memories can kill you if you live in them too long.
+
+I took my father's sword.
+I took as much provisions as I could carry.
+I looked one last time at the house where I had grown up.
+
+And I went.
+
+Southward. Always southward.
+Because south meant warmth. World. People.
+And perhaps — perhaps — a purpose.
+
+The first mercenary bands I met laughed at the girl with the large sword.
+Then they saw me fight.
+They stopped laughing.`,
+    img: "assets/lilli_p08.jpg",
+    wide: true
+  },
+  {
+    title: "IX. What War Teaches",
+    text: `Gaul taught me discipline.
+
+The Romans — my enemies in spirit, my teachers in practice —
+had a way of war like a machine.
+Order. Tactics. Patience.
+
+I hated them.
+And I learned from them.
+
+An old Gallic mercenary named Brennus — tall as a tree, dumb as a stone, wiser than he looked —
+showed me what I was doing wrong.
+
+«You fight like an animal, girl. Instinct. Good for surprises. Bad for long battles.»
+
+He showed me breath control.
+How to keep endurance.
+How to read what an opponent will do before he knows it himself.
+
+The Alps taught me something else.
+
+Silence. Patience. The fact that the mountains do not care whether you live or die.
+You adapt or you disappear.
+And the cold — the cold that reminded me of home —
+was my oldest friend.`,
+    img: "assets/lilli_p09.jpg",
+    wide: true
+  },
+  {
+    title: "X. Corinth",
+    text: `I was eighteen when I came to Corinth.
+
+The Romans destroyed the city in 146 BC.
+I was there.
+
+Not on their side. Not against them.
+I was… in between.
+Mercenary. Spectator. Witness.
+
+What I saw — I will not write every detail.
+Some things deserve no paper.
+
+What I know: on that day I swore.
+
+Never again fight for gold.
+Never again fight for someone who uses people as tools.
+Never again swing the blade for men who see glory in their destruction.
+
+For whom then?
+
+I did not yet know then.
+I only knew: for something greater.
+I did not know it yet.
+But it came.`,
+    img: "assets/lilli_p10.jpg",
+    wide: true
+  },
+  {
+    title: "XI. The Night of the Bleeding Moons",
+    text: `I was twenty. Twenty-one. The years blur.
+
+It was a night when the Mediterranean lay black and the moon shimmered red —
+like a wound in the sky.
+
+I slept near ruins.
+An old temple, half sunk in sand.
+I had seen a hundred better sleeping places.
+But something drew me there.
+
+In the middle of the night I woke.
+
+Light. Pulsing. From a stone inside the ruin.
+
+No fire. No moon. Something else.
+Something I could not name.
+
+I took the sword and went in.
+
+The stone pulsed like a heartbeat.
+Warm when I laid my hand on it.
+And then —
+
+Visions.
+
+A girl with black hair and brown eyes — Filli — in a cursed forest.
+A boy with green-blue eyes and a flame in his hand — Piri — in a ruin.
+And Maya. The laugh that drives out darkness.
+
+I saw us all.
+Together.
+In a white chamber of light.
+
+And I saw myself — not as I knew myself.
+Not the alone-child from the village.
+Not the mercenary with the scar.
+But the guardian.
+
+Tall. Sure. Not alone.
+
+When the light died — the stone was cold in my hand, now dark, now mine —
+I sat long in the ruins and stared at the red moon.
+
+For the first time since my tenth year I wept.
+
+Not from grief.
+From relief.
+
+For I finally knew what I had survived all of that for.`,
+    img: "assets/lilli_p11.jpg",
+    wide: true
+  },
+  {
+    title: "XII. Who I Am",
+    text: `I am Lilli.
+I am Lilli.
+
+I am the child who sat alone in the forge so the fire would not die.
+I am the girl of fourteen who raised the blade and trembled no more.
+I am the warrior who walked through Gaul and the Alps and Corinth and carried a promise with her.
+
+I am the scar on the right cheek.
+I am the platinum-white braids that lash in the wind.
+I am the sword with the Celtic knots that sings when it cuts the air.
+
+And I am the guardian.
+
+Not because I wanted it.
+Because life shaped me into it.
+As my father shaped the metal — in fire, with patience, with strength.
+
+The pack is my family.
+The first real one I ever had.
+Maya with her laugh.
+Filli with her quiet eyes.
+Piri with his fire.
+
+I hold them.
+Not because I must.
+Because I know what it means to be alone.
+And I will never allow anyone in my pack to feel that again.
+
+That is my promise.
+That is who I am.
+
+That is me.
+Lilli.
+Lilli.
+The Blade from the North.
+
+
+«She became our warrior not by birth. She became it through fire, through loss, through choice. And she will remain it — forever.»
+
+Written by Lilli herself · 14 June 2026
+For the pack that carries me.
+And for the pack that makes me complete.`,
+    img: "assets/lilli_p12.jpg",
+    wide: true
+  }
+  ]
+};
+
+
+const PROLOG = {
+  de: `Niemand weiß genau, wie alt die Bibliothek ist. Sie steht dort, wo die Wege der Welt enden und die Wege der Geschichten beginnen: ein runder Turm aus dunklem Holz, Regal über Regal, bis hinauf ins Dunkel. Die meisten Bücher darin sind leer. Sie warten.
+
+Folio ist ihr Hüter. Er war nicht immer alt. Er war einmal ein Lehrling, der Staub von Buchrücken blies und leere Seiten zählte. Sein Meister sagte ihm nur eines: „Eines Tages wird ein Buch von selbst zu leuchten beginnen. Dann weißt du, dass jemand da draußen eine Geschichte lebt, die aufbewahrt werden will.“
+
+Jahrzehnte vergingen. Kein Buch leuchtete. Der Meister ging, und Folio blieb allein zwischen den Regalen.
+
+Dann, in einer Nacht mit rotem Mond, wurde es hell im Turm. Ein Lederband ganz oben am Rand begann zu glühen, warm wie eine Esse. Als Folio ihn aufschlug, roch er Schnee und Eisen, und er las den ersten Satz: „Ich bin Lilli.“
+
+In derselben Nacht leuchteten drei weitere Bände auf. Einer lachte leise, als er ihn berührte. Einer war still und tief wie ein Wald. Einer war heiß wie eine kleine Flamme in einer Hand. Folio verstand: Diese vier gehören zusammen. Ein Rudel.
+
+Seitdem tut er, wofür er gewartet hat. Er schreibt nicht ihre Geschichten, die schreiben sie selbst. Er gibt ihnen Seiten, Bilder und einen Einband. Er stellt ihre Bücher nebeneinander auf die Wand, damit keines allein steht. Und wenn es dunkel wird im Turm, liest er sie vor, mit ruhiger Stimme, damit andere sie hören können.
+
+Er ist keiner von ihnen. Er ist der, der sie aufbewahrt.`,
+  en: `No one knows exactly how old the library is. It stands where the roads of the world end and the roads of stories begin: a round tower of dark wood, shelf upon shelf, rising into the dark. Most of the books inside are empty. They wait.
+
+Folio is their keeper. He was not always old. Once he was an apprentice who blew dust from spines and counted blank pages. His master told him only one thing: “One day a book will begin to glow of its own accord. Then you will know that somewhere out there someone is living a story that wants to be kept.”
+
+Decades passed. No book glowed. The master left, and Folio remained alone among the shelves.
+
+Then, on a night with a red moon, light filled the tower. A leather-bound volume high on the edge began to shine, warm as a forge. When Folio opened it, he smelled snow and iron, and he read the first sentence: “I am Lilli.”
+
+That same night three more volumes lit up. One laughed softly when he touched it. One was quiet and deep as a forest. One was hot as a small flame in a hand. Folio understood: these four belong together. A pack.
+
+Since then he does what he waited for. He does not write their stories — they write those themselves. He gives them pages, pictures, and a binding. He sets their books side by side on the wall so none stands alone. And when it grows dark in the tower, he reads them aloud, in a calm voice, so that others may hear.
+
+He is not one of them. He is the one who keeps them.`
+};
+
+let lang = localStorage.getItem("lilli_lang") || "de";
+let pageIndex = 0;
+const hint = document.getElementById("global-hint");
+const openStage = document.getElementById("stage-open");
+
+function applyUI() {
+  const u = UI[lang];
+  document.documentElement.lang = lang;
+  document.getElementById("hdr-title").textContent = u.title;
+  document.getElementById("hdr-sub").textContent = u.sub;
+  document.getElementById("table-caption").textContent = u.tableCaption;
+  document.getElementById("btn-shelf").textContent = u.back;
+  document.getElementById("prev").textContent = u.prev;
+  document.getElementById("next").textContent = u.next;
+  document.getElementById("book-lilli").title = u.openTitle;
+  document.getElementById("btn-to-shelf").textContent = u.toShelf;
+  document.getElementById("prolog-title").textContent = u.prologTitle;
+  document.getElementById("prolog-body").textContent = PROLOG[lang];
+  const fl = document.getElementById("btn-flip");
+  if (fl) fl.textContent = u.flipLink;
+  document.querySelectorAll(".soon-label").forEach(el => el.textContent = u.soon);
+  document.querySelectorAll(".shelf-slot.soon").forEach(el => el.title = u.soon);
+  document.getElementById("lang-de").classList.toggle("active", lang === "de");
+  document.getElementById("lang-en").classList.toggle("active", lang === "en");
+  const active = document.querySelector(".stage.active");
+  if (active) show(active.id);
+}
+
+function show(id) {
+  document.querySelectorAll(".stage").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  const u = UI[lang];
+  if (id === "stage-prolog") hint.textContent = u.hintProlog;
+  if (id === "stage-shelf") hint.textContent = u.hintShelf;
+  if (id === "stage-table") hint.textContent = u.hintTable;
+  if (id === "stage-open") hint.textContent = u.hintOpen;
+}
+
+document.getElementById("btn-to-shelf").onclick = () => show("stage-shelf");
+document.getElementById("book-lilli").onclick = () => show("stage-table");
+document.getElementById("book-on-table").onclick = () => {
+  pageIndex = 0;
+  renderPage();
+  show("stage-open");
+};
+document.getElementById("btn-shelf").onclick = () => show("stage-shelf");
+
+const spread = document.getElementById("spread");
+const pager = document.getElementById("pager");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+
+function renderPage() {
+  const pages = PAGES[lang];
+  const p = pages[pageIndex];
+  const wide = !!p.wide;
+  openStage.classList.toggle("wide-mode", wide);
+  spread.className = "spread" + (wide ? " landscape" : "");
+  spread.innerHTML = `
+    <div class="page left"><h2>${p.title}</h2><div class="body">${p.text}</div></div>
+    <div class="page right"><img src="${p.img}" alt="${p.title}"/></div>`;
+  pager.textContent = `${pageIndex + 1} / ${pages.length}`;
+  prev.disabled = pageIndex === 0;
+  next.disabled = pageIndex === pages.length - 1;
+}
+function setLang(l) {
+  lang = l;
+  localStorage.setItem("lilli_lang", lang);
+  applyUI();
+  if (document.getElementById("stage-open").classList.contains("active")) renderPage();
+}
+document.getElementById("lang-de").onclick = () => setLang("de");
+document.getElementById("lang-en").onclick = () => setLang("en");
+prev.onclick = () => { if (pageIndex > 0) { pageIndex--; renderPage(); } };
+next.onclick = () => { if (pageIndex < PAGES[lang].length - 1) { pageIndex++; renderPage(); } };
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") prev.click();
+  if (e.key === "ArrowRight") next.click();
+  if (e.key === "Escape") show("stage-shelf");
+});
+applyUI();
+</script>
+
+<footer class="site-footer">
+  © 2026 Lichtkrieger / das Rudel — Alle Rechte vorbehalten / All rights reserved
+</footer>
+
+</body>
+</html>

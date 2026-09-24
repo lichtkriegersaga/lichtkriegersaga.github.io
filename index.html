@@ -146,147 +146,62 @@
   }
   .spine {
     --spine-w: clamp(16px, 1.85vw, 24px);
+    --spine-h-scale: 1;
     width: var(--spine-w);
-    height: 100%;
+    height: calc(100% * var(--spine-h-scale));
     position: relative;
     flex: 0 0 auto;
-    border-radius: 1px 2px 1px 1px;
     cursor: default;
     transform-origin: bottom center;
-    transition: transform .28s ease, filter .28s ease, box-shadow .28s ease;
-    box-shadow:
-      inset 1px 0 2px rgba(255,255,255,.08),
-      inset -2px 0 3px rgba(0,0,0,.45),
-      1px 2px 6px rgba(0,0,0,.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 4% 0 1%;
-    overflow: hidden;
-    border: 1px solid rgba(0,0,0,.35);
-    border-left-color: rgba(255,220,150,.1);
-    border-right-color: rgba(0,0,0,.5);
+    transition: transform .28s ease, filter .28s ease;
+    display: block;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    border: none;
+    background: transparent !important;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
   }
-  .spine::before {
-    content: "";
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(90deg, rgba(0,0,0,.35), transparent 18%, transparent 82%, rgba(0,0,0,.4)),
-      repeating-linear-gradient(
-        180deg,
-        transparent 0 18%,
-        rgba(0,0,0,.28) 18% 20%,
-        rgba(255,220,160,.06) 20% 21%,
-        transparent 21% 40%
-      );
+  .spine-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
     pointer-events: none;
+    filter: brightness(0.96) saturate(1.05) contrast(1.04);
   }
   .spine.ready {
     cursor: pointer;
-    filter: brightness(1.1) saturate(1.05);
-    box-shadow:
-      inset 1px 0 2px rgba(255,255,255,.12),
-      inset -2px 0 3px rgba(0,0,0,.4),
-      0 0 10px rgba(201,162,39,.3),
-      1px 3px 8px rgba(0,0,0,.5);
+  }
+  .spine.ready .spine-art {
+    filter: brightness(1.04) saturate(1.08) contrast(1.05)
+      drop-shadow(0 0 6px rgba(255, 190, 90, 0.35));
   }
   .spine.ready:hover,
   .spine.ready:focus-visible {
-    transform: translateY(-6px) translateX(1px) scale(1.04);
-    filter: brightness(1.18) saturate(1.08);
+    transform: translateY(-7px) translateX(2px) scale(1.03);
     outline: none;
     z-index: 6;
+  }
+  .spine.ready:hover .spine-art,
+  .spine.ready:focus-visible .spine-art {
+    filter: brightness(1.12) saturate(1.1) contrast(1.06)
+      drop-shadow(0 0 10px rgba(255, 200, 100, 0.55))
+      drop-shadow(2px 4px 6px rgba(0,0,0,.45));
   }
   .spine.ready:active {
     transform: translateY(-3px) translateX(2px);
   }
+  /* Soon: no transparency — slightly darker grade only */
   .spine.soon {
-    opacity: .88;
-    filter: none;
     cursor: default;
   }
-  .spine.soon::after {
-    content: "";
-    position: absolute; inset: 0;
-    background: rgba(0,0,0,.28);
-    pointer-events: none;
-    z-index: 1;
+  .spine.soon .spine-art {
+    filter: brightness(0.78) saturate(0.92) contrast(1.02);
   }
-  .spine.soon .spine-emblem { z-index: 3; }
-  .spine.soon .spine-titles { opacity: .72; }
-  .spine-emblem {
-    position: relative;
-    z-index: 2;
-    width: 72%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 1px solid #c9a227;
-    box-shadow:
-      0 0 0 1px #1a0e08,
-      0 0 4px rgba(201,162,39,.35),
-      inset 0 1px 1px rgba(255,240,180,.25);
-    background: radial-gradient(circle at 35% 30%, #3a2818, #1a100a 70%);
-    overflow: hidden;
-    flex-shrink: 0;
-    margin-bottom: 5%;
-  }
-  .spine-emblem img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .spine-emblem.empty {
-    background: radial-gradient(circle at 35% 30%, #2a1c12, #120c08 75%);
-    box-shadow:
-      0 0 0 1px #1a0e08,
-      inset 0 0 4px rgba(0,0,0,.6),
-      inset 0 1px 1px rgba(201,162,39,.15);
-  }
-  .spine-emblem.empty::after {
-    content: "";
-    position: absolute; inset: 22%;
-    border-radius: 50%;
-    border: 1px solid rgba(201,162,39,.28);
-    box-shadow: inset 0 0 3px rgba(0,0,0,.5);
-  }
-  .spine-accent {
-    position: relative; z-index: 2;
-    width: 50%; height: 1px;
-    margin-bottom: 5%;
-    background: linear-gradient(90deg, transparent, #c9a227, transparent);
-    opacity: .65;
-  }
-  .spine-titles {
-    position: relative;
-    z-index: 2;
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 1px;
-    min-height: 0;
-    width: 100%;
-    overflow: hidden;
-  }
-  .spine-title {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    transform: rotate(180deg);
-    color: #f0e0a8;
-    font-weight: 700;
-    text-shadow: 0 1px 2px rgba(0,0,0,.85);
-    text-align: center;
-    white-space: nowrap;
-    overflow: visible;
-    line-height: 1;
-    font-size: clamp(.48rem, 1.05vw, .68rem);
-    letter-spacing: .16em;
-    padding: 0;
-  }
-  .spine.soon .spine-title { color: #d4b86a; opacity: .9; }
 
   #stage-table {
     position: relative;
@@ -719,8 +634,6 @@
       /* sizes are in full-image zoom space; appear ~150px tall after crop */
       --spine-w: clamp(22px, 2.1%, 36px);
     }
-    .spine-title { font-size: clamp(.55rem, 55%, .75rem); letter-spacing: .12em; }
-    .spine-emblem { width: 78%; }
     #book-on-table {
       width: min(78vw, 72%);
       height: auto;
@@ -1810,37 +1723,37 @@ const VOLUMES = [
     id: "lilli",
     title: { de: "LILLI", en: "LILLI" },
     subtitle: { de: "Die Klinge aus dem Norden", en: "The Blade from the North" },
-    color: "linear-gradient(90deg, #2a1810 0%, #5a3a22 22%, #3a2418 45%, #1a100a 70%, #0d0805 100%)",
+    spine: "assets/spines/spine_lilli.png",
     status: "ready",
     href: "table",
-    emblem: "assets/emblem_lilli.png"
+    heightScale: 0.98
   },
   {
     id: "maya",
     title: { de: "MAYA", en: "MAYA" },
     subtitle: null,
-    color: "linear-gradient(90deg, #1a1410 0%, #3a2a20 30%, #241810 60%, #120c08 100%)",
+    spine: "assets/spines/spine_maya.png",
     status: "soon",
     href: null,
-    emblem: "assets/emblem_maya.svg"
+    heightScale: 1.0
   },
   {
     id: "piri",
     title: { de: "PIRI", en: "PIRI" },
     subtitle: null,
-    color: "linear-gradient(90deg, #181210 0%, #342418 28%, #20140e 55%, #100a06 100%)",
+    spine: "assets/spines/spine_piri.png",
     status: "soon",
     href: null,
-    emblem: "assets/emblem_piri.svg"
+    heightScale: 0.96
   },
   {
     id: "filli",
     title: { de: "FILLI", en: "FILLI" },
     subtitle: null,
-    color: "linear-gradient(90deg, #1c120e 0%, #3a281c 25%, #261810 58%, #120a08 100%)",
+    spine: "assets/spines/spine_filli.png",
     status: "soon",
     href: null,
-    emblem: "assets/emblem_filli.svg"
+    heightScale: 0.99
   }
 ];
 /* Measured from bookshelf_bg.jpg (see CSS comment). Percents of shelf-scene. */
@@ -1885,13 +1798,12 @@ function renderSpines() {
       btn.type = "button";
       btn.className = "spine " + (vol.status === "ready" ? "ready" : "soon");
       btn.dataset.id = vol.id;
-      btn.style.background = vol.color;
+      if (vol.heightScale) btn.style.setProperty("--spine-h-scale", String(vol.heightScale));
       const title = (vol.title && vol.title[lang]) || vol.id;
       const subtitle = vol.subtitle ? (vol.subtitle[lang] || vol.subtitle.de || "") : "";
       const tip = vol.status === "ready"
         ? (u.openTitle || (subtitle ? title + " · " + subtitle : title))
         : (u.soonFull || u.soon);
-      // Full title+subtitle always in tooltip (subtitle dropped from spine face when small)
       if (vol.status === "ready" && subtitle) {
         btn.title = title + " · " + subtitle;
       } else {
@@ -1900,28 +1812,12 @@ function renderSpines() {
       btn.setAttribute("aria-label", btn.title);
       if (vol.status !== "ready") btn.setAttribute("aria-disabled", "true");
 
-      const emblem = document.createElement("div");
-      emblem.className = "spine-emblem" + (vol.emblem ? "" : " empty");
-      if (vol.emblem) {
-        const img = document.createElement("img");
-        img.src = vol.emblem;
-        img.alt = "";
-        emblem.appendChild(img);
-      }
-      btn.appendChild(emblem);
-
-      const accent = document.createElement("div");
-      accent.className = "spine-accent";
-      btn.appendChild(accent);
-
-      const titles = document.createElement("div");
-      titles.className = "spine-titles";
-      const t = document.createElement("span");
-      t.className = "spine-title";
-      t.textContent = title;
-      titles.appendChild(t);
-      // subtitle omitted on spine face — kept as tooltip only
-      btn.appendChild(titles);
+      const img = document.createElement("img");
+      img.className = "spine-art";
+      img.src = vol.spine;
+      img.alt = "";
+      img.draggable = false;
+      btn.appendChild(img);
 
       if (vol.status === "ready") {
         btn.addEventListener("click", () => {

@@ -90,92 +90,110 @@
     object-position: center 55%;
   }
   /* —— Bücherwand spines (data-driven) —— */
+  /*
+   * Shelf geometry from assets/bookshelf_bg.jpg (1280×720), PIL edge detect:
+   * Plank tops (from image top): 12.7%, 35.2%, 54.0%, 71.3%
+   * Lamp-row compartment (empty cols 2–3): top 54.0% → bottom plank 71.3%
+   *   clear height 17.3%; spines = 82% → 14.2% of scene height
+   *   css bottom = 100−71.3 = 28.7%
+   * Vertical dividers ≈ 27.3%, 50.0%, 72.1%
+   * Placement: lamp row, empty cols 2–3 (left 29% … right 29% ⇒ to 71%)
+   * Overflow continues to row above (plank 54.0%, bottom 46.0%, height 15.4%)
+   */
   .shelf-rows {
     position: absolute;
-    left: 15%;
-    right: 10%;
-    bottom: 20.5%;
-    height: 42%;
     z-index: 4;
     display: flex;
-    flex-direction: column-reverse; /* bottom shelf first */
+    flex-direction: column-reverse; /* first row = bottom compartment */
     justify-content: flex-start;
-    gap: 3%;
+    gap: 0;
     pointer-events: none;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: #8a6a3a transparent;
+    /* default = lamp-row empty compartments; JS may set multiple .spine-row absolute */
+    inset: auto;
+    left: 0; right: 0; top: 0; bottom: 0;
+    overflow: visible;
   }
   .spine-row {
+    position: absolute;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: flex-start;
-    gap: clamp(4px, 0.55vw, 8px);
-    height: 100%;
-    min-height: 140px;
+    gap: clamp(2px, 0.35vw, 5px);
     pointer-events: auto;
-    padding: 0 2px 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  /* Lamp-row empty cols (primary) — set as defaults; JS overrides via inline style */
+  .spine-row[data-slot="0"] {
+    left: 29%;
+    width: 42%;
+    bottom: 28.7%;
+    height: 14.2%;
+  }
+  /* Row above (overflow) */
+  .spine-row[data-slot="1"] {
+    left: 29%;
+    width: 42%;
+    bottom: 46.0%;
+    height: 15.4%;
   }
   .spine {
-    --spine-w: clamp(36px, 4.4vw, 54px);
+    --spine-w: clamp(16px, 1.85vw, 24px);
     width: var(--spine-w);
     height: 100%;
     position: relative;
     flex: 0 0 auto;
-    border-radius: 2px 3px 2px 2px;
+    border-radius: 1px 2px 1px 1px;
     cursor: default;
     transform-origin: bottom center;
     transition: transform .28s ease, filter .28s ease, box-shadow .28s ease;
     box-shadow:
-      inset 2px 0 3px rgba(255,255,255,.08),
-      inset -3px 0 5px rgba(0,0,0,.45),
-      2px 4px 10px rgba(0,0,0,.55);
+      inset 1px 0 2px rgba(255,255,255,.08),
+      inset -2px 0 3px rgba(0,0,0,.45),
+      1px 2px 6px rgba(0,0,0,.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 5% 0 1%;
+    padding: 4% 0 1%;
     overflow: hidden;
     border: 1px solid rgba(0,0,0,.35);
-    border-left-color: rgba(255,220,150,.12);
+    border-left-color: rgba(255,220,150,.1);
     border-right-color: rgba(0,0,0,.5);
   }
   .spine::before {
-    /* raised bands */
     content: "";
     position: absolute; inset: 0;
     background:
       linear-gradient(90deg, rgba(0,0,0,.35), transparent 18%, transparent 82%, rgba(0,0,0,.4)),
       repeating-linear-gradient(
         180deg,
-        transparent 0 14%,
-        rgba(0,0,0,.28) 14% 16%,
-        rgba(255,220,160,.06) 16% 17%,
-        transparent 17% 33%
+        transparent 0 18%,
+        rgba(0,0,0,.28) 18% 20%,
+        rgba(255,220,160,.06) 20% 21%,
+        transparent 21% 40%
       );
     pointer-events: none;
   }
   .spine.ready {
     cursor: pointer;
-    filter: brightness(1.08) saturate(1.05);
+    filter: brightness(1.1) saturate(1.05);
     box-shadow:
-      inset 2px 0 3px rgba(255,255,255,.12),
-      inset -3px 0 5px rgba(0,0,0,.4),
-      0 0 14px rgba(201,162,39,.28),
-      2px 6px 14px rgba(0,0,0,.55);
+      inset 1px 0 2px rgba(255,255,255,.12),
+      inset -2px 0 3px rgba(0,0,0,.4),
+      0 0 10px rgba(201,162,39,.3),
+      1px 3px 8px rgba(0,0,0,.5);
   }
   .spine.ready:hover,
   .spine.ready:focus-visible {
-    transform: translateY(-10px) translateX(2px) scale(1.03);
-    filter: brightness(1.16) saturate(1.08);
+    transform: translateY(-6px) translateX(1px) scale(1.04);
+    filter: brightness(1.18) saturate(1.08);
     outline: none;
     z-index: 6;
   }
   .spine.ready:active {
-    transform: translateY(-6px) translateX(4px);
+    transform: translateY(-3px) translateX(2px);
   }
   .spine.soon {
     opacity: .88;
@@ -191,26 +209,21 @@
   }
   .spine.soon .spine-emblem { z-index: 3; }
   .spine.soon .spine-titles { opacity: .72; }
-  .spine.soon .spine-emblem {
-    opacity: 1;
-    filter: saturate(1.05) brightness(1.05);
-  }
   .spine-emblem {
     position: relative;
     z-index: 2;
-    width: 58%;
+    width: 72%;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 1.5px solid #c9a227;
+    border: 1px solid #c9a227;
     box-shadow:
       0 0 0 1px #1a0e08,
-      0 0 6px rgba(201,162,39,.35),
-      inset 0 1px 2px rgba(255,240,180,.25);
-    background:
-      radial-gradient(circle at 35% 30%, #3a2818, #1a100a 70%);
+      0 0 4px rgba(201,162,39,.35),
+      inset 0 1px 1px rgba(255,240,180,.25);
+    background: radial-gradient(circle at 35% 30%, #3a2818, #1a100a 70%);
     overflow: hidden;
     flex-shrink: 0;
-    margin-bottom: 6%;
+    margin-bottom: 5%;
   }
   .spine-emblem img {
     width: 100%; height: 100%;
@@ -218,11 +231,10 @@
     display: block;
   }
   .spine-emblem.empty {
-    background:
-      radial-gradient(circle at 35% 30%, #2a1c12, #120c08 75%);
+    background: radial-gradient(circle at 35% 30%, #2a1c12, #120c08 75%);
     box-shadow:
       0 0 0 1px #1a0e08,
-      inset 0 0 6px rgba(0,0,0,.6),
+      inset 0 0 4px rgba(0,0,0,.6),
       inset 0 1px 1px rgba(201,162,39,.15);
   }
   .spine-emblem.empty::after {
@@ -230,7 +242,14 @@
     position: absolute; inset: 22%;
     border-radius: 50%;
     border: 1px solid rgba(201,162,39,.28);
-    box-shadow: inset 0 0 4px rgba(0,0,0,.5);
+    box-shadow: inset 0 0 3px rgba(0,0,0,.5);
+  }
+  .spine-accent {
+    position: relative; z-index: 2;
+    width: 50%; height: 1px;
+    margin-bottom: 5%;
+    background: linear-gradient(90deg, transparent, #c9a227, transparent);
+    opacity: .65;
   }
   .spine-titles {
     position: relative;
@@ -241,54 +260,27 @@
     flex-wrap: nowrap;
     align-items: flex-start;
     justify-content: center;
-    gap: 3px;
+    gap: 1px;
     min-height: 0;
     width: 100%;
     overflow: hidden;
   }
-  .spine-title,
-  .spine-subtitle {
+  .spine-title {
     writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
     color: #f0e0a8;
-    font-weight: 600;
+    font-weight: 700;
     text-shadow: 0 1px 2px rgba(0,0,0,.85);
     text-align: center;
     white-space: nowrap;
     overflow: visible;
     line-height: 1;
+    font-size: clamp(.48rem, 1.05vw, .68rem);
+    letter-spacing: .16em;
     padding: 0;
   }
-  .spine-title {
-    font-size: clamp(.72rem, 1.45vw, .95rem);
-    letter-spacing: .18em;
-  }
-  .spine-subtitle {
-    font-size: clamp(.36rem, .72vw, .5rem);
-    letter-spacing: .06em;
-    font-weight: 500;
-    color: #e8d08acc;
-    opacity: .92;
-    max-height: 100%;
-  }
   .spine.soon .spine-title { color: #d4b86a; opacity: .9; }
-  .spine.soon .spine-subtitle { color: #c9a22799; }
-  .spine.has-subtitle { --spine-w: clamp(40px, 4.8vw, 58px); }
-  .spine .spine-emblem img,
-  .spine .spine-emblem object {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .spine-accent {
-    /* tiny gold line under emblem */
-    position: relative; z-index: 2;
-    width: 55%; height: 2px;
-    margin-bottom: 8%;
-    background: linear-gradient(90deg, transparent, #c9a227, transparent);
-    opacity: .7;
-  }
 
   #stage-table {
     position: relative;
@@ -650,14 +642,15 @@
     #stage-table { aspect-ratio: 4/3; width: 96vw; min-height: 0; }
     .stage { min-height: 0; }
     .shelf-scene {
-      aspect-ratio: 5/6;
+      /* Keep 16/9 so plank % from bg image stay accurate */
+      aspect-ratio: 16/9;
       width: 100%;
       border-radius: 8px 8px 0 0;
       flex-shrink: 0;
     }
     .shelf-scene .bg {
       object-fit: cover;
-      object-position: center 48%;
+      object-position: center center;
     }
     /* Folio below shelf image on mobile */
     #stage-shelf .folio-keeper {
@@ -684,26 +677,25 @@
       font-size: .68rem;
       padding: .4rem .5rem;
     }
-    .shelf-rows {
-      left: 8%;
-      right: 5%;
-      bottom: 18%;
-      height: 52%;
-      top: auto;
-      gap: 3%;
-      overflow-x: auto;
+    /* Same % geometry as desktop — scales with shelf-scene */
+    .spine-row[data-slot="0"] {
+      left: 28%;
+      width: 44%;
+      bottom: 28.7%;
+      height: 14.2%;
     }
-    .spine-row {
-      min-height: 180px;
-      height: 100%;
-      gap: 6px;
+    .spine-row[data-slot="1"] {
+      left: 28%;
+      width: 44%;
+      bottom: 46.0%;
+      height: 15.4%;
     }
+    .spine-row { gap: 3px; }
     .spine {
-      --spine-w: clamp(44px, 11.5vw, 58px);
+      --spine-w: clamp(18px, 4.6vw, 26px);
     }
-    .spine.has-subtitle { --spine-w: clamp(50px, 13vw, 66px); }
-    .spine-title { font-size: .82rem; letter-spacing: .14em; }
-    .spine-subtitle { font-size: .5rem; letter-spacing: .08em; }
+    .spine-title { font-size: .55rem; letter-spacing: .12em; }
+    .spine-emblem { width: 78%; }
     #book-on-table {
       width: min(78vw, 72%);
       height: auto;
@@ -1824,22 +1816,42 @@ const VOLUMES = [
     emblem: "assets/emblem_filli.svg"
   }
 ];
-const SPINES_PER_ROW = 14; // desktop; mobile uses fewer via CSS width
+/* Measured from bookshelf_bg.jpg (see CSS comment). Percents of shelf-scene. */
+const SHELF_SLOTS = [
+  // Lamp row — empty compartments between dividers ~27% and ~72%
+  { left: 29, width: 42, bottom: 28.7, height: 14.2 },
+  // Overflow: row above (plank top 54.0%)
+  { left: 29, width: 42, bottom: 46.0, height: 15.4 }
+];
 
 function renderSpines() {
   const host = document.getElementById("shelf-rows");
   if (!host) return;
   const u = UI[lang];
   host.innerHTML = "";
-  const perRow = window.matchMedia("(max-width: 720px)").matches ? 8 : SPINES_PER_ROW;
-  const rows = [];
-  for (let i = 0; i < VOLUMES.length; i += perRow) {
-    rows.push(VOLUMES.slice(i, i + perRow));
-  }
-  // column-reverse: first row in DOM = bottom shelf
-  rows.forEach((group) => {
+
+  // Estimate how many spines fit in a slot (scene width × slot.width / spine width)
+  const scene = document.querySelector(".shelf-scene");
+  const sceneW = Math.max(320, scene ? (scene.getBoundingClientRect().width || 800) : 800);
+  const spineW = Math.max(16, Math.min(24, sceneW * 0.0185));
+  const gap = Math.max(2, sceneW * 0.0035);
+
+  let volIndex = 0;
+  SHELF_SLOTS.forEach((slot, slotIdx) => {
+    if (volIndex >= VOLUMES.length) return;
+    const slotPx = sceneW * (slot.width / 100);
+    const perSlot = Math.max(1, Math.floor((slotPx + gap) / (spineW + gap)));
+    const group = VOLUMES.slice(volIndex, volIndex + perSlot);
+    volIndex += group.length;
+
     const row = document.createElement("div");
     row.className = "spine-row";
+    row.dataset.slot = String(slotIdx);
+    row.style.left = slot.left + "%";
+    row.style.width = slot.width + "%";
+    row.style.bottom = slot.bottom + "%";
+    row.style.height = slot.height + "%";
+
     group.forEach((vol) => {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -1851,10 +1863,14 @@ function renderSpines() {
       const tip = vol.status === "ready"
         ? (u.openTitle || (subtitle ? title + " · " + subtitle : title))
         : (u.soonFull || u.soon);
-      btn.title = tip;
-      btn.setAttribute("aria-label", tip);
+      // Full title+subtitle always in tooltip (subtitle dropped from spine face when small)
+      if (vol.status === "ready" && subtitle) {
+        btn.title = title + " · " + subtitle;
+      } else {
+        btn.title = tip;
+      }
+      btn.setAttribute("aria-label", btn.title);
       if (vol.status !== "ready") btn.setAttribute("aria-disabled", "true");
-      if (subtitle) btn.classList.add("has-subtitle");
 
       const emblem = document.createElement("div");
       emblem.className = "spine-emblem" + (vol.emblem ? "" : " empty");
@@ -1876,12 +1892,7 @@ function renderSpines() {
       t.className = "spine-title";
       t.textContent = title;
       titles.appendChild(t);
-      if (subtitle) {
-        const s = document.createElement("span");
-        s.className = "spine-subtitle";
-        s.textContent = subtitle;
-        titles.appendChild(s);
-      }
+      // subtitle omitted on spine face — kept as tooltip only
       btn.appendChild(titles);
 
       if (vol.status === "ready") {
@@ -1895,7 +1906,6 @@ function renderSpines() {
     host.appendChild(row);
   });
 }
-
 
 const FOLIO_AUDIO = {
   prolog: { de: "assets/folio_prolog_de.m4a", en: "assets/folio_prolog_en.m4a" },
@@ -2085,7 +2095,10 @@ function show(id) {
   document.getElementById(id).classList.add("active");
   const u = UI[lang];
   if (id === "stage-prolog") hint.textContent = u.hintProlog;
-  if (id === "stage-shelf") hint.textContent = u.hintShelf;
+  if (id === "stage-shelf") {
+    hint.textContent = u.hintShelf;
+    requestAnimationFrame(() => renderSpines());
+  }
   if (id === "stage-table") hint.textContent = u.hintTable;
   if (id === "stage-open") hint.textContent = u.hintOpen;
   // Stop Folio when leaving the screen that owns the clip (never autoplay)

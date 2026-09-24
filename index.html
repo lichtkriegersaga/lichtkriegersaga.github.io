@@ -722,8 +722,8 @@
       </button>
       <button type="button" id="btn-to-shelf">Zur Bücherwand</button>
     </div>
-    <audio id="audio-folio-prolog" preload="metadata"></audio>
-    <audio id="audio-folio-gruss" preload="metadata"></audio>
+    <audio id="audio-folio-prolog" preload="auto" playsinline></audio>
+    <audio id="audio-folio-gruss" preload="auto" playsinline></audio>
   </div>
 
   <div class="stage" id="stage-shelf">
@@ -1904,30 +1904,26 @@ function syncFolioLabels() {
   btnGruss.setAttribute("aria-label", u.folioSpeakTitle);
 }
 
-async function resolvePrologSrc() {
-  await ensureFolioProbes();
-  if (lang === "en" && FOLIO_OK.prolog_en) {
-    noteProlog.hidden = true;
-    noteProlog.textContent = "";
-    return FOLIO_AUDIO.prolog.en;
-  }
-  if (lang === "en" && !FOLIO_OK.prolog_en) {
-    noteProlog.hidden = false;
-    noteProlog.textContent = UI[lang].folioNoteDe;
-  } else {
-    noteProlog.hidden = true;
-    noteProlog.textContent = "";
-  }
-  return FOLIO_AUDIO.prolog.de;
+function resolvePrologSrc() {
+  noteProlog.hidden = true;
+  noteProlog.textContent = "";
+  return lang === "en" ? FOLIO_AUDIO.prolog.en : FOLIO_AUDIO.prolog.de;
 }
 
-async function resolveGrussSrc() {
-  await ensureFolioProbes();
-  if (lang === "en" && FOLIO_OK.gruss_en) return FOLIO_AUDIO.gruss.en;
-  return FOLIO_AUDIO.gruss.de;
+function resolveGrussSrc() {
+  return lang === "en" ? FOLIO_AUDIO.gruss.en : FOLIO_AUDIO.gruss.de;
 }
 
-async function togglePrologAudio() {
+// iOS/Safari: play() must be called synchronously inside the tap (no await before it)
+function playNow(el, src, onOk, onFail) {
+  if (el.getAttribute("src") !== src) { el.src = src; el.load(); }
+  el.muted = false; el.volume = 1;
+  let p;
+  try { p = el.play(); } catch (err) { onFail(err); return; }
+  if (p && p.then) p.then(onOk).catch(onFail); else onOk();
+}
+
+function togglePrologAudio() {
   if (btnProlog.classList.contains("playing") && !audioProlog.paused) {
     audioProlog.pause();
     btnProlog.classList.remove("playing");
@@ -1937,22 +1933,14 @@ async function togglePrologAudio() {
   }
   stopAudio(audioGruss);
   btnGruss.classList.remove("playing");
-  const src = await resolvePrologSrc();
-  if (audioProlog.getAttribute("src") !== src) {
-    audioProlog.src = src;
-  }
-  try {
-    await audioProlog.play();
+  playNow(audioProlog, resolvePrologSrc(), () => {
     btnProlog.classList.add("playing");
     btnProlog.setAttribute("aria-pressed", "true");
     syncFolioLabels();
-  } catch (err) {
-    console.warn("Folio prolog play failed", err);
-    stopAllFolio();
-  }
+  }, (err) => { console.warn("Folio prolog play failed", err); stopAllFolio(); });
 }
 
-async function toggleGrussAudio() {
+function toggleGrussAudio() {
   if (btnGruss.classList.contains("playing") && !audioGruss.paused) {
     audioGruss.pause();
     btnGruss.classList.remove("playing");
@@ -1962,17 +1950,8 @@ async function toggleGrussAudio() {
   btnProlog.classList.remove("playing");
   btnProlog.setAttribute("aria-pressed", "false");
   syncFolioLabels();
-  const src = await resolveGrussSrc();
-  if (audioGruss.getAttribute("src") !== src) {
-    audioGruss.src = src;
-  }
-  try {
-    await audioGruss.play();
-    btnGruss.classList.add("playing");
-  } catch (err) {
-    console.warn("Folio greeting play failed", err);
-    btnGruss.classList.remove("playing");
-  }
+  playNow(audioGruss, resolveGrussSrc(), () => btnGruss.classList.add("playing"),
+    (err) => { console.warn("Folio greeting play failed", err); btnGruss.classList.remove("playing"); });
 }
 
 audioProlog.addEventListener("ended", () => {

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Piri — Die Flamme aus dem Osten | Lichtkrieger</title>
+<meta name="description" content="PIRI — Die Flamme aus dem Osten. Lederband mit Cover und 12 Kapiteln. Deutsch &amp; Englisch umschalten. Die Vorgeschichte des Magiers aus dem Lichtkrieger-Rudel."/>
+<meta name="theme-color" content="#120a06"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Piri — Die Flamme aus dem Osten"/>
+<meta property="og:description" content="Lederband · Cover &amp; 12 Kapitel · DE/EN. Die Vorgeschichte der Flamme aus dem Osten."/>
+<meta property="og:image" content="../assets/piri_cover.jpg"/>
+<meta property="og:locale" content="de_DE"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Piri — Die Flamme aus dem Osten"/>
+<meta name="twitter:description" content="Lederband · Cover &amp; 12 Kapitel · DE/EN"/>
+<meta name="twitter:image" content="../assets/piri_cover.jpg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png"/>
+<link rel="icon" type="image/png" href="../assets/favicon.png"/>
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"/>
+<style>
+  :root {
+    --leather: #2a1810;
+    --parchment: #f3e6c8;
+    --ink: #1a120c;
+    --gold: #c9a227;
+    --brass: #8a6a3a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: radial-gradient(ellipse at center, #3a2418 0%, #120a06 70%);
+    color: var(--parchment);
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.5rem 1rem 3rem;
+  }
+  h1 { font-weight: 600; letter-spacing: .08em; font-size: 1.1rem; margin: 0 0 .25rem; color: var(--gold); }
+  .sub { opacity: .75; font-size: .85rem; margin-bottom: 1.25rem; }
+  .lang-switch {
+    position: fixed; top: .75rem; right: .75rem; z-index: 20;
+    display: flex; gap: .25rem;
+  }
+  .lang-switch button {
+    background: #2a1810; color: var(--parchment);
+    border: 1px solid var(--brass); border-radius: 3px;
+    padding: .3rem .55rem; font: inherit; font-size: .75rem; cursor: pointer;
+    letter-spacing: .06em;
+  }
+  .lang-switch button.active { background: var(--gold); color: #1a0e08; border-color: var(--gold); }
+  .stage {
+    width: min(920px, 96vw);
+    aspect-ratio: 3/2;
+    max-height: 72vh;
+    position: relative;
+    perspective: 2000px;
+  }
+  .stage.wide-mode {
+    width: min(1100px, 96vw);
+    aspect-ratio: 16/10;
+  }
+  .spread {
+    width: 100%; height: 100%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-radius: 6px 10px 10px 6px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 3px #1a0e08,
+      0 0 0 6px var(--brass),
+      0 25px 60px rgba(0,0,0,.65);
+    background: var(--leather);
+  }
+  .spread.landscape {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1.05fr) minmax(0, .95fr);
+  }
+  .page {
+    background: var(--parchment);
+    color: var(--ink);
+    padding: 1.4rem 1.5rem;
+    overflow: auto;
+    position: relative;
+  }
+  .page.left {
+    border-right: 1px solid #cbb892;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.06), transparent 12%),
+      var(--parchment);
+  }
+  .spread.landscape .page.left {
+    border-right: none;
+    border-bottom: 1px solid #cbb892;
+    order: 2;
+    background:
+      linear-gradient(0deg, rgba(0,0,0,.05), transparent 18%),
+      var(--parchment);
+  }
+  .page.right {
+    background:
+      linear-gradient(270deg, rgba(0,0,0,.05), transparent 12%),
+      var(--parchment);
+    display: flex; align-items: center; justify-content: center;
+    padding: .6rem;
+  }
+  .spread.landscape .page.right {
+    order: 1;
+    padding: .35rem;
+    background: #1a120c;
+  }
+  .page.cover-wrap {
+    grid-column: 1 / -1;
+    background: #1a0e08;
+    padding: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .page.cover-wrap img { width: 100%; height: 100%; object-fit: contain; background: #0d0805; }
+  .page h2 {
+    margin: 0 0 .8rem; font-size: 1.15rem; color: #5a3a18;
+    border-bottom: 1px solid #c9a22766; padding-bottom: .4rem;
+  }
+  .page .body {
+    font-size: clamp(.78rem, 1.35vw, .95rem);
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .page.right img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    border: 1px solid #b89a5a55;
+    border-radius: 2px;
+  }
+  .spread.landscape .page.right img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    border: none;
+  }
+  .nav {
+    margin-top: 1.25rem;
+    display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; justify-content: center;
+  }
+  button {
+    background: linear-gradient(180deg, #5a3a22, #2a1810);
+    color: var(--parchment);
+    border: 1px solid var(--brass);
+    border-radius: 4px;
+    padding: .55rem 1.1rem;
+    font: inherit; cursor: pointer;
+    letter-spacing: .04em;
+  }
+  button:hover { filter: brightness(1.15); }
+  button:disabled { opacity: .35; cursor: default; }
+  .pager { min-width: 7rem; text-align: center; color: var(--gold); font-size: .9rem; }
+  .hint { margin-top: .75rem; font-size: .75rem; opacity: .55; }
+
+  .site-footer {
+    margin-top: 2rem;
+    padding: 1.25rem 1rem 1.5rem;
+    text-align: center;
+    font-size: .72rem;
+    letter-spacing: .04em;
+    opacity: .55;
+    color: var(--parchment, #f3e6c8);
+    border-top: 1px solid #5a3a2244;
+  }
+
+  .back-home {
+    position: fixed; top: .75rem; left: .75rem; z-index: 20;
+    background: #2a1810; color: var(--parchment);
+    border: 1px solid var(--brass); border-radius: 3px;
+    padding: .3rem .7rem; font: inherit; font-size: .75rem;
+    text-decoration: none; letter-spacing: .04em;
+  }
+  .back-home:hover { filter: brightness(1.15); }
+  @media (max-width: 720px) {
+    body {
+      padding: 3.1rem .65rem 2rem; /* room under fixed back + DE/EN */
+      padding-left: .65rem;
+      padding-right: .65rem;
+    }
+    .lang-switch { top: .5rem; right: .5rem; }
+    .back-home {
+      top: .5rem; left: .5rem;
+      font-size: .68rem;
+      padding: .25rem .5rem;
+      max-width: 42vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    h1, #doc-title {
+      font-size: clamp(.72rem, 3.5vw, .92rem);
+      letter-spacing: .04em;
+      line-height: 1.3;
+      text-align: center;
+      max-width: 100%;
+      margin: 0 auto .2rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      padding: 0 .15rem;
+    }
+    .sub {
+      font-size: .72rem;
+      margin-bottom: .85rem;
+      text-align: center;
+      padding: 0 .25rem;
+      line-height: 1.35;
+    }
+    .stage,
+    .stage.wide-mode {
+      width: 96vw;
+      max-height: none;
+      aspect-ratio: auto;
+      min-height: 0;
+      height: auto;
+    }
+    .spread,
+    .spread.landscape {
+      min-height: 0;
+      height: auto;
+      aspect-ratio: auto;
+      max-height: none;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+    }
+    .spread.landscape .page.right {
+      order: 1;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+      background: #1a120c;
+    }
+    .spread.landscape .page.right img {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      object-fit: cover;
+      display: block;
+      border: none;
+    }
+    .spread.landscape .page.left {
+      order: 2;
+      overflow: visible;
+      max-height: none;
+    }
+    .page.cover-wrap {
+      aspect-ratio: 16 / 9;
+      height: auto;
+      max-height: none;
+    }
+    .page.cover-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .page { padding: 1rem; }
+    .page .body { font-size: .85rem; }
+    .nav { margin-top: .75rem; gap: .5rem; }
+    .nav button { padding: .45rem .85rem; font-size: .8rem; }
+  }
+</style>
+</head>
+<body>
+  <a class="back-home" href="../index.html" id="back-home">‹ Bücherwand</a>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button type="button" id="lang-de" class="active">DE</button>
+    <button type="button" id="lang-en">EN</button>
+  </div>
+  <h1 id="doc-title">PIRI — Die Flamme aus dem Osten</h1>
+  <div class="sub" id="doc-sub">Lederband · zum Umblättern · Vorgeschichte · 12 Kapitel</div>
+  <div class="stage" id="stage">
+    <div class="spread" id="spread"></div>
+  </div>
+  <div class="nav">
+    <button id="prev" type="button">‹ Zurück</button>
+    <div class="pager" id="pager">1 / 1</div>
+    <button id="next" type="button">Weiter ›</button>
+  </div>
+  <div class="hint" id="doc-hint">Tastatur: ← → · Ein Band pro Charakter · Piri</div>
+<script>
+const UI = {
+  de: {
+    title: "PIRI — Die Flamme aus dem Osten",
+    sub: "Lederband · zum Umblättern · Vorgeschichte · 12 Kapitel",
+    prev: "‹ Zurück",
+    next: "Weiter ›",
+    hint: "Tastatur: ← → · Piri · Die Flamme aus dem Osten"
+  },
+  en: {
+    title: "PIRI — The Flame from the East",
+    sub: "Leather volume · flip through · origin story · 12 chapters",
+    prev: "‹ Back",
+    next: "Next ›",
+    hint: "Keys: ← → · Piri · The Flame from the East"
+  }
+};
+const PAGES = {
+  "de": [
+    {
+      "type": "cover",
+      "img": "../assets/piri_cover.jpg",
+      "label": "Cover"
+    },
+    {
+      "type": "spread",
+      "title": "I. Das Kind des Sturms",
+      "text": "Es gibt Nächte in den Hügeln meiner Heimat, in denen der Himmel nicht donnert — er zerreisst.\n\nIn einer solchen Nacht wurde ich geboren.\n\nDie Blitze kamen so dicht, dass die Hebamme später sagte, die Hütte sei keinen Augenblick dunkel gewesen.\nUnd das Feuer in der Schmiede meines Vaters brannte heller als je zuvor.\nOhne dass jemand Holz nachgelegt hatte.\n\nIch weinte nicht.\nIch machte die Augen auf.\nNicht erschrocken. Aufmerksam.\nAls würde ich den Sturm draussen nicht fürchten — sondern erkennen.\n\nMeine Mutter war eine Seherin. Sie wusste, was Worte wiegen.\nSie schaute in meine Augen — grünblau, sagt man, wie ein Sturm über dem Meer —\nund flüsterte: \"Er kennt das Feuer. Er heisst Piri.\"\n\nMein Vater, der Schmied mit den narbigen Händen, hob mich ins Blitzlicht.\n\"Piri,\" wiederholte er.\nDer Funke.\n\nNicht weil er es sich wünschte.\nWeil er es sah.\n\nFeuer und Wasser. Sturm und Stille.\nDas war ich von Anfang an.\n",
+      "img": "../assets/piri_p01.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "II. Zwischen zwei Welten",
+      "text": "Unser Dorf lag zwischen zwei Mächten.\n\nAuf der einen Seite: Rom.\nLegionen, die marschierten. Strassen, die niemand bestellt hatte.\nGesetze, bei denen niemand gefragt wurde, ob er sie wollte.\n\nAuf der anderen Seite: die Druiden.\nAlte Männer in alten Wäldern.\nSie flüsterten von Göttern, die älter waren als die Wörter für sie.\n\nIch wuchs zwischen beiden auf.\nUnd gehörte zu keinem ganz.\n\nFür die Römer war ich ein Barbarenkind.\nFür die Druiden war da etwas in mir — zu stark, zu wild für ihre alten Pfade.\n\nNur mein Vater sah einfach mich.\n\nDie Schmiede war der einzige Ort, der beiden Welten gehörte und keiner.\nDort sass ich neben dem Amboss und schaute in die Glut.\n\n\"Feuer ist kein Feind und kein Freund,\" sagte er einmal und legte die Zange in die Kohlen.\n\"Feuer ist Möglichkeit. Es macht weich, was hart ist. Es formt, was formlos ist.\nAber es zerstört, was du ihm ohne Absicht gibst.\"\n\nEr schaute mich an.\n\"Der Unterschied zwischen Zerstörung und Erschaffung — das bist du. Deine Hand. Deine Geduld.\"\n\nIch war sechs.\nIch verstand es noch nicht.\nIch verstand es ein Jahr später.\n",
+      "img": "../assets/piri_p02.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "III. Die erste Flamme",
+      "text": "Ich war sieben.\n\nEin gewöhnlicher Morgen. Tau auf dem Gras. Rauch über den Dächern.\nIch sass vor der Schmiede und schaute auf meine Hände.\nMir war kalt.\n\nIch dachte nicht darüber nach.\nIch wünschte mir nur — einfach so — Wärme.\n\nUnd dann war sie da.\n\nEine kleine Flamme auf meiner linken Handfläche.\nBlau-weiss zuerst. Dann orange.\nRuhig. Sie brannte nicht. Sie wärmte nur.\n\nIch erschrak nicht.\nIch schaute sie an wie einen alten Freund, den man lange nicht gesehen hat.\nDa bist du ja.\n\nDie Nachbarn kamen. Dann das halbe Dorf.\nSie nannten es einen Segen.\nDie Druiden kamen aus dem Wald und sagten lange nichts.\n\nMein Vater sagte auch nichts.\nEr legte nur die Hand auf meine Schulter.\nSchwer. Warm. Still.\nIch spüre sie heute noch.\n\nDas Dorf sah einen Segen.\n\nDie Römer, die später kamen —\ndie sahen eine Bedrohung.\n",
+      "img": "../assets/piri_p03.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IV. Genau so viel wie nötig",
+      "text": "Die Leute denken, Feuer sei Kraft.\n\nSie irren sich.\nFeuer ist Gefühl.\n\nJahrelang übte ich.\nWie gross. Wie heiss. Wie lang.\nWann es Wärme ist und wann es Schmerz.\nIch lernte: Feuer hört zu, wenn man die richtige Sprache spricht.\n\nMein Vater setzte mich an den Schleifstein.\n\"Eine Klinge schärft man nicht mit Kraft,\" sagte er.\n\"Der richtige Winkel. Der richtige Druck. Die richtige Zeit.\nZu viel — du nimmst das Metall weg. Zu wenig — du änderst nichts.\"\n\nIch sass stundenlang an diesem Stein.\nBis ich hörte, wann eine Schneide fertig war.\nBis ich spürte, wann das Metall genug hatte.\n\nGenau so viel wie nötig.\nNicht mehr. Nicht weniger.\n\nDas ist meine eigentliche Gabe, glaube ich.\nNicht die Flamme.\nZu spüren, was ein Ding braucht —\nund es dann zu geben.\n\nEine Klinge braucht den richtigen Winkel.\nEin Feuer braucht genug Luft.\nUnd ein Mensch — das lernte ich später —\nbraucht das richtige Wort zur richtigen Zeit.\n",
+      "img": "../assets/piri_p04.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "V. Als die Römer kamen",
+      "text": "Ich war zwölf.\n\nEs war Herbst. Die Wälder brannten in ihren eigenen Farben —\nrot, orange, gold.\nAls hätte die Welt gewusst, was kommt,\nund sich noch einmal in voller Pracht gezeigt.\n\nDie Römer kamen am Morgen.\n\nNicht die ganze Legion. Eine Einheit.\nDie Sorte, die Dörfer wie unseres als Problem sah.\nNicht als Menschen. Als Problem.\n\nEs ging schnell.\n\nMein Vater stellte sich vor die Schmiede.\nEr war kein Krieger. Er war ein Schmied.\nAber er hatte eine Frau und einen Sohn.\nEr hatte keine Wahl — und er wählte trotzdem.\n\nIch sah es.\n\nIch werde nicht aufschreiben, was ich sah.\nEs genügt, dass ich es sah.\nMit zwölf Jahren.\n\nUnd in dieser Sekunde wurde ich anders.\n\nNicht gebrochen.\nAnders.\n\nDie Glut in der Schmiede erlosch an diesem Tag.\nZum ersten Mal, solange ich lebte.\n",
+      "img": "../assets/piri_p05.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VI. Drei Tage ohne Flamme",
+      "text": "Meine Mutter töteten sie nicht.\nSie nahmen sie mit.\n\nDas ist manchmal schlimmer.\nWeil man nicht weiss, wo sie ist.\nWeil die Hoffnung nie ganz aufhört, weh zu tun.\n\nIch hatte keine Zeit zu weinen.\nIch rannte.\n\nIn die Wälder. Das alte keltische Amulett meiner Familie in der Faust — ein Knoten aus Bronze, warm von meiner Hand.\nDas Einzige, was ich mitnahm.\n\nIch rannte, bis ich nicht mehr konnte.\nDann sass ich zwischen Baumwurzeln und öffnete die Hand.\n\nNichts.\n\nZum ersten Mal, seit ich sieben war: keine Flamme.\n\nIch starrte so lange auf meine Handfläche, bis ich es verstand.\nDie Flamme kommt nicht aus dem Nichts.\nSie kommt aus mir.\nUnd ich war leer.\n\nDie Nächte waren kalt.\nIch wartete.\n\nEinen Tag.\nZwei.\nDrei.\n\nDann — am dritten Morgen — ein Funke.\nKlein. Zitternd. Kaum mehr als ein Glimmen.\n\nAber er kam.\n\nIch schloss die Finger ganz vorsichtig darum.\nWie um etwas, das man nie wieder verlieren darf.\n",
+      "img": "../assets/piri_p06.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VII. Die Räume zwischen dem Licht",
+      "text": "Was dann kam, lernte ich allein.\n\nNiemand zeigte es mir. Niemand hätte es gekonnt.\n\nIch entdeckte die Schatten.\nNicht die Dunkelheit — die Schatten.\nDie Räume zwischen dem Licht.\n\nWenn ich die Augen schloss und ganz still wurde,\nkonnte ich hindurchgehen.\nNicht weit. Nicht sicher, zuerst.\nEinmal landete ich in einem Bach statt hinter einem Baum.\n\nAber es reichte, um mich zu verstecken.\nEs reichte, um zu entkommen.\n\nUnd ich fand das Heilfeuer.\n\nEin Feuer, das nicht brennt.\nIch legte es auf meine aufgeschürften Knie, auf die Risse in meinen Händen —\nund die Haut schloss sich.\nLangsam. Mühsam.\nDanach schlief ich wie ein Stein.\n\nAber es funktionierte.\n\nIch war zwölf. Dreizehn. Vierzehn.\nIch lebte im Wald.\nMit einer Flamme, einem Amulett\nund Fähigkeiten, die ich mir nicht ausgesucht hatte.\n\nNachts, wenn es zu still war, liess ich die Flamme ein wenig grösser werden.\nNicht zum Wärmen.\nDamit etwas da war, das mit mir wach blieb.\n",
+      "img": "../assets/piri_p07.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VIII. Die Narbe die mich ehrlich hält",
+      "text": "Mit sechzehn fand ich sie.\n\nEine kleine Gruppe. Kelten, Gallier, Überlebende.\nSie kämpften gegen Rom — nicht weil sie glaubten zu gewinnen.\nSondern weil Aufgeben schlimmer gewesen wäre als Kämpfen.\n\nIch kannte das Gefühl.\nIch blieb.\n\nMein erster richtiger Kampf dauerte kaum länger als ein Atemzug.\nEin Legionär. Ein Gladius. Eine Bewegung, die ich zu spät sah.\n\nDie Klinge streifte meinen Hals.\nFlach. Nicht tödlich.\nAber tief genug für eine Narbe, die ich jeden Morgen spüre, wenn ich schlucke.\n\nIch war wütend auf mich.\nDann dankbar.\n\nDenn das Feuer verführt.\nEs flüstert: Dir kann niemand etwas.\nMit sechzehn glaubt man das gern.\n\nDie Narbe widerspricht.\nJeden Tag.\nDu bist nicht unbesiegbar.\n\nIch brauchte diese Erinnerung.\nIch brauche sie heute noch.\n\nDas Feuer macht mich stark.\nDie Narbe hält mich ehrlich.\n",
+      "img": "../assets/piri_p08.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IX. Was Verlust aus mir machte",
+      "text": "Ich hätte bitter werden können.\n\nVater tot. Mutter fort. Heimat verbrannt.\nEin Junge allein im Wald, mit einer Flamme, die manchmal nicht kommt.\nBitter wäre verständlich gewesen.\n\nStattdessen wurde ich — seltsamerweise — sanft.\n\nNicht weich. Nicht naiv.\nSanft.\n\nIch verstand etwas:\nWer zu viel verloren hat, will nicht, dass andere dasselbe erleben.\n\nAlso wurde ich der, der beschützt.\nNicht zuerst mit Gewalt — obwohl ich das kann.\nMit Voraussicht.\n\nVerlust schickt keine Warnung.\nDarum bin ich immer bereit.\nDarum kommt bei mir die Flamme zuerst — und die Fragen danach.\n\nDas ist nicht Wut.\nDas ist Liebe, die keine andere Form kennt.\n\nDie Rebellen zerstreuten sich irgendwann, wie Funken im Wind.\nIch wanderte weiter.\nVon Gallien hinauf bis Britannien. Und wieder zurück.\nDurch Nebel, durch Moor, durch Dörfer, die mir Brot gaben und keine Fragen stellten.\n\nImmer auf der Suche.\nOhne zu wissen, wonach.\n",
+      "img": "../assets/piri_p09.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "X. Die Höhle der Ahnen",
+      "text": "Ich war zweiundzwanzig.\n\nEin alter Mann in einem Dorf am Rand der Welt zeigte auf einen Hügel.\n\"Dort sind die Ahnen,\" sagte er. \"Geh hin, wenn du bereit bist.\"\n\nIch ging nicht sofort.\nDas hatte ich gelernt: Zu früh ist genauso schlecht wie zu spät.\n\nDie Höhle war tief und kalt und still.\nDie Geister — wenn es Geister waren — prüften mich nicht.\nSie empfingen mich.\nAls hätten sie auf mich gewartet.\n\nIm Innern: ein Stein.\nWarm wie eine Hand, die man kennt.\nAls wäre er immer schon meiner gewesen.\n\nDas vierte Zeitfragment.\n\nIch legte die Hand darauf.\n\nUnd sah sie.\n\nLilli. Die Kriegerin mit den silberweissen Zöpfen und dem Schwert.\nMaya. Kupferrotes Haar und ein Lachen, als gäbe es keine Dunkelheit.\nFilli. Die Stille, mit dunklem Haar und Augen, die mich lasen —\njemand, dem man sein Feuer anvertrauen könnte, ohne dass es zerstört.\n\nUnd mich. Das Feuer, das sie alle verbindet.\n\nIch weinte nicht. Ich lachte nicht.\nIch atmete.\nZum ersten Mal wirklich, seit mein Vater starb.\n\n\"Da seid ihr,\" sagte ich leise.\n",
+      "img": "../assets/piri_p10.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XI. Was in meiner Faust bleibt",
+      "text": "Ich trage nicht viel.\n\nEin Amulett aus Bronze. Den Knoten meiner Familie.\nSeit ich zwölf war, hat es meine Hand kaum verlassen.\n\nEinen Stein, warm in einem Lederbeutel.\nEr pulsiert manchmal, wenn ich an die Gesichter aus der Höhle denke.\n\nEine Narbe am Hals, die mich ehrlich hält.\n\nUnd die Worte meines Vaters.\nDer Unterschied zwischen Zerstörung und Erschaffung — das bist du.\n\nIch habe lange gebraucht, um zu verstehen, was er mir wirklich beigebracht hat.\nNicht das Schmieden.\nDas Bleiben.\n\nEin Vater ist jemand, der bleibt.\nDer lehrt, ohne zu zwingen.\nDer da ist, wenn das Feuer nicht kommt.\nDer die Hand auf die Schulter legt und nichts sagt — und doch alles.\n\nEr konnte nicht bleiben.\nAber das Wissen, wie das geht, ist geblieben.\n\nSo will ich sein.\nFür die, die mir anvertraut werden.\nDer, der die Klinge schärft, bis sie im Sonnenlicht glänzt.\nDer, der nicht geht.\n\nOhne Ego.\nMit Wärme.\nGenau so viel wie nötig.\n",
+      "img": "../assets/piri_p11.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XII. Wer ich bin",
+      "text": "Ich bin Piri.\n\nIch bin das Kind, das im Blitz geboren wurde und den Sturm erkannte.\nIch bin der Junge mit sieben, der eine Flamme auf der Handfläche hielt\nund sie ansah wie einen alten Freund.\nIch bin der Zwölfjährige, der floh und drei Tage wartete, bis das Feuer zurückkam.\nIch bin der Zweiundzwanzigjährige in der Höhle der Ahnen, der endlich wieder atmet.\n\nIch bin der Funke.\nDer Schärfer.\nDie Flamme aus dem Osten.\n\nUnd irgendwann — in einer weissen Kammer aus Licht —\nwerde ich ihnen gegenüberstehen.\n\nDer Kriegerin, die dasteht wie eine Klinge, die endlich ruhen darf.\nDer Rothaarigen, deren Lachen etwas heilt, das niemand benannt hat.\nUnd der Stillen mit dem dunklen Haar,\ndie mich ansieht und nicht meine Macht sieht —\nsondern den Jungen im Wald.\n\nIch werde die Flamme senken.\nNicht aus Schwäche.\nAus Respekt.\n\nUnd ich werde sagen, was ich in der Höhle schon gesagt habe:\n\n\"Da seid ihr.\"\n\nWeil ich weiss:\nSie waren meine,\nbevor wir uns trafen.\n\n\n\"Er wurde unser Magier nicht durch Geburt.  \nEr wurde es durch Feuer, durch Verlust, durch Wahl.  \nUnd er wird es bleiben — für immer.\"\n\n\nGeschrieben von Piri selbst · für das Rudel.  \nDie Flamme aus dem Osten.\n",
+      "img": "../assets/piri_p12.jpg",
+      "wide": true
+    }
+  ],
+  "en": [
+    {
+      "type": "cover",
+      "img": "../assets/piri_cover.jpg",
+      "label": "Cover"
+    },
+    {
+      "type": "spread",
+      "title": "I. Child of the Storm",
+      "text": "There are nights in the hills of my homeland when the sky does not thunder — it tears.\n\nOn such a night I was born.\n\nThe lightning came so close together that the midwife said later the hut was not dark for a single moment.\nAnd the fire in my father's forge burned brighter than ever before.\nWithout anyone adding wood.\n\nI did not cry.\nI opened my eyes.\nNot frightened. Attentive.\nAs if I did not fear the storm outside — but recognized it.\n\nMy mother was a seer. She knew what words weigh.\nShe looked into my eyes — green-blue, they say, like a storm over the sea —\nand whispered: \"He knows the fire. His name is Piri.\"\n\nMy father, the smith with the scarred hands, lifted me into the lightning.\n\"Piri,\" he repeated.\nThe spark.\n\nNot because he wished it.\nBecause he saw it.\n\nFire and water. Storm and stillness.\nThat was me from the very beginning.\n",
+      "img": "../assets/piri_p01.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "II. Between Two Worlds",
+      "text": "Our village lay between two powers.\n\nOn one side: Rome.\nLegions that marched. Roads no one had asked for.\nLaws no one had been asked whether they wanted.\n\nOn the other side: the druids.\nOld men in old forests.\nThey whispered of gods older than the words for them.\n\nI grew up between the two.\nAnd belonged wholly to neither.\n\nTo the Romans I was a barbarian child.\nTo the druids there was something in me — too strong, too wild for their old paths.\n\nOnly my father simply saw me.\n\nThe forge was the one place that belonged to both worlds and to neither.\nThere I sat beside the anvil and watched the embers.\n\n\"Fire is neither enemy nor friend,\" he said once, laying the tongs in the coals.\n\"Fire is possibility. It softens what is hard. It shapes what is shapeless.\nBut it destroys what you give it without intent.\"\n\nHe looked at me.\n\"The difference between destruction and creation — that is you. Your hand. Your patience.\"\n\nI was six.\nI did not understand it yet.\nI understood it a year later.\n",
+      "img": "../assets/piri_p02.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "III. The First Flame",
+      "text": "I was seven.\n\nAn ordinary morning. Dew on the grass. Smoke above the roofs.\nI sat outside the forge and looked at my hands.\nI was cold.\n\nI did not think about it.\nI only wished — just like that — for warmth.\n\nAnd then it was there.\n\nA small flame on my left palm.\nBlue-white at first. Then orange.\nCalm. It did not burn. It only warmed.\n\nI was not afraid.\nI looked at it like an old friend you have not seen in a long time.\nThere you are.\n\nThe neighbours came. Then half the village.\nThey called it a blessing.\nThe druids came out of the forest and said nothing for a long while.\n\nMy father said nothing either.\nHe only laid his hand on my shoulder.\nHeavy. Warm. Still.\nI can feel it to this day.\n\nThe village saw a blessing.\n\nThe Romans who came later —\nthey saw a threat.\n",
+      "img": "../assets/piri_p03.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IV. Just As Much As Needed",
+      "text": "People think fire is strength.\n\nThey are wrong.\nFire is feeling.\n\nFor years I practiced.\nHow big. How hot. How long.\nWhen it is warmth and when it is pain.\nI learned: fire listens when you speak the right language.\n\nMy father sat me down at the grindstone.\n\"You don't sharpen a blade with strength,\" he said.\n\"The right angle. The right pressure. The right time.\nToo much — you take the metal away. Too little — you change nothing.\"\n\nI sat at that stone for hours.\nUntil I could hear when an edge was finished.\nUntil I could feel when the metal had had enough.\n\nJust as much as needed.\nNo more. No less.\n\nThat is my true gift, I think.\nNot the flame.\nTo feel what a thing needs —\nand then to give it.\n\nA blade needs the right angle.\nA fire needs enough air.\nAnd a person — I learned this later —\nneeds the right word at the right time.\n",
+      "img": "../assets/piri_p04.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "V. When the Romans Came",
+      "text": "I was twelve.\n\nIt was autumn. The forests burned in their own colours —\nred, orange, gold.\nAs if the world had known what was coming\nand wanted to show itself once more in full splendour.\n\nThe Romans came in the morning.\n\nNot the whole legion. One unit.\nThe kind that saw villages like ours as a problem.\nNot as people. As a problem.\n\nIt was quick.\n\nMy father stood in front of the forge.\nHe was no warrior. He was a smith.\nBut he had a wife and a son.\nHe had no choice — and he chose anyway.\n\nI saw it.\n\nI will not write down what I saw.\nIt is enough that I saw it.\nAt twelve years old.\n\nAnd in that second I became different.\n\nNot broken.\nDifferent.\n\nThe embers in the forge went out that day.\nFor the first time in my life.\n",
+      "img": "../assets/piri_p05.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VI. Three Days Without Flame",
+      "text": "They did not kill my mother.\nThey took her.\n\nSometimes that is worse.\nBecause you do not know where she is.\nBecause hope never quite stops hurting.\n\nI had no time to cry.\nI ran.\n\nInto the forests. My family's old Celtic amulet in my fist — a knot of bronze, warm from my hand.\nThe only thing I took.\n\nI ran until I could not run anymore.\nThen I sat between tree roots and opened my hand.\n\nNothing.\n\nFor the first time since I was seven: no flame.\n\nI stared at my palm until I understood.\nThe flame does not come from nothing.\nIt comes from me.\nAnd I was empty.\n\nThe nights were cold.\nI waited.\n\nOne day.\nTwo.\nThree.\n\nThen — on the third morning — a spark.\nSmall. Trembling. Barely more than a glow.\n\nBut it came.\n\nI closed my fingers around it very carefully.\nLike around something you must never lose again.\n",
+      "img": "../assets/piri_p06.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VII. The Spaces Between the Light",
+      "text": "What came next, I learned alone.\n\nNo one showed me. No one could have.\n\nI discovered the shadows.\nNot the darkness — the shadows.\nThe spaces between the light.\n\nWhen I closed my eyes and grew very still,\nI could walk through them.\nNot far. Not safely, at first.\nOnce I landed in a stream instead of behind a tree.\n\nBut it was enough to hide.\nIt was enough to escape.\n\nAnd I found the healing fire.\n\nA fire that does not burn.\nI laid it on my scraped knees, on the cracks in my hands —\nand the skin closed.\nSlowly. With effort.\nAfterwards I slept like a stone.\n\nBut it worked.\n\nI was twelve. Thirteen. Fourteen.\nI lived in the forest.\nWith a flame, an amulet,\nand abilities I had not chosen.\n\nAt night, when it was too quiet, I let the flame grow a little bigger.\nNot for warmth.\nSo that something was there that stayed awake with me.\n",
+      "img": "../assets/piri_p07.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VIII. The Scar That Keeps Me Honest",
+      "text": "At sixteen I found them.\n\nA small band. Celts, Gauls, survivors.\nThey fought Rome — not because they believed they would win.\nBut because giving up would have been worse than fighting.\n\nI knew that feeling.\nI stayed.\n\nMy first real fight lasted barely longer than a breath.\nA legionary. A gladius. A movement I saw too late.\n\nThe blade grazed my throat.\nShallow. Not deadly.\nBut deep enough for a scar I feel every morning when I swallow.\n\nI was angry at myself.\nThen grateful.\n\nBecause fire seduces.\nIt whispers: No one can touch you.\nAt sixteen you like to believe that.\n\nThe scar disagrees.\nEvery day.\nYou are not invincible.\n\nI needed that reminder.\nI still need it.\n\nThe fire makes me strong.\nThe scar keeps me honest.\n",
+      "img": "../assets/piri_p08.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IX. What Loss Made of Me",
+      "text": "I could have become bitter.\n\nFather dead. Mother gone. Home burned.\nA boy alone in the forest, with a flame that sometimes does not come.\nBitterness would have been understandable.\n\nInstead I became — strangely — gentle.\n\nNot soft. Not naive.\nGentle.\n\nI understood something:\nWhoever has lost too much does not want others to live through the same.\n\nSo I became the one who protects.\nNot with force first — though I can do that.\nWith foresight.\n\nLoss sends no warning.\nThat is why I am always ready.\nThat is why with me the flame comes first — and the questions after.\n\nThat is not anger.\nThat is love that knows no other shape.\n\nIn time the rebels scattered, like sparks in the wind.\nI wandered on.\nFrom Gaul up to Britannia. And back again.\nThrough fog, through moor, through villages that gave me bread and asked no questions.\n\nAlways searching.\nWithout knowing for what.\n",
+      "img": "../assets/piri_p09.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "X. The Cave of the Ancestors",
+      "text": "I was twenty-two.\n\nAn old man in a village at the edge of the world pointed to a hill.\n\"The ancestors are there,\" he said. \"Go when you are ready.\"\n\nI did not go at once.\nI had learned that: too early is just as bad as too late.\n\nThe cave was deep and cold and still.\nThe spirits — if they were spirits — did not test me.\nThey received me.\nAs if they had been waiting for me.\n\nInside: a stone.\nWarm like a hand you know.\nAs if it had always been mine.\n\nThe fourth time fragment.\n\nI laid my hand on it.\n\nAnd I saw them.\n\nLilli. The warrior with the silver-white braids and the sword.\nMaya. Copper-red hair and a laugh as if there were no darkness.\nFilli. The stillness, with dark hair and eyes that read me —\nsomeone you could entrust your fire to without it destroying.\n\nAnd me. The fire that binds them all.\n\nI did not weep. I did not laugh.\nI breathed.\nTruly, for the first time since my father died.\n\n\"There you are,\" I said softly.\n",
+      "img": "../assets/piri_p10.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XI. What Stays in My Fist",
+      "text": "I do not carry much.\n\nAn amulet of bronze. My family's knot.\nSince I was twelve it has hardly left my hand.\n\nA stone, warm in a leather pouch.\nSometimes it pulses when I think of the faces from the cave.\n\nA scar on my throat that keeps me honest.\n\nAnd my father's words.\nThe difference between destruction and creation — that is you.\n\nIt took me a long time to understand what he truly taught me.\nNot smithing.\nStaying.\n\nA father is someone who stays.\nWho teaches without forcing.\nWho is there when the fire does not come.\nWho lays a hand on your shoulder and says nothing — and yet everything.\n\nHe could not stay.\nBut the knowledge of how it is done has stayed.\n\nThat is who I want to be.\nFor those entrusted to me.\nThe one who sharpens the blade until it gleams in the sunlight.\nThe one who does not leave.\n\nWithout ego.\nWith warmth.\nJust as much as needed.\n",
+      "img": "../assets/piri_p11.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XII. Who I Am",
+      "text": "I am Piri.\n\nI am the child born in the lightning who recognized the storm.\nI am the boy of seven who held a flame on his palm\nand looked at it like an old friend.\nI am the twelve-year-old who fled and waited three days for the fire to return.\nI am the twenty-two-year-old in the cave of the ancestors who finally breathes again.\n\nI am the spark.\nThe sharpener.\nThe flame from the East.\n\nAnd someday — in a white chamber of light —\nI will stand before them.\n\nThe warrior who stands like a blade that may finally rest.\nThe redhead whose laugh heals something no one has named.\nAnd the quiet one with the dark hair,\nwho looks at me and does not see my power —\nbut the boy in the forest.\n\nI will lower the flame.\nNot out of weakness.\nOut of respect.\n\nAnd I will say what I already said in the cave:\n\n\"There you are.\"\n\nBecause I know:\nThey were mine\nbefore we ever met.\n\n\n\"He became our mage not by birth.  \nHe became it through fire, through loss, through choice.  \nAnd he will remain it — forever.\"\n\n\nWritten by Piri himself · for the pack.  \nThe Flame from the East.\n",
+      "img": "../assets/piri_p12.jpg",
+      "wide": true
+    }
+  ]
+};
+let lang = localStorage.getItem("piri_lang") || "de";
+let i = 0;
+const spread = document.getElementById("spread");
+const stage = document.getElementById("stage");
+const pager = document.getElementById("pager");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function applyUI() {
+  const u = UI[lang];
+  document.documentElement.lang = lang;
+  document.getElementById("doc-title").textContent = u.title;
+  document.getElementById("doc-sub").textContent = u.sub;
+  document.getElementById("doc-hint").textContent = u.hint;
+  prev.textContent = u.prev;
+  const bh = document.getElementById("back-home");
+  if (bh) bh.textContent = (lang === "de" ? "‹ Bücherwand" : "‹ Bookshelf");
+  next.textContent = u.next;
+  document.getElementById("lang-de").classList.toggle("active", lang === "de");
+  document.getElementById("lang-en").classList.toggle("active", lang === "en");
+}
+
+function render() {
+  const pages = PAGES[lang];
+  const p = pages[i];
+  if (p.type === "cover") {
+    stage.classList.remove("wide-mode");
+    spread.className = "spread";
+    spread.innerHTML = `<div class="page cover-wrap"><img src="${esc(p.img)}" alt="Cover"/></div>`;
+  } else {
+    const wide = !!p.wide;
+    stage.classList.toggle("wide-mode", wide);
+    spread.className = "spread" + (wide ? " landscape" : "");
+    spread.innerHTML = `
+      <div class="page left"><h2>${esc(p.title)}</h2><div class="body">${esc(p.text)}</div></div>
+      <div class="page right"><img src="${esc(p.img)}" alt="${esc(p.title)}"/></div>`;
+  }
+  pager.textContent = `${i + 1} / ${pages.length}`;
+  prev.disabled = i === 0;
+  next.disabled = i === pages.length - 1;
+}
+function setLang(l) {
+  lang = l;
+  localStorage.setItem("piri_lang", lang);
+  applyUI();
+  render();
+}
+document.getElementById("lang-de").onclick = () => setLang("de");
+document.getElementById("lang-en").onclick = () => setLang("en");
+prev.onclick = () => { if (i > 0) { i--; render(); } };
+next.onclick = () => { if (i < PAGES[lang].length - 1) { i++; render(); } };
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") prev.click();
+  if (e.key === "ArrowRight") next.click();
+});
+applyUI();
+render();
+</script>
+
+<footer class="site-footer">
+  © 2026 Lichtkrieger / das Rudel — Alle Rechte vorbehalten / All rights reserved
+</footer>
+
+</body>
+</html>

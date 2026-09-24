@@ -83,11 +83,17 @@
     overflow: hidden;
     border-radius: 8px;
   }
+  .shelf-scene-zoom {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
   .shelf-scene .bg {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    object-position: center 55%;
+    object-position: center center;
   }
   /* —— Bücherwand spines (data-driven) —— */
   /*
@@ -642,14 +648,32 @@
     #stage-table { aspect-ratio: 4/3; width: 96vw; min-height: 0; }
     .stage { min-height: 0; }
     .shelf-scene {
-      /* Keep 16/9 so plank % from bg image stay accurate */
-      aspect-ratio: 16/9;
+      /*
+       * Zoom crop so lamp-row spines are readable (~130–170px tall).
+       * Full-image coords unchanged; zoom wrapper scales image+spines together.
+       * crop ≈ x 23.6–44.4% (w 20.8%), y 48.5–76.9% (h 28.4%) around lamp compartment.
+       */
+      --crop-x: 0.236;
+      --crop-w: 0.208;
+      --crop-y: 0.485;
+      --crop-h: 0.284;
+      aspect-ratio: calc((16 * var(--crop-w)) / (9 * var(--crop-h)));
       width: 100%;
       border-radius: 8px 8px 0 0;
       flex-shrink: 0;
+      overflow: hidden;
+    }
+    .shelf-scene-zoom {
+      position: absolute;
+      inset: auto;
+      width: calc(100% / var(--crop-w));
+      height: auto;
+      aspect-ratio: 16 / 9;
+      left: calc(-100% * var(--crop-x) / var(--crop-w));
+      top: calc(-100% * var(--crop-y) / var(--crop-h));
     }
     .shelf-scene .bg {
-      object-fit: cover;
+      object-fit: fill;
       object-position: center center;
     }
     /* Folio below shelf image on mobile */
@@ -692,9 +716,10 @@
     }
     .spine-row { gap: 3px; }
     .spine {
-      --spine-w: clamp(18px, 4.6vw, 26px);
+      /* sizes are in full-image zoom space; appear ~150px tall after crop */
+      --spine-w: clamp(22px, 2.1%, 36px);
     }
-    .spine-title { font-size: .55rem; letter-spacing: .12em; }
+    .spine-title { font-size: clamp(.55rem, 55%, .75rem); letter-spacing: .12em; }
     .spine-emblem { width: 78%; }
     #book-on-table {
       width: min(78vw, 72%);
@@ -778,8 +803,10 @@
 
   <div class="stage" id="stage-shelf">
     <div class="shelf-scene">
-      <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand"/>
-      <div class="shelf-rows" id="shelf-rows" aria-label="Bücherwand"></div>
+      <div class="shelf-scene-zoom">
+        <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand"/>
+        <div class="shelf-rows" id="shelf-rows" aria-label="Bücherwand"></div>
+      </div>
     </div>
     <aside class="folio-keeper" aria-label="Folio">
       <div class="folio-medallion">
@@ -1831,7 +1858,8 @@ function renderSpines() {
   host.innerHTML = "";
 
   // Estimate how many spines fit in a slot (scene width × slot.width / spine width)
-  const scene = document.querySelector(".shelf-scene");
+  // Use zoom layer (full image coords) so mobile crop doesn't shrink packing math
+  const scene = document.querySelector(".shelf-scene-zoom") || document.querySelector(".shelf-scene");
   const sceneW = Math.max(320, scene ? (scene.getBoundingClientRect().width || 800) : 800);
   const spineW = Math.max(16, Math.min(24, sceneW * 0.0185));
   const gap = Math.max(2, sceneW * 0.0035);

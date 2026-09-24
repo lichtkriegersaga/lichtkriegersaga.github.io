@@ -81,43 +81,162 @@
     width: 100%; height: 100%;
     object-fit: cover;
   }
-  .shelf-slot {
+  /* —— Bücherwand spines (data-driven) —— */
+  .shelf-rows {
     position: absolute;
-    bottom: 28%;
-    width: 11%;
+    left: 16%;
+    right: 10%;
+    bottom: 26%;
+    height: 38%;
+    z-index: 4;
+    display: flex;
+    flex-direction: column-reverse; /* bottom shelf first */
+    justify-content: flex-start;
+    gap: 3%;
+    pointer-events: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #8a6a3a transparent;
+  }
+  .spine-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: clamp(4px, 0.55vw, 8px);
+    height: 100%;
+    min-height: 140px;
+    pointer-events: auto;
+    padding: 0 2px 2px;
+  }
+  .spine {
+    --spine-w: clamp(34px, 4.2vw, 52px);
+    width: var(--spine-w);
+    height: 100%;
+    position: relative;
+    flex: 0 0 auto;
+    border-radius: 2px 3px 2px 2px;
+    cursor: default;
+    transform-origin: bottom center;
+    transition: transform .28s ease, filter .28s ease, box-shadow .28s ease;
+    box-shadow:
+      inset 2px 0 3px rgba(255,255,255,.08),
+      inset -3px 0 5px rgba(0,0,0,.45),
+      2px 4px 10px rgba(0,0,0,.55);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8% 0 6%;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,.35);
+    border-left-color: rgba(255,220,150,.12);
+    border-right-color: rgba(0,0,0,.5);
+  }
+  .spine::before {
+    /* raised bands */
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.35), transparent 18%, transparent 82%, rgba(0,0,0,.4)),
+      repeating-linear-gradient(
+        180deg,
+        transparent 0 14%,
+        rgba(0,0,0,.28) 14% 16%,
+        rgba(255,220,160,.06) 16% 17%,
+        transparent 17% 33%
+      );
+    pointer-events: none;
+  }
+  .spine.ready {
     cursor: pointer;
-    transition: transform .25s ease, filter .25s;
-    filter: drop-shadow(0 8px 12px rgba(0,0,0,.55));
+    filter: brightness(1.08) saturate(1.05);
+    box-shadow:
+      inset 2px 0 3px rgba(255,255,255,.12),
+      inset -3px 0 5px rgba(0,0,0,.4),
+      0 0 14px rgba(201,162,39,.28),
+      2px 6px 14px rgba(0,0,0,.55);
   }
-  .shelf-slot:hover { transform: translateY(-10px) scale(1.04); }
-  .shelf-slot img {
-    width: 100%;
+  .spine.ready:hover,
+  .spine.ready:focus-visible {
+    transform: translateY(-10px) translateX(2px) scale(1.03);
+    filter: brightness(1.16) saturate(1.08);
+    outline: none;
+    z-index: 6;
+  }
+  .spine.ready:active {
+    transform: translateY(-6px) translateX(4px);
+  }
+  .spine.soon {
+    opacity: .72;
+    filter: grayscale(.15) brightness(.9);
+    cursor: default;
+  }
+  .spine-emblem {
+    position: relative;
+    z-index: 2;
+    width: 68%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1.5px solid #c9a227;
+    box-shadow:
+      0 0 0 1px #1a0e08,
+      0 0 6px rgba(201,162,39,.35),
+      inset 0 1px 2px rgba(255,240,180,.25);
+    background:
+      radial-gradient(circle at 35% 30%, #3a2818, #1a100a 70%);
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-bottom: 10%;
+  }
+  .spine-emblem img {
+    width: 100%; height: 100%;
+    object-fit: cover;
     display: block;
-    border-radius: 3px;
   }
-  .shelf-slot.lilli { left: 18%; }
-  .shelf-slot.maya { left: 34%; opacity: .45; cursor: default; }
-  .shelf-slot.piri { left: 50%; opacity: .45; cursor: default; }
-  .shelf-slot.filli { left: 66%; opacity: .45; cursor: default; }
-  .shelf-slot .label {
-    text-align: center;
-    font-size: .7rem;
-    margin-top: .25rem;
-    color: var(--gold);
-    text-shadow: 0 1px 3px #000;
+  .spine-emblem.empty {
+    background:
+      radial-gradient(circle at 35% 30%, #2a1c12, #120c08 75%);
+    box-shadow:
+      0 0 0 1px #1a0e08,
+      inset 0 0 6px rgba(0,0,0,.6),
+      inset 0 1px 1px rgba(201,162,39,.15);
   }
-  .shelf-slot.soon .label { opacity: .7; }
-  .spine-placeholder {
-    width: 100%;
-    aspect-ratio: 2/3;
-    background: linear-gradient(90deg, #3a2418, #1a100a 40%, #2a1810);
-    border: 1px solid #5a3a22;
-    border-radius: 3px;
-    display: flex; align-items: center; justify-content: center;
+  .spine-emblem.empty::after {
+    content: "";
+    position: absolute; inset: 22%;
+    border-radius: 50%;
+    border: 1px solid rgba(201,162,39,.28);
+    box-shadow: inset 0 0 4px rgba(0,0,0,.5);
+  }
+  .spine-title {
+    position: relative;
+    z-index: 2;
+    flex: 1;
     writing-mode: vertical-rl;
-    letter-spacing: .15em;
-    font-size: .75rem;
-    color: #c9a22799;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    color: #f0e0a8;
+    font-size: clamp(.62rem, 1.25vw, .85rem);
+    letter-spacing: .12em;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,.85);
+    line-height: 1.1;
+    text-align: center;
+    max-height: 100%;
+    overflow: hidden;
+    padding: 0 1px;
+  }
+  .spine.soon .spine-title { color: #d4b86a; opacity: .85; }
+  .spine-accent {
+    /* tiny gold line under emblem */
+    position: relative; z-index: 2;
+    width: 55%; height: 2px;
+    margin-bottom: 8%;
+    background: linear-gradient(90deg, transparent, #c9a227, transparent);
+    opacity: .7;
   }
 
   #stage-table {
@@ -138,14 +257,28 @@
     position: absolute;
     left: 50%; top: 52%;
     transform: translate(-50%, -50%);
-    width: min(280px, 32%);
+    width: min(580px, 56%);
+    height: auto;
+    max-height: 70%;
     cursor: pointer;
     transition: transform .35s ease;
-    filter: drop-shadow(0 18px 28px rgba(0,0,0,.7));
     animation: land .8s ease;
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
   #book-on-table:hover { transform: translate(-50%, -54%) scale(1.03); }
-  #book-on-table img { width: 100%; display: block; border-radius: 4px; }
+  #book-on-table img {
+    width: 100%;
+    height: auto;
+    max-height: 68vh;
+    object-fit: contain;
+    display: block;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    filter: drop-shadow(0 18px 28px rgba(0,0,0,.78)) drop-shadow(0 4px 10px rgba(0,0,0,.5));
+  }
   @keyframes land {
     from { opacity: 0; transform: translate(-50%, -80%) scale(.7) rotate(-8deg); }
     to { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0); }
@@ -320,6 +453,115 @@
     .prolog-text { max-height: 48vh; }
   }
 
+
+  /* —— Folio audio —— */
+  .btn-folio-read {
+    background: linear-gradient(180deg, #e8d08a, #c9a227 45%, #8a6a3a);
+    color: #1a0e08;
+    border: 1px solid #f0e0a8;
+    font-weight: 600;
+    letter-spacing: .04em;
+    padding: .65rem 1.25rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 0 #5a3a18, 0 6px 16px rgba(0,0,0,.35);
+    display: inline-flex; align-items: center; gap: .4rem;
+  }
+  .btn-folio-read.playing {
+    background: linear-gradient(180deg, #8a6a3a, #5a3a22);
+    color: var(--parchment);
+    border-color: var(--gold);
+  }
+  .btn-folio-read .folio-note {
+    font-size: .7rem; font-weight: 500; opacity: .75; letter-spacing: 0;
+  }
+  .prolog-nav { gap: .75rem; flex-wrap: wrap; align-items: center; }
+  .prolog-nav button { /* keep existing */ }
+
+  .folio-keeper {
+    position: absolute;
+    left: 2.5%;
+    top: 8%;
+    width: min(168px, 18%);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .45rem;
+    pointer-events: none;
+  }
+  .folio-keeper > * { pointer-events: auto; }
+  .folio-medallion {
+    width: min(72px, 100%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--gold);
+    box-shadow:
+      0 0 0 3px #1a0e08,
+      0 0 0 5px #8a6a3a,
+      0 8px 18px rgba(0,0,0,.55);
+    background: #1a120c;
+    flex-shrink: 0;
+  }
+  .folio-medallion img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 18%;
+    display: block;
+  }
+  .folio-speech {
+    background: rgba(26, 14, 8, .78);
+    border: 1px solid var(--brass);
+    border-radius: 8px;
+    padding: .45rem .55rem .45rem .6rem;
+    color: var(--parchment);
+    font-size: clamp(.62rem, 1.1vw, .78rem);
+    line-height: 1.4;
+    font-style: italic;
+    text-align: left;
+    max-width: 100%;
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: flex-start;
+    gap: .4rem;
+  }
+  .folio-speech .folio-line { flex: 1; min-width: 0; }
+  .folio-speak-btn {
+    flex-shrink: 0;
+    width: 1.7rem; height: 1.7rem;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: linear-gradient(180deg, #c9a227, #8a6a3a);
+    color: #1a0e08;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0;
+    font-size: .75rem;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,.4);
+  }
+  .folio-speak-btn:hover { filter: brightness(1.1); }
+  .folio-speak-btn.playing {
+    background: linear-gradient(180deg, #8a6a3a, #5a3a22);
+    color: var(--parchment);
+  }
+  @media (max-width: 720px) {
+    .folio-keeper {
+      left: 2%;
+      top: 4%;
+      width: min(42%, 150px);
+      gap: .35rem;
+    }
+    .folio-medallion { width: 52px; }
+    .folio-speech {
+      font-size: .62rem;
+      padding: .35rem .4rem;
+    }
+    .folio-speak-btn { width: 1.5rem; height: 1.5rem; font-size: .7rem; }
+    .prolog-nav { flex-direction: column; }
+    .btn-folio-read { width: min(100%, 280px); justify-content: center; }
+  }
+
   .site-footer {
     margin-top: 2rem;
     padding: 1.25rem 1rem 1.5rem;
@@ -347,11 +589,31 @@
     header p { font-size: .78rem; }
     #stage-shelf, #stage-table { aspect-ratio: 4/3; width: 96vw; min-height: 0; }
     .stage { min-height: 0; }
-    .shelf-slot { width: 14%; bottom: 24%; }
-    .shelf-slot.lilli { left: 12%; }
-    .shelf-slot.maya { left: 30%; }
-    .shelf-slot.piri { left: 48%; }
-    .shelf-slot.filli { left: 66%; }
+    .shelf-rows {
+      left: 6%;
+      right: 4%;
+      bottom: 20%;
+      height: 42%;
+      top: auto;
+      gap: 3%;
+      overflow-x: auto;
+    }
+    .spine-row {
+      min-height: 150px;
+      height: 100%;
+      gap: 5px;
+    }
+    .spine {
+      --spine-w: clamp(38px, 10vw, 52px);
+    }
+    .spine-title { font-size: .68rem; letter-spacing: .08em; }
+    #book-on-table {
+      width: min(78vw, 72%);
+      height: auto;
+      max-height: 58%;
+      top: 52%;
+    }
+    #book-on-table img { max-height: 50vh; }
     /* Chapter view: image tight on text, no empty dark bands */
     #stage-open, #stage-open.wide-mode { width: 96vw; }
     .spread,
@@ -415,34 +677,34 @@
       </div>
     </div>
     <div class="prolog-nav">
+      <button type="button" class="btn-folio-read" id="btn-folio-prolog" aria-pressed="false">
+        <span id="folio-prolog-label">▶ Folio liest vor</span>
+        <span class="folio-note" id="folio-prolog-note" hidden></span>
+      </button>
       <button type="button" id="btn-to-shelf">Zur Bücherwand</button>
     </div>
+    <audio id="audio-folio-prolog" preload="metadata"></audio>
+    <audio id="audio-folio-gruss" preload="metadata"></audio>
   </div>
 
   <div class="stage" id="stage-shelf">
     <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand"/>
-    <div class="shelf-slot lilli" id="book-lilli" title="Lilli öffnen">
-      <img src="assets/lilli_cover.jpg" alt="Lilli"/>
-      <div class="label">Lilli</div>
-    </div>
-    <div class="shelf-slot maya soon" title="Folgt bald / Coming soon">
-      <div class="spine-placeholder">MAYA</div>
-      <div class="label soon-label">folgt bald</div>
-    </div>
-    <div class="shelf-slot piri soon" title="Folgt bald / Coming soon">
-      <div class="spine-placeholder">PIRI</div>
-      <div class="label soon-label">folgt bald</div>
-    </div>
-    <div class="shelf-slot filli soon" title="Folgt bald / Coming soon">
-      <div class="spine-placeholder">FILLI</div>
-      <div class="label soon-label">folgt bald</div>
-    </div>
+    <aside class="folio-keeper" aria-label="Folio">
+      <div class="folio-medallion">
+        <img src="assets/folio_portrait.jpg" alt="Folio"/>
+      </div>
+      <div class="folio-speech">
+        <p class="folio-line" id="folio-gruss-text"></p>
+        <button type="button" class="folio-speak-btn" id="btn-folio-gruss" title="Folio sprechen lassen" aria-label="Folio sprechen lassen">🔊</button>
+      </div>
+    </aside>
+    <div class="shelf-rows" id="shelf-rows" aria-label="Bücherwand"></div>
   </div>
 
   <div class="stage" id="stage-table">
     <img class="bg" src="assets/table_bg.jpg" alt="Alter Tisch"/>
     <div id="book-on-table" title="Aufschlagen">
-      <img src="assets/lilli_cover.jpg" alt="Lilli auf dem Tisch"/>
+      <img src="assets/lilli_cover_cut.png" alt="Lilli auf dem Tisch"/>
     </div>
     <div class="table-caption" id="table-caption">Tippe zum Aufschlagen</div>
   </div>
@@ -463,7 +725,7 @@ const UI = {
   de: {
     title: "LICHTKRIEGER — BÜCHERWAND",
     sub: "Ein Lederband pro Seele · Lilli ist das erste · 12 Kapitel",
-    hintShelf: "Tippe auf Lillis Band im Regal",
+    hintShelf: "Tippe auf Lillis Rücken im Regal",
     hintTable: "Das Buch liegt auf dem alten Tisch",
     hintOpen: "Blättere in Lillis Geschichte",
     hintProlog: "Der Prolog der Saga — Folio, der Bibliothekar",
@@ -472,15 +734,21 @@ const UI = {
     prev: "‹ Zurück",
     next: "Weiter ›",
     soon: "folgt bald",
+    soonFull: "Folgt bald / Coming soon",
     openTitle: "Lilli öffnen",
     toShelf: "Zur Bücherwand",
     prologTitle: "Prolog — Folio, der Bibliothekar",
-    flipLink: "Cover-Ansicht"
+    flipLink: "Cover-Ansicht",
+    folioRead: "▶ Folio liest vor",
+    folioPause: "❚❚ Pause",
+    folioNoteDe: "(auf Deutsch)",
+    folioGruss: "Willkommen in meiner Bibliothek. Jedes Buch hier ist eine Seele. Nimm dir Zeit.",
+    folioSpeakTitle: "Folio sprechen lassen"
   },
   en: {
     title: "LICHTKRIEGER — BOOKSHELF",
     sub: "One leather volume per soul · Lilli is first · 12 chapters",
-    hintShelf: "Tap Lilli's volume on the shelf",
+    hintShelf: "Tap Lilli's spine on the shelf",
     hintTable: "The book rests on the old table",
     hintOpen: "Turn the pages of Lilli's story",
     hintProlog: "The prologue of the saga — Folio, the librarian",
@@ -489,10 +757,16 @@ const UI = {
     prev: "‹ Back",
     next: "Next ›",
     soon: "coming soon",
+    soonFull: "Coming soon",
     openTitle: "Open Lilli",
     toShelf: "To the bookshelf",
     prologTitle: "Prologue — Folio, the Librarian",
-    flipLink: "Cover view"
+    flipLink: "Cover view",
+    folioRead: "▶ Folio reads aloud",
+    folioPause: "❚❚ Pause",
+    folioNoteDe: "(in German)",
+    folioGruss: "Welcome to my library. Every book here is a soul. Take your time.",
+    folioSpeakTitle: "Let Folio speak"
   }
 };
 const PAGES = {
@@ -1410,6 +1684,260 @@ Since then he does what he waited for. He does not write their stories — they 
 He is not one of them. He is the one who keeps them.`
 };
 
+
+
+/* Bücherwand — add volumes here; they wrap onto further rows automatically */
+const VOLUMES = [
+  {
+    id: "lilli",
+    title: { de: "LILLI · Die Klinge aus dem Norden", en: "LILLI · The Blade from the North" },
+    color: "linear-gradient(90deg, #2a1810 0%, #5a3a22 22%, #3a2418 45%, #1a100a 70%, #0d0805 100%)",
+    status: "ready",
+    href: "table",
+    emblem: "assets/emblem_lilli.png"
+  },
+  {
+    id: "maya",
+    title: { de: "MAYA", en: "MAYA" },
+    color: "linear-gradient(90deg, #1a1410 0%, #3a2a20 30%, #241810 60%, #120c08 100%)",
+    status: "soon",
+    href: null,
+    emblem: null
+  },
+  {
+    id: "piri",
+    title: { de: "PIRI", en: "PIRI" },
+    color: "linear-gradient(90deg, #181210 0%, #342418 28%, #20140e 55%, #100a06 100%)",
+    status: "soon",
+    href: null,
+    emblem: null
+  },
+  {
+    id: "filli",
+    title: { de: "FILLI", en: "FILLI" },
+    color: "linear-gradient(90deg, #1c120e 0%, #3a281c 25%, #261810 58%, #120a08 100%)",
+    status: "soon",
+    href: null,
+    emblem: null
+  }
+];
+const SPINES_PER_ROW = 14; // desktop; mobile uses fewer via CSS width
+
+function renderSpines() {
+  const host = document.getElementById("shelf-rows");
+  if (!host) return;
+  const u = UI[lang];
+  host.innerHTML = "";
+  const perRow = window.matchMedia("(max-width: 720px)").matches ? 8 : SPINES_PER_ROW;
+  const rows = [];
+  for (let i = 0; i < VOLUMES.length; i += perRow) {
+    rows.push(VOLUMES.slice(i, i + perRow));
+  }
+  // column-reverse: first row in DOM = bottom shelf
+  rows.forEach((group) => {
+    const row = document.createElement("div");
+    row.className = "spine-row";
+    group.forEach((vol) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "spine " + (vol.status === "ready" ? "ready" : "soon");
+      btn.dataset.id = vol.id;
+      btn.style.background = vol.color;
+      const title = (vol.title && vol.title[lang]) || vol.id;
+      const tip = vol.status === "ready"
+        ? (u.openTitle || title)
+        : (u.soonFull || u.soon);
+      btn.title = tip;
+      btn.setAttribute("aria-label", tip);
+      if (vol.status !== "ready") btn.setAttribute("aria-disabled", "true");
+
+      const emblem = document.createElement("div");
+      emblem.className = "spine-emblem" + (vol.emblem ? "" : " empty");
+      if (vol.emblem) {
+        const img = document.createElement("img");
+        img.src = vol.emblem;
+        img.alt = "";
+        emblem.appendChild(img);
+      }
+      btn.appendChild(emblem);
+
+      const accent = document.createElement("div");
+      accent.className = "spine-accent";
+      btn.appendChild(accent);
+
+      const t = document.createElement("span");
+      t.className = "spine-title";
+      t.textContent = title;
+      btn.appendChild(t);
+
+      if (vol.status === "ready") {
+        btn.addEventListener("click", () => {
+          if (vol.href === "table") show("stage-table");
+          else if (vol.href) window.location.href = vol.href;
+        });
+      }
+      row.appendChild(btn);
+    });
+    host.appendChild(row);
+  });
+}
+
+
+const FOLIO_AUDIO = {
+  prolog: { de: "assets/folio_prolog_de.m4a", en: "assets/folio_prolog_en.m4a" },
+  gruss:  { de: "assets/folio_gruss_de.m4a",  en: "assets/folio_gruss_en.m4a" }
+};
+const audioProlog = document.getElementById("audio-folio-prolog");
+const audioGruss  = document.getElementById("audio-folio-gruss");
+const btnProlog   = document.getElementById("btn-folio-prolog");
+const btnGruss    = document.getElementById("btn-folio-gruss");
+const labelProlog = document.getElementById("folio-prolog-label");
+const noteProlog  = document.getElementById("folio-prolog-note");
+const grussText   = document.getElementById("folio-gruss-text");
+
+function folioSrcExists(rel) {
+  // relative assets we ship; EN may be missing — detect via HEAD once cached in FOLO_OK
+  return !!rel;
+}
+const FOLIO_OK = { prolog_en: null, gruss_en: null }; // null=unknown, true/false after probe
+
+async function probeAsset(url) {
+  try {
+    const r = await fetch(url, { method: "HEAD", cache: "no-cache" });
+    return r.ok;
+  } catch (_) {
+    // file:// or offline: try GET range-less tiny
+    try {
+      const r = await fetch(url, { method: "GET", cache: "force-cache" });
+      return r.ok;
+    } catch (e2) { return false; }
+  }
+}
+
+async function ensureFolioProbes() {
+  if (FOLIO_OK.prolog_en === null) FOLIO_OK.prolog_en = await probeAsset(FOLIO_AUDIO.prolog.en);
+  if (FOLIO_OK.gruss_en === null)  FOLIO_OK.gruss_en  = await probeAsset(FOLIO_AUDIO.gruss.en);
+}
+
+function stopAudio(el) {
+  if (!el) return;
+  el.pause();
+  try { el.currentTime = 0; } catch (_) {}
+}
+
+function stopAllFolio() {
+  stopAudio(audioProlog);
+  stopAudio(audioGruss);
+  btnProlog.classList.remove("playing");
+  btnProlog.setAttribute("aria-pressed", "false");
+  btnGruss.classList.remove("playing");
+  syncFolioLabels();
+  renderSpines();
+}
+
+function syncFolioLabels() {
+  const u = UI[lang];
+  const playing = btnProlog.classList.contains("playing");
+  labelProlog.textContent = playing ? u.folioPause : u.folioRead;
+  grussText.textContent = u.folioGruss;
+  btnGruss.title = u.folioSpeakTitle;
+  btnGruss.setAttribute("aria-label", u.folioSpeakTitle);
+}
+
+async function resolvePrologSrc() {
+  await ensureFolioProbes();
+  if (lang === "en" && FOLIO_OK.prolog_en) {
+    noteProlog.hidden = true;
+    noteProlog.textContent = "";
+    return FOLIO_AUDIO.prolog.en;
+  }
+  if (lang === "en" && !FOLIO_OK.prolog_en) {
+    noteProlog.hidden = false;
+    noteProlog.textContent = UI[lang].folioNoteDe;
+  } else {
+    noteProlog.hidden = true;
+    noteProlog.textContent = "";
+  }
+  return FOLIO_AUDIO.prolog.de;
+}
+
+async function resolveGrussSrc() {
+  await ensureFolioProbes();
+  if (lang === "en" && FOLIO_OK.gruss_en) return FOLIO_AUDIO.gruss.en;
+  return FOLIO_AUDIO.gruss.de;
+}
+
+async function togglePrologAudio() {
+  if (btnProlog.classList.contains("playing") && !audioProlog.paused) {
+    audioProlog.pause();
+    btnProlog.classList.remove("playing");
+    btnProlog.setAttribute("aria-pressed", "false");
+    syncFolioLabels();
+    return;
+  }
+  stopAudio(audioGruss);
+  btnGruss.classList.remove("playing");
+  const src = await resolvePrologSrc();
+  if (audioProlog.getAttribute("src") !== src) {
+    audioProlog.src = src;
+  }
+  try {
+    await audioProlog.play();
+    btnProlog.classList.add("playing");
+    btnProlog.setAttribute("aria-pressed", "true");
+    syncFolioLabels();
+  } catch (err) {
+    console.warn("Folio prolog play failed", err);
+    stopAllFolio();
+  }
+}
+
+async function toggleGrussAudio() {
+  if (btnGruss.classList.contains("playing") && !audioGruss.paused) {
+    audioGruss.pause();
+    btnGruss.classList.remove("playing");
+    return;
+  }
+  stopAudio(audioProlog);
+  btnProlog.classList.remove("playing");
+  btnProlog.setAttribute("aria-pressed", "false");
+  syncFolioLabels();
+  const src = await resolveGrussSrc();
+  if (audioGruss.getAttribute("src") !== src) {
+    audioGruss.src = src;
+  }
+  try {
+    await audioGruss.play();
+    btnGruss.classList.add("playing");
+  } catch (err) {
+    console.warn("Folio greeting play failed", err);
+    btnGruss.classList.remove("playing");
+  }
+}
+
+audioProlog.addEventListener("ended", () => {
+  btnProlog.classList.remove("playing");
+  btnProlog.setAttribute("aria-pressed", "false");
+  syncFolioLabels();
+});
+audioProlog.addEventListener("pause", () => {
+  if (audioProlog.ended || audioProlog.currentTime === 0) return;
+  // user/OS pause — reflect UI if not ended
+  if (!audioProlog.ended) {
+    btnProlog.classList.remove("playing");
+    btnProlog.setAttribute("aria-pressed", "false");
+    syncFolioLabels();
+  }
+});
+audioGruss.addEventListener("ended", () => btnGruss.classList.remove("playing"));
+audioGruss.addEventListener("pause", () => {
+  if (!audioGruss.ended) btnGruss.classList.remove("playing");
+});
+
+btnProlog.addEventListener("click", () => { togglePrologAudio(); });
+btnGruss.addEventListener("click", (e) => { e.stopPropagation(); toggleGrussAudio(); });
+
+
 let lang = localStorage.getItem("lilli_lang") || "de";
 let pageIndex = 0;
 const hint = document.getElementById("global-hint");
@@ -1424,21 +1952,21 @@ function applyUI() {
   document.getElementById("btn-shelf").textContent = u.back;
   document.getElementById("prev").textContent = u.prev;
   document.getElementById("next").textContent = u.next;
-  document.getElementById("book-lilli").title = u.openTitle;
   document.getElementById("btn-to-shelf").textContent = u.toShelf;
   document.getElementById("prolog-title").textContent = u.prologTitle;
   document.getElementById("prolog-body").textContent = PROLOG[lang];
   const fl = document.getElementById("btn-flip");
   if (fl) fl.textContent = u.flipLink;
-  document.querySelectorAll(".soon-label").forEach(el => el.textContent = u.soon);
-  document.querySelectorAll(".shelf-slot.soon").forEach(el => el.title = u.soon);
   document.getElementById("lang-de").classList.toggle("active", lang === "de");
   document.getElementById("lang-en").classList.toggle("active", lang === "en");
+  syncFolioLabels();
+  renderSpines();
   const active = document.querySelector(".stage.active");
   if (active) show(active.id);
 }
 
 function show(id) {
+  const prev = document.querySelector(".stage.active");
   document.querySelectorAll(".stage").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   const u = UI[lang];
@@ -1446,10 +1974,24 @@ function show(id) {
   if (id === "stage-shelf") hint.textContent = u.hintShelf;
   if (id === "stage-table") hint.textContent = u.hintTable;
   if (id === "stage-open") hint.textContent = u.hintOpen;
+  // Stop Folio when leaving the screen that owns the clip (never autoplay)
+  if (prev && prev.id !== id) {
+    if (prev.id === "stage-prolog" || id !== "stage-prolog") {
+      if (id !== "stage-prolog") {
+        stopAudio(audioProlog);
+        btnProlog.classList.remove("playing");
+        btnProlog.setAttribute("aria-pressed", "false");
+      }
+    }
+    if (id !== "stage-shelf") {
+      stopAudio(audioGruss);
+      btnGruss.classList.remove("playing");
+    }
+    syncFolioLabels();
+  }
 }
 
 document.getElementById("btn-to-shelf").onclick = () => show("stage-shelf");
-document.getElementById("book-lilli").onclick = () => show("stage-table");
 document.getElementById("book-on-table").onclick = () => {
   pageIndex = 0;
   renderPage();
@@ -1478,6 +2020,10 @@ function renderPage() {
 function setLang(l) {
   lang = l;
   localStorage.setItem("lilli_lang", lang);
+  stopAllFolio();
+  // clear src so next play picks language-correct file
+  audioProlog.removeAttribute("src");
+  audioGruss.removeAttribute("src");
   applyUI();
   if (document.getElementById("stage-open").classList.contains("active")) renderPage();
 }
@@ -1491,6 +2037,12 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") show("stage-shelf");
 });
 applyUI();
+ensureFolioProbes();
+let _spineResizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(_spineResizeTimer);
+  _spineResizeTimer = setTimeout(renderSpines, 150);
+});
 </script>
 
 <footer class="site-footer">

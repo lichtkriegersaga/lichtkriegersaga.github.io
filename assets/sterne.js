@@ -24,7 +24,8 @@
       q: "Wie hat dir die Geschichte gefallen?",
       group: "Deine Bewertung, 1 bis 5 Sterne",
       star: function (n) { return n === 1 ? "1 Stern" : n + " Sterne"; },
-      thanks: "Danke für deine Sterne! Du kannst deine Wertung jederzeit ändern.",
+      thanks: "Danke für deine Sterne!",
+      change: "Du kannst deine Wertung jederzeit ändern.",
       votes: function (n) { return n === 1 ? "Stimme" : "Stimmen"; },
       none: "Noch keine Stimmen",
       demo: "Demo · Beispielzahlen",
@@ -34,7 +35,8 @@
       q: "How did you like the story?",
       group: "Your rating, 1 to 5 stars",
       star: function (n) { return n === 1 ? "1 star" : n + " stars"; },
-      thanks: "Thank you for your stars! You can change your rating any time.",
+      thanks: "Thanks for your stars!",
+      change: "You can change your rating any time.",
       votes: function (n) { return n === 1 ? "vote" : "votes"; },
       none: "No votes yet",
       demo: "Demo · sample numbers",
@@ -153,15 +155,15 @@
   function injectStyle() {
     if (document.getElementById("sterne-style")) return;
     var css = [
-      ".sterne-block{box-sizing:border-box;width:min(380px,86vw);margin:.9rem auto .3rem;padding:.55rem .8rem .65rem;text-align:center;",
+      ".sterne-block{box-sizing:border-box;width:min(300px,86vw);margin:.75rem auto .3rem;padding:.4rem .6rem .45rem;text-align:center;",
       "color:var(--ink,#1a120c);background:linear-gradient(180deg,rgba(0,0,0,.035),transparent 30%),var(--parchment,#f3e6c8);",
       "border:1px solid var(--brass,#8a6a3a);border-radius:6px;box-shadow:0 0 0 3px #1a0e08,0 0 0 4px rgba(201,162,39,.55),0 16px 34px rgba(0,0,0,.5);font-family:inherit}",
       ".sterne-block[hidden]{display:none!important}",
-      ".sterne-orn{display:flex;align-items:center;justify-content:center;gap:.6rem;color:var(--brass,#8a6a3a);font-size:.6rem;margin-bottom:.15rem}",
+      ".sterne-orn{display:none;align-items:center;justify-content:center;gap:.6rem;color:var(--brass,#8a6a3a);font-size:.6rem;margin-bottom:.15rem}",
       ".sterne-orn::before,.sterne-orn::after{content:'';flex:0 1 3.6rem;height:1px;background:linear-gradient(90deg,transparent,#c9a22799,transparent)}",
-      ".sterne-q{margin:0 0 .3rem;font-size:.84rem;font-weight:600;color:#5a3a18;letter-spacing:.01em}",
-      ".sterne-stars{display:inline-flex;gap:.15rem;align-items:center;justify-content:center}",
-      ".sterne-block .sterne-star{all:unset;display:inline-block;box-sizing:border-box;width:1.75rem;height:1.75rem;padding:.14rem;cursor:pointer;border-radius:5px;line-height:0;",
+      ".sterne-q{margin:0 0 .15rem;font-size:.74rem;font-weight:600;color:#5a3a18;letter-spacing:.01em}",
+      ".sterne-stars{display:inline-flex;gap:.1rem;align-items:center;justify-content:center}",
+      ".sterne-block .sterne-star{all:unset;display:inline-block;box-sizing:border-box;width:1.5rem;height:1.5rem;padding:.07rem;cursor:pointer;border-radius:5px;line-height:0;",
       "transition:transform .15s ease;-webkit-tap-highlight-color:transparent}",
       ".sterne-block .sterne-star svg{width:100%;height:100%;display:block;overflow:visible}",
       ".sterne-block .sterne-star path{fill:rgba(138,106,58,.10);stroke:#8a6a3a;stroke-width:1.3;stroke-linejoin:round;transition:fill .12s ease,stroke .12s ease}",
@@ -169,11 +171,11 @@
       ".sterne-block .sterne-star.pre path{fill:#e3c35a;stroke:#8a6a3a}",
       ".sterne-block .sterne-star:hover{transform:translateY(-1px) scale(1.06)}",
       ".sterne-block .sterne-star:focus-visible{outline:2px solid #5a3a18;outline-offset:1px}",
-      ".sterne-thanks{margin:.3rem 0 0;font-size:.74rem;font-style:italic;color:#5a3a18}",
-      ".sterne-avg{margin:.25rem 0 0;font-size:.72rem;color:#5a3a18}",
+      ".sterne-thanks{margin:.15rem 0 0;font-size:.68rem;white-space:nowrap;font-style:italic;color:#5a3a18}",
+      ".sterne-avg{margin:.1rem 0 0;font-size:.66rem;color:#5a3a18}",
       ".sterne-avg:empty{display:none}",
-      ".sterne-demo{margin:.25rem 0 0;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:#8a3a18;opacity:.85}",
-      "@media (max-width:720px){.sterne-block{width:min(320px,84vw);margin-top:.75rem;padding:.5rem .6rem .6rem}.sterne-block .sterne-star{width:2rem;height:2rem;padding:.25rem}.sterne-q{font-size:.8rem}}",
+      ".sterne-demo{margin:.12rem 0 0;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:#8a3a18;opacity:.85}",
+      "@media (max-width:720px){.sterne-block{width:min(280px,80vw);margin-top:.6rem;padding:.35rem .5rem .4rem}.sterne-block .sterne-star{width:2rem;height:2rem;padding:.13rem}.sterne-q{font-size:.74rem}}",
       /* bookshelf badges */
       ".spine .spine-rating{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:3px;display:flex;flex-direction:column;align-items:center;",
       "line-height:1;white-space:nowrap;pointer-events:none;z-index:3;font-size:10px;color:#e6c35c;letter-spacing:.02em;",
@@ -237,6 +239,7 @@
       });
       thanks.textContent = v ? t.thanks : "";
       thanks.hidden = !v;
+      if (v) { group.title = t.change; thanks.title = t.change; } else { group.removeAttribute("title"); thanks.removeAttribute("title"); }
       var s = summary && summary[book];
       avgEl.textContent = (ONLINE || DEMO) && summary ? summaryText(s, lang) : "";
     }

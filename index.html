@@ -761,8 +761,11 @@
       <button type="button" id="next">Weiter ›</button>
       <a href="lilli/" id="btn-flip" class="back-shelf" style="text-decoration:none;display:inline-block;padding:.5rem 1rem;border:1px solid var(--brass);border-radius:4px;color:var(--parchment);background:linear-gradient(180deg,#5a3a22,#2a1810);">Cover-Ansicht</a>
     </div>
+    <div id="sterne-host" data-book="lilli" hidden></div>
   </div>
 
+<script src="assets/sterne-config.js"></script>
+<script src="assets/sterne.js"></script>
 <script>
 const UI = {
   de: {
@@ -1830,6 +1833,7 @@ function renderSpines() {
       img.alt = "";
       img.draggable = false;
       btn.appendChild(img);
+      if (window.Sterne) Sterne.decorateSpine(btn, vol.id, lang);
 
       if (vol.status === "ready") {
         btn.addEventListener("click", () => {
@@ -2058,6 +2062,7 @@ function renderPage() {
   pager.textContent = `${pageIndex + 1} / ${pages.length}`;
   prev.disabled = pageIndex === 0;
   next.disabled = pageIndex === pages.length - 1;
+  if (window.Sterne) Sterne.bookPage(document.getElementById("sterne-host"), "lilli", lang, pageIndex === pages.length - 1);
 }
 function setLang(l) {
   lang = l;

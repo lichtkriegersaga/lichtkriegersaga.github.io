@@ -278,6 +278,9 @@
     <button id="next" type="button">Weiter ›</button>
   </div>
   <div class="hint" id="doc-hint">Tastatur: ← → · Ein Band pro Charakter · Piri</div>
+  <div id="sterne-host" data-book="piri" hidden></div>
+<script src="../assets/sterne-config.js"></script>
+<script src="../assets/sterne.js"></script>
 <script>
 const UI = {
   de: {
@@ -527,6 +530,7 @@ function render() {
   pager.textContent = `${i + 1} / ${pages.length}`;
   prev.disabled = i === 0;
   next.disabled = i === pages.length - 1;
+  if (window.Sterne) Sterne.bookPage(document.getElementById("sterne-host"), "piri", lang, i === pages.length - 1);
 }
 function setLang(l) {
   lang = l;

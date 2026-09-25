@@ -11,6 +11,6 @@
  * Leer gelassen = Sterne funktionieren nur lokal im Browser (keine Durchschnitte, keine Fehler).
  */
 window.STERNE_CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: ""
+  SUPABASE_URL: "https://mqcgwvsptunjbkgtwuea.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_aedDvkzY_Kip1Bfhlcnb9w_UkqkxksA"
 };

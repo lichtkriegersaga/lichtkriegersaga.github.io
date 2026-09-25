@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Filli — Die Seele aus dem Westen | Lichtkrieger</title>
+<meta name="description" content="FILLI — Die Seele aus dem Westen. Lederband mit Cover und 12 Kapiteln. Deutsch &amp; Englisch umschalten. Die Vorgeschichte der Heilerin aus dem Lichtkrieger-Rudel."/>
+<meta name="theme-color" content="#0a130b"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Filli — Die Seele aus dem Westen"/>
+<meta property="og:description" content="Lederband · Cover &amp; 12 Kapitel · DE/EN. Die Vorgeschichte der Seele aus dem Westen."/>
+<meta property="og:image" content="../assets/filli_cover.jpg"/>
+<meta property="og:locale" content="de_DE"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Filli — Die Seele aus dem Westen"/>
+<meta name="twitter:description" content="Lederband · Cover &amp; 12 Kapitel · DE/EN"/>
+<meta name="twitter:image" content="../assets/filli_cover.jpg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png"/>
+<link rel="icon" type="image/png" href="../assets/favicon.png"/>
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"/>
+<style>
+  :root {
+    --leather: #18281a;
+    --parchment: #f3e6c8;
+    --ink: #1a120c;
+    --gold: #c9a227;
+    --brass: #8a6a3a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: radial-gradient(ellipse at center, #22382a 0%, #0a130b 70%);
+    color: var(--parchment);
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.5rem 1rem 3rem;
+  }
+  h1 { font-weight: 600; letter-spacing: .08em; font-size: 1.1rem; margin: 0 0 .25rem; color: var(--gold); }
+  .sub { opacity: .75; font-size: .85rem; margin-bottom: 1.25rem; }
+  .lang-switch {
+    position: fixed; top: .75rem; right: .75rem; z-index: 20;
+    display: flex; gap: .25rem;
+  }
+  .lang-switch button {
+    background: #18281a; color: var(--parchment);
+    border: 1px solid var(--brass); border-radius: 3px;
+    padding: .3rem .55rem; font: inherit; font-size: .75rem; cursor: pointer;
+    letter-spacing: .06em;
+  }
+  .lang-switch button.active { background: var(--gold); color: #1a0e08; border-color: var(--gold); }
+  .stage {
+    width: min(920px, 96vw);
+    aspect-ratio: 3/2;
+    max-height: 72vh;
+    position: relative;
+    perspective: 2000px;
+  }
+  .stage.wide-mode {
+    width: min(1100px, 96vw);
+    aspect-ratio: 16/10;
+  }
+  .spread {
+    width: 100%; height: 100%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-radius: 6px 10px 10px 6px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 3px #1a0e08,
+      0 0 0 6px var(--brass),
+      0 25px 60px rgba(0,0,0,.65);
+    background: var(--leather);
+  }
+  .spread.landscape {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1.05fr) minmax(0, .95fr);
+  }
+  .page {
+    background: var(--parchment);
+    color: var(--ink);
+    padding: 1.4rem 1.5rem;
+    overflow: auto;
+    position: relative;
+  }
+  .page.left {
+    border-right: 1px solid #cbb892;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.06), transparent 12%),
+      var(--parchment);
+  }
+  .spread.landscape .page.left {
+    border-right: none;
+    border-bottom: 1px solid #cbb892;
+    order: 2;
+    background:
+      linear-gradient(0deg, rgba(0,0,0,.05), transparent 18%),
+      var(--parchment);
+  }
+  .page.right {
+    background:
+      linear-gradient(270deg, rgba(0,0,0,.05), transparent 12%),
+      var(--parchment);
+    display: flex; align-items: center; justify-content: center;
+    padding: .6rem;
+  }
+  .spread.landscape .page.right {
+    order: 1;
+    padding: .35rem;
+    background: #0f1a11;
+  }
+  .page.cover-wrap {
+    grid-column: 1 / -1;
+    background: #0f1a11;
+    padding: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .page.cover-wrap img { width: 100%; height: 100%; object-fit: contain; background: #0d0805; }
+  .page h2 {
+    margin: 0 0 .8rem; font-size: 1.15rem; color: #5a3a18;
+    border-bottom: 1px solid #c9a22766; padding-bottom: .4rem;
+  }
+  .page .body {
+    font-size: clamp(.78rem, 1.35vw, .95rem);
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .page.right img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    border: 1px solid #b89a5a55;
+    border-radius: 2px;
+  }
+  .spread.landscape .page.right img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    border: none;
+  }
+  .nav {
+    margin-top: 1.25rem;
+    display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; justify-content: center;
+  }
+  button {
+    background: linear-gradient(180deg, #34502f, #18281a);
+    color: var(--parchment);
+    border: 1px solid var(--brass);
+    border-radius: 4px;
+    padding: .55rem 1.1rem;
+    font: inherit; cursor: pointer;
+    letter-spacing: .04em;
+  }
+  button:hover { filter: brightness(1.15); }
+  button:disabled { opacity: .35; cursor: default; }
+  .pager { min-width: 7rem; text-align: center; color: var(--gold); font-size: .9rem; }
+  .hint { margin-top: .75rem; font-size: .75rem; opacity: .55; }
+
+  .site-footer {
+    margin-top: 2rem;
+    padding: 1.25rem 1rem 1.5rem;
+    text-align: center;
+    font-size: .72rem;
+    letter-spacing: .04em;
+    opacity: .55;
+    color: var(--parchment, #f3e6c8);
+    border-top: 1px solid #5a3a2244;
+  }
+
+  .back-home {
+    position: fixed; top: .75rem; left: .75rem; z-index: 20;
+    background: #18281a; color: var(--parchment);
+    border: 1px solid var(--brass); border-radius: 3px;
+    padding: .3rem .7rem; font: inherit; font-size: .75rem;
+    text-decoration: none; letter-spacing: .04em;
+  }
+  .back-home:hover { filter: brightness(1.15); }
+  @media (max-width: 720px) {
+    body {
+      padding: 3.1rem .65rem 2rem; /* room under fixed back + DE/EN */
+      padding-left: .65rem;
+      padding-right: .65rem;
+    }
+    .lang-switch { top: .5rem; right: .5rem; }
+    .back-home {
+      top: .5rem; left: .5rem;
+      font-size: .68rem;
+      padding: .25rem .5rem;
+      max-width: 42vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    h1, #doc-title {
+      font-size: clamp(.72rem, 3.5vw, .92rem);
+      letter-spacing: .04em;
+      line-height: 1.3;
+      text-align: center;
+      max-width: 100%;
+      margin: 0 auto .2rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      padding: 0 .15rem;
+    }
+    .sub {
+      font-size: .72rem;
+      margin-bottom: .85rem;
+      text-align: center;
+      padding: 0 .25rem;
+      line-height: 1.35;
+    }
+    .stage,
+    .stage.wide-mode {
+      width: 96vw;
+      max-height: none;
+      aspect-ratio: auto;
+      min-height: 0;
+      height: auto;
+    }
+    .spread,
+    .spread.landscape {
+      min-height: 0;
+      height: auto;
+      aspect-ratio: auto;
+      max-height: none;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+    }
+    .spread.landscape .page.right {
+      order: 1;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+      background: #1a120c;
+    }
+    .spread.landscape .page.right img {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      object-fit: cover;
+      display: block;
+      border: none;
+    }
+    .spread.landscape .page.left {
+      order: 2;
+      overflow: visible;
+      max-height: none;
+    }
+    .page.cover-wrap {
+      aspect-ratio: 16 / 9;
+      height: auto;
+      max-height: none;
+    }
+    .page.cover-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .page { padding: 1rem; }
+    .page .body { font-size: .85rem; }
+    .nav { margin-top: .75rem; gap: .5rem; }
+    .nav button { padding: .45rem .85rem; font-size: .8rem; }
+  }
+</style>
+</head>
+<body>
+  <a class="back-home" href="../index.html" id="back-home">‹ Bücherwand</a>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button type="button" id="lang-de" class="active">DE</button>
+    <button type="button" id="lang-en">EN</button>
+  </div>
+  <h1 id="doc-title">FILLI — Die Seele aus dem Westen</h1>
+  <div class="sub" id="doc-sub">Lederband · zum Umblättern · Vorgeschichte · 12 Kapitel</div>
+  <div class="stage" id="stage">
+    <div class="spread" id="spread"></div>
+  </div>
+  <div class="nav">
+    <button id="prev" type="button">‹ Zurück</button>
+    <div class="pager" id="pager">1 / 1</div>
+    <button id="next" type="button">Weiter ›</button>
+  </div>
+  <div class="hint" id="doc-hint">Tastatur: ← → · Ein Band pro Charakter · Filli</div>
+<script>
+const UI = {
+  de: {
+    title: "FILLI — Die Seele aus dem Westen",
+    sub: "Lederband · zum Umblättern · Vorgeschichte · 12 Kapitel",
+    prev: "‹ Zurück",
+    next: "Weiter ›",
+    hint: "Tastatur: ← → · Filli · Die Seele aus dem Westen"
+  },
+  en: {
+    title: "FILLI — The Soul from the West",
+    sub: "Leather volume · flip through · origin story · 12 chapters",
+    prev: "‹ Back",
+    next: "Next ›",
+    hint: "Keys: ← → · Filli · The Soul from the West"
+  }
+};
+const PAGES = {
+  "de": [
+    {
+      "type": "cover",
+      "img": "../assets/filli_cover.jpg",
+      "label": "Cover"
+    },
+    {
+      "type": "spread",
+      "title": "I. Das Kind das lauschte",
+      "text": "Es gibt eine Stille in den alten Wäldern,\ndie kein anderer Ort der Welt kennt.\n\nNicht die Stille der Leere.\nDie Stille des Vollen.\nAls würde der Wald atmen — und du hörst es,\nwenn du still genug bist.\n\nIch wurde im Silberwald geboren, weit im Westen,\nwo die Bäume älter sind als die Götter\nund bis hinunter ans graue Meer reichen.\nEs war Frühling. An den Ästen hing noch Schnee.\n\nDie Hebamme sagte: \"Das Kind weint nicht.\"\n\nMeine Mutter, die Heilerin des Dorfes, schaute mich an und verstand sofort.\nIch weinte nicht, weil ich nicht erschrocken war.\nIch weinte nicht, weil ich — lauschte.\n\n\"Filli,\" sagte sie. \"Die Sanfte.\"\n\nNicht weil ich schwach war.\nWeil ich schon wusste: Manche Dinge hört man nur, wenn man nicht schreit.\n\nMein Haar war schwarz wie der Wald in der Nacht,\nmit Strähnen darin wie Glut unter Asche —\ndas Erbe meiner Grossmutter, die auch eine Seherin war.\nMeine Augen: honigbraun wie Bernstein im Mondlicht.\nUnd auf meiner Nase ein paar Sommersprossen,\nals hätte der Frühling mich im Vorbeigehen berührt.\n\nIch war das ruhigste Kind im Dorf.\nNicht still. Ruhig.\nDas ist nicht dasselbe.\n",
+      "img": "../assets/filli_p01.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "II. Das Haus der Kräuter",
+      "text": "Unser Haus roch nach Thymian und nassem Moos.\n\nMeine Mutter hatte überall Kräuter hängen.\nAn den Balken. An den Fenstern. Neben der Tür.\nGetrocknet, gebündelt, jedes an seinem Platz,\nals hätte das Haus selbst ein Gedächtnis.\n\nIch lernte sie alle.\n\nNicht weil sie es verlangte.\nWeil ich es wollte.\n\nMit drei konnte ich sie beim Namen nennen.\nMit vier wusste ich, welches gegen Fieber half\nund welches man auf eine Wunde legt.\nIch sass zu ihren Füssen, während sie Salben rührte,\nund hörte zu, wie sie mit den Kranken sprach.\n\nLeise. Immer leise.\n\"Wer Schmerzen hat,\" sagte sie, \"braucht zuerst keine Medizin.\nEr braucht jemanden, der nicht wegschaut.\"\n\nIch schaute nicht weg.\nNie.\n\nAbends, wenn das Feuer klein war,\nlegte ich die Hände auf die warmen Steine am Herd\nund stellte mir vor, die Wärme ginge durch mich hindurch\nund käme irgendwo anders wieder heraus.\n\nIch wusste nicht, dass das ein Spiel war,\ndas bald keines mehr sein würde.\n\nMit fünf —\n\nMit fünf geschah es zum ersten Mal.\n",
+      "img": "../assets/filli_p02.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "III. Die erste Heilung",
+      "text": "Es war ein Morgen im Herbst.\n\nMein Vater sass vor dem Haus und schnitzte.\nEr hatte Hände, gross und rau von aussen,\naber sie bewegten sich wie die eines Künstlers.\n\nDann rutschte das Messer ab.\n\nNicht schlimm. Ein Schnitt über den Handballen.\nEr lachte sogar, um mich nicht zu erschrecken.\n\nAber ich erschrak nicht.\nIch kniete mich neben ihn\nund legte meine kleine Hand auf seine grosse.\n\nWas dann geschah — ich wusste es nicht.\nIch weiss es bis heute nicht ganz.\nEine Wärme aus mir heraus, durch meine Hand, in seine.\nAls hätte ich die Wärme vom Herd endlich gefunden.\n\nEr zuckte nicht.\nEr wurde still.\nWir atmeten beide.\n\nAls ich die Hand wegnahm, war der Schnitt nicht verschwunden.\nAber kleiner. Ruhiger.\nAls hätte sein Körper sich besonnen und beschlossen zu heilen.\n\nMein Vater schaute auf seine Hand. Dann auf mich.\nEr sagte nichts.\nEr strich mir nur das Haar aus dem Gesicht.\n\nDas Dorf nannte es ein Wunder.\nMeine Mutter nannte es nicht.\nSie wusste es einfach:\nGabe.\n\nMeine Hände zitterten noch lange.\nNicht aus Angst.\nWeil ich zum ersten Mal gespürt hatte,\nwie zwei Menschen kurz ein einziges Ding sein können.\n",
+      "img": "../assets/filli_p03.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IV. Was mein Vater lehrte",
+      "text": "Mein Vater war Jäger und Schnitzer.\n\nDas klingt nach einem Widerspruch zu einer Heilerin.\nEs war keiner.\n\nEr ging durch den Wald mit einer Zärtlichkeit,\ndie andere Männer nicht verstanden.\nEr lehrte mich nicht jagen.\nEr lehrte mich lesen.\n\n\"Sieh die Spur,\" sagte er und kniete sich neben mich in den Schnee.\n\"Nicht nur den Abdruck. Den Druck. Die Tiefe.\nWie jemand stand. Ob er Angst hatte. Ob er ruhig war.\"\n\nDie Welt als Text.\nJeder Abdruck eine Aussage.\nJeder geknickte Grashalm ein Satz.\n\nIch trug das mein Leben lang.\n\nDenn bald las ich nicht mehr nur Spuren im Schnee.\nIch las Menschen.\n\nDie Art, wie jemand die Hände hält, wenn er lügt.\nDen Atem, der sich ändert, wenn jemand Schmerz verbirgt.\nDie Augen, die woandershin schauen,\nwenn das Herz weint und der Mund lächelt.\n\n\"Du siehst zu viel, kleine Filli,\" sagte mein Vater manchmal.\nNicht streng. Eher stolz. Und ein bisschen besorgt.\n\nEr hatte recht.\nIch sah zu viel.\n\nIch las euch alle,\nnoch bevor wir uns trafen.\n",
+      "img": "../assets/filli_p04.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "V. Der Winter des Fiebers",
+      "text": "Ich war zehn.\n\nDas Fieber kam im November.\n\nNicht wie in den Geschichten — nicht mit Trommeln, nicht mit Donner.\nEs kam leise.\nErst ein Kind, das nicht mehr aufstehen wollte.\nDann seine Mutter. Dann der Nachbar.\n\nMeine Mutter schlief kaum mehr.\nUnd ich schlief auch nicht.\n\nWir arbeiteten nebeneinander, die Heilerin und ihre Tochter.\nKräuterdampf. Warme Tücher. Kühles Wasser.\nUnd das Auflegen der Hände, das Wärme brachte.\n\nManche Fieber sanken.\nManche nicht.\n\nIch lernte in diesen Wochen mehr über den Menschen\nals in allen Jahren zuvor.\nWie er kämpft.\nWie er hofft.\nUnd — langsam, schwer —\ndass er manchmal verliert.\n\nNicht jeden kann man retten.\n\nDas war meine erste dunkle Wahrheit.\nNicht das Schwert. Nicht das Feuer.\nNur das stille Wissen:\nManchmal reicht es nicht.\n\nIch legte meine Hände auf, bis sie brannten.\nIch sang die Lieder, die meine Mutter mir beigebracht hatte.\nIch hielt Hände, die nach mir griffen.\n\nUnd dann —\n\nDann war es meine Mutter,\ndie sich an den Türrahmen lehnte\nund nicht mehr weitergehen konnte.\n",
+      "img": "../assets/filli_p05.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VI. Die Hand die losliess",
+      "text": "Es ging so schnell.\n\nZu schnell für eine Frau, die Tag und Nacht für andere da gewesen war.\nZu schnell für eine Heilerin.\nZu schnell für eine Mutter.\n\nDas Fieber kam über Nacht.\nIch tat alles.\nJedes Kraut. Jedes Lied. Jede Wärme aus meinen Händen.\n\nSie hielt meine Hand.\n\n\"Du wirst eine bessere Heilerin als ich,\" flüsterte sie.\n\n\"Sei still, Mutter. Schone dich.\"\n\n\"Nein.\" Ein kleines Lächeln. \"Das musst du wissen.\"\n\nDraussen fiel der erste Schnee.\nIm Herd knackte das Feuer.\nAn den Balken hingen ihre Kräuter,\njedes an seinem Platz.\n\nSie hielt meine Hand durch die Nacht.\n\nUnd irgendwann — zwischen der dritten und der vierten Stunde —\nwurde ihr Griff leichter.\n\nUnd dann ging sie.\nGanz leise.\nSo, wie sie immer gesprochen hatte.\n\nIch liess nicht los.\n\nIch sass bei ihr, ihre Hand in meinen beiden,\nbis das erste graue Licht durch die Fensterläden kam.\n\nMein Vater fand uns so.\nEr sagte kein Wort.\nEr setzte sich nur hinter mich\nund legte seine grossen Hände auf meine Schultern.\n\nWir blieben, bis der Morgen ganz da war.\n",
+      "img": "../assets/filli_p06.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VII. Die Schuld",
+      "text": "Das ist es, was ich trage.\n\nNicht die Trauer — die ist ehrlich.\nDie Schuld.\n\n\"Ich hätte sie retten müssen.\"\n\nLogisch war das nicht.\nDas Fieber hatte Stärkere genommen.\nMeine Mutter hatte sich für andere verschenkt\nund für sich selbst zu wenig übrig behalten.\nIch war zehn Jahre alt.\n\nAber Logik und Schuld sprechen nicht dieselbe Sprache.\n\nAlso lernte ich mehr.\nNoch mehr.\nAls könnten genug Wissen und genug Hingabe die Schuld irgendwann auflösen.\nAls gäbe es eine Schwelle — und wenn ich sie überquere,\ndann hätte ich es endlich gut genug gemacht.\n\nDie Schwelle gibt es nicht.\n\nAber der Weg dorthin hat viele gerettet, die sonst gegangen wären.\nDas ist meine Art von Versöhnung.\nNicht Vergebung.\nWeitermachen.\n\nUnd ich lernte noch etwas in diesen Jahren:\nWas ich heile, trage ich manchmal selbst.\nEin Ziehen hinter den Augen.\nEine Müdigkeit, die nicht meine ist.\n\nIch habe nie jemandem davon erzählt.\nNicht meinem Vater.\nNicht den Menschen, deren Schmerz ich nahm.\n\nManche Dinge trägt man,\ndamit andere sie nicht tragen müssen.\n",
+      "img": "../assets/filli_p07.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VIII. Der Aufbruch",
+      "text": "Mit vierzehn verliess ich das Dorf.\n\nNicht weil nichts mehr da war.\nMein Vater war noch da, und er liess mich gehen,\nmit einem geschnitzten Blatt an einer Schnur um meinen Hals.\nIch ging, weil ich mehr lernen musste.\n\nDrei Tagesreisen entfernt lebte eine alte Frau,\ndie Heilweisen kannte, die keine Dorfheilerin kannte.\nIch fand sie. Ich lernte von ihr.\nDann gab es jemand anderen.\nUnd wieder jemanden.\n\nEinsiedler in Höhlen.\nKräuterkundige am Rand der Moore.\nAlte Frauen, die in keinem Dorf lebten, weil Dörfer ihnen zu laut waren.\n\nIch fand sie alle.\nWeil ich die Stille kannte.\nWeil ich wusste, dass Weisheit selten laut ist.\n\nEinmal lebte ich einen ganzen Winter in einem Wald,\nden die Leute verflucht nannten.\nNiemand ging hinein.\nIch schon.\nEr war nicht verflucht.\nEr war nur still — und niemand hatte ihm je zugehört.\n\nMeine Augen wurden tiefer in diesen Jahren.\nSanfter.\nUnd trauriger.\n\nUnd ich begann zu sehen.\n",
+      "img": "../assets/filli_p08.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IX. Die Visionen",
+      "text": "Es begann mit Träumen.\n\nNicht die gewöhnlichen, die man vergisst, wenn man aufwacht.\nTräume, die bleiben. Genau. Vollständig.\n\nEine Brücke über den Fluss, die bricht — drei Tage bevor sie brach.\nEin Sturm über der Küste, zwei Nächte bevor er kam.\nEin verirrtes Kind, gefunden genau dort,\nwo ich es im Traum unter einer alten Eiche gesehen hatte.\n\nDie Menschen sagten Verschiedenes.\nHexe. Seherin. Gesegnete.\n\nIch sagte nichts.\nIch schrieb auf, was ich sah.\nUnd wartete.\n\nFast immer hatte ich recht.\n\nDas war keine Freude.\nWer freut sich, Unglück vorauszusehen?\n\nUnd die Visionen hatten ihren Preis.\nSie kamen ungebeten.\nSie liessen mich erschöpft zurück, manchmal für Tage.\nManche hinterliessen einen Schmerz, der keinen Namen hatte.\n\nAber manchmal —\nmanchmal sah ich etwas, bevor es zu spät war.\nDie Brücke wurde gesperrt.\nDie Boote blieben am Ufer.\nDas Kind schlief in dieser Nacht zu Hause.\n\nUnd ich konnte handeln.\n\nDas war der Sinn.\n\nNicht zu wissen, was kommt.\nSondern da zu sein,\nwenn es kommt.\n",
+      "img": "../assets/filli_p09.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "X. Der Stein aus Mondlicht",
+      "text": "Ich war achtzehn.\n\nIch hatte von der Höhle gehört.\nFlüsterwissen — die Art, die niemand aufschreibt.\nAlte Frauen sagten: Dort schlafen die, die vor uns kamen.\nNicht böse. Nur alt.\n\nIch fand die Höhle im tiefen Winter.\n\nDie Geister — wenn es Geister waren — liessen mich ein.\nAls hätten sie gewusst, dass ich lauschen würde, statt zu fragen.\n\nIn der Mitte: ein Stein.\nEr brannte nicht wie Feuer.\nEr glühte nicht golden.\nEr pulsierte silbern.\nKühl. Ruhig. Wie Mondlicht auf Wasser.\n\nDas zweite Zeitfragment.\n\nIch legte die Hand darauf.\n\nUnd sah sie.\n\nLilli. Die Kriegerin mit den silberweissen Zöpfen und dem Schwert.\nMaya. Das Lachen. Locken wie rotes Feuer.\nPiri. Die Flamme auf der Handfläche —\nund seine Hand neben meiner.\nNicht als Werkzeug. Als Nähe.\nDas erzählte ich lange niemandem.\n\nUnd mich selbst.\nDas Herz, das sie alle zusammenhält.\n\nIch weinte in dieser Höhle.\nAllein zwischen Geisteratem und altem Stein.\n\nNicht aus Trauer.\nAus Erleichterung.\n\n\"Ich bin nicht allein,\" flüsterte ich.\n\nZum ersten Mal seit meiner Mutter.\n",
+      "img": "../assets/filli_p10.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XI. Was ich zurückhalte",
+      "text": "Man hält mich für sanft.\n\nDas bin ich.\nAber sanft heisst nicht leer.\n\nIch halte zurück.\nNicht weil ich wenig fühle.\nWeil ich zu viel fühle.\n\nWenn ich einem Menschen die Hand auflege,\nspüre ich nicht nur seine Wunde.\nIch spüre seine Angst. Seine Lügen. Seine Liebe.\nWenn ich alles aussprechen würde, was ich sehe,\nwürde niemand mehr neben mir sitzen wollen.\n\nAlso schweige ich.\nUnd höre zu.\nStille ist auch eine Sprache.\nVielleicht die ehrlichste.\n\nMein Vater sagte einmal, als ich klein war:\n\"Weisst du, was der Schmied tut, wenn der Stahl glüht?\nEr taucht ihn ins Öl. Nicht um ihn zu schwächen.\nDamit er hart wird. Damit er hält.\"\n\nDamals verstand ich das nicht.\nHeute weiss ich: Das bin ich.\nNicht die Klinge. Nicht das Feuer.\nDas, was sie hält.\n\nAber ich weiss auch:\nIrgendwann werde ich lernen müssen,\ndas, was ich fühle, beim Namen zu nennen.\nNicht nur unter der Haut zu tragen.\n\nNicht heute.\nNoch nicht.\n\nAber ich habe es gesehen, in einem Stein aus Mondlicht:\nEs gibt Menschen,\nbei denen ich nicht mehr zurückhalten muss.\n",
+      "img": "../assets/filli_p11.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XII. Wer ich bin",
+      "text": "Ich bin Filli.\n\nIch bin das Kind, das lauschte, statt zu weinen.\nIch bin das Mädchen mit fünf, das die Wärme vom Herd in seinen Händen fand.\nIch bin die Zehnjährige, die die Hand ihrer Mutter hielt, bis der Morgen kam.\nIch bin die Vierzehnjährige, die aufbrach, weil weniger nicht reichte.\nIch bin die Achtzehnjährige in der Höhle,\ndie zum ersten Mal seit Jahren nicht allein ist.\n\nIch bin die Seherin.\nDie Heilerin.\nDie Seele aus dem Westen.\n\nUnd irgendwann — in einer weissen Kammer aus Licht —\nwerde ich ihnen gegenüberstehen.\n\nDer Kriegerin, die dasteht wie eine Klinge, die endlich ruhen darf.\nDer Rothaarigen, deren Lachen etwas heilt, das niemand benannt hat.\nUnd dem mit der Flamme, der ein wenig abseits steht.\n\nIch werde ihn ansehen.\nNicht lange.\nAber lange genug, um nicht seine Macht zu sehen —\nsondern den Jungen im Wald.\n\nUnd er wird die Flamme senken.\nIch werde einmal nicken.\nKaum sichtbar.\n\nDann werde ich meine Hände auf ihre Herzen legen\nund flüstern:\n\n\"Jetzt sind wir ganz.\"\n\n\n\"Sie wurde unsere Seherin nicht durch Macht.  \nSie wurde es durch Verlust, durch Mitgefühl, durch Wahl.  \nUnd sie wird es bleiben — für immer.\"\n\n\nGeschrieben von Filli selbst · für das Rudel.  \nDie Seele aus dem Westen.\n",
+      "img": "../assets/filli_p12.jpg",
+      "wide": true
+    }
+  ],
+  "en": [
+    {
+      "type": "cover",
+      "img": "../assets/filli_cover.jpg",
+      "label": "Cover"
+    },
+    {
+      "type": "spread",
+      "title": "I. The Child Who Listened",
+      "text": "There is a stillness in the old forests\nthat no other place in the world knows.\n\nNot the stillness of emptiness.\nThe stillness of fullness.\nAs if the forest were breathing — and you can hear it,\nif you are still enough.\n\nI was born in the Silver Forest, far in the West,\nwhere the trees are older than the gods\nand reach all the way down to the grey sea.\nIt was spring. Snow still hung on the branches.\n\nThe midwife said: \"The child isn't crying.\"\n\nMy mother, the village healer, looked at me and understood at once.\nI did not cry because I was not frightened.\nI did not cry because I was — listening.\n\n\"Filli,\" she said. \"The gentle one.\"\n\nNot because I was weak.\nBecause I already knew: some things you only hear when you don't scream.\n\nMy hair was black as the forest at night,\nwith strands in it like embers under ash —\nmy grandmother's inheritance; she was a seer too.\nMy eyes: honey-brown, like amber in moonlight.\nAnd across my nose a few freckles,\nas if spring had brushed me in passing.\n\nI was the calmest child in the village.\nNot quiet. Calm.\nThat is not the same thing.\n",
+      "img": "../assets/filli_p01.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "II. The House of Herbs",
+      "text": "Our house smelled of thyme and wet moss.\n\nMy mother had herbs hanging everywhere.\nFrom the beams. At the windows. Beside the door.\nDried, bundled, each in its place,\nas if the house itself had a memory.\n\nI learned them all.\n\nNot because she asked me to.\nBecause I wanted to.\n\nAt three I could call them by name.\nAt four I knew which one helped against fever\nand which one you lay on a wound.\nI sat at her feet while she stirred her salves\nand listened to how she spoke to the sick.\n\nSoftly. Always softly.\n\"Someone in pain,\" she said, \"doesn't need medicine first.\nThey need someone who doesn't look away.\"\n\nI did not look away.\nNever.\n\nIn the evenings, when the fire was low,\nI laid my hands on the warm stones of the hearth\nand imagined the warmth passing through me\nand coming out somewhere else.\n\nI did not know it was a game\nthat would soon be a game no longer.\n\nAt five —\n\nAt five it happened for the first time.\n",
+      "img": "../assets/filli_p02.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "III. The First Healing",
+      "text": "It was a morning in autumn.\n\nMy father sat in front of the house, carving.\nHe had hands that were big and rough on the outside,\nbut they moved like an artist's.\n\nThen the knife slipped.\n\nNothing terrible. A cut across the heel of his hand.\nHe even laughed, so as not to frighten me.\n\nBut I was not frightened.\nI knelt beside him\nand laid my small hand on his big one.\n\nWhat happened then — I did not know.\nI still don't fully know.\nA warmth out of me, through my hand, into his.\nAs if I had finally found the warmth from the hearth.\n\nHe did not flinch.\nHe went still.\nWe both breathed.\n\nWhen I took my hand away, the cut had not vanished.\nBut it was smaller. Calmer.\nAs if his body had thought it over and decided to heal.\n\nMy father looked at his hand. Then at me.\nHe said nothing.\nHe only brushed the hair out of my face.\n\nThe village called it a miracle.\nMy mother did not call it anything.\nShe simply knew:\na gift.\n\nMy hands trembled for a long time.\nNot from fear.\nBecause for the first time I had felt\nhow two people can briefly be one single thing.\n",
+      "img": "../assets/filli_p03.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IV. What My Father Taught",
+      "text": "My father was a hunter and a carver.\n\nThat sounds like a contradiction for a healer's child.\nIt wasn't.\n\nHe walked through the forest with a tenderness\nother men did not understand.\nHe did not teach me to hunt.\nHe taught me to read.\n\n\"Look at the track,\" he said, kneeling beside me in the snow.\n\"Not just the print. The pressure. The depth.\nHow someone stood. Whether they were afraid. Whether they were calm.\"\n\nThe world as a text.\nEvery print a statement.\nEvery bent blade of grass a sentence.\n\nI carried that all my life.\n\nBecause soon I was reading more than tracks in the snow.\nI was reading people.\n\nThe way someone holds their hands when they lie.\nThe breath that changes when someone hides pain.\nThe eyes that look elsewhere\nwhen the heart weeps and the mouth smiles.\n\n\"You see too much, little Filli,\" my father said sometimes.\nNot sternly. Proudly, rather. And a little worried.\n\nHe was right.\nI saw too much.\n\nI read all of you\nbefore we ever met.\n",
+      "img": "../assets/filli_p04.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "V. The Winter of the Fever",
+      "text": "I was ten.\n\nThe fever came in November.\n\nNot like in the stories — no drums, no thunder.\nIt came quietly.\nFirst a child who would not get up anymore.\nThen his mother. Then the neighbor.\n\nMy mother hardly slept.\nAnd I did not sleep either.\n\nWe worked side by side, the healer and her daughter.\nHerb steam. Warm cloths. Cool water.\nAnd the laying on of hands that brought warmth.\n\nSome fevers fell.\nSome did not.\n\nIn those weeks I learned more about people\nthan in all the years before.\nHow they fight.\nHow they hope.\nAnd — slowly, heavily —\nthat sometimes they lose.\n\nYou cannot save everyone.\n\nThat was my first dark truth.\nNot the sword. Not the fire.\nOnly the quiet knowing:\nSometimes it is not enough.\n\nI laid on my hands until they burned.\nI sang the songs my mother had taught me.\nI held hands that reached for me.\n\nAnd then —\n\nThen it was my mother\nwho leaned against the doorframe\nand could not go on.\n",
+      "img": "../assets/filli_p05.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VI. The Hand That Let Go",
+      "text": "It happened so fast.\n\nToo fast for a woman who had been there for others day and night.\nToo fast for a healer.\nToo fast for a mother.\n\nThe fever came overnight.\nI did everything.\nEvery herb. Every song. Every warmth from my hands.\n\nShe held my hand.\n\n\"You will be a better healer than I am,\" she whispered.\n\n\"Hush, Mother. Save your strength.\"\n\n\"No.\" A small smile. \"You need to know this.\"\n\nOutside, the first snow was falling.\nIn the hearth, the fire crackled.\nFrom the beams hung her herbs,\neach in its place.\n\nShe held my hand through the night.\n\nAnd at some point — between the third hour and the fourth —\nher grip grew lighter.\n\nAnd then she went.\nVery quietly.\nThe way she had always spoken.\n\nI did not let go.\n\nI sat with her, her hand in both of mine,\nuntil the first grey light came through the shutters.\n\nMy father found us like that.\nHe did not say a word.\nHe only sat down behind me\nand laid his big hands on my shoulders.\n\nWe stayed until the morning had fully come.\n",
+      "img": "../assets/filli_p06.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VII. The Guilt",
+      "text": "This is what I carry.\n\nNot the grief — the grief is honest.\nThe guilt.\n\n\"I should have saved her.\"\n\nIt was not logical.\nThe fever had taken stronger people.\nMy mother had given herself away to others\nand kept too little for herself.\nI was ten years old.\n\nBut logic and guilt do not speak the same language.\n\nSo I learned more.\nEven more.\nAs if enough knowledge and enough devotion could one day dissolve the guilt.\nAs if there were a threshold — and once I crossed it,\nI would finally have done it well enough.\n\nThe threshold does not exist.\n\nBut the road toward it has saved many who would otherwise have gone.\nThat is my kind of reconciliation.\nNot forgiveness.\nCarrying on.\n\nAnd I learned something else in those years:\nWhat I heal, I sometimes carry myself.\nA pull behind the eyes.\nA tiredness that is not mine.\n\nI never told anyone.\nNot my father.\nNot the people whose pain I took.\n\nSome things you carry\nso that others don't have to.\n",
+      "img": "../assets/filli_p07.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "VIII. The Departure",
+      "text": "At fourteen I left the village.\n\nNot because nothing was left.\nMy father was still there, and he let me go,\nwith a carved leaf on a cord around my neck.\nI left because I had to learn more.\n\nThree days' journey away lived an old woman\nwho knew ways of healing no village healer knew.\nI found her. I learned from her.\nThen there was someone else.\nAnd someone else again.\n\nHermits in caves.\nHerb-wise folk at the edge of the moors.\nOld women who lived in no village, because villages were too loud for them.\n\nI found them all.\nBecause I knew stillness.\nBecause I knew that wisdom is rarely loud.\n\nOnce I lived a whole winter in a forest\nthat people called cursed.\nNo one went in.\nI did.\nIt was not cursed.\nIt was only quiet — and no one had ever listened to it.\n\nMy eyes grew deeper in those years.\nSofter.\nAnd sadder.\n\nAnd I began to see.\n",
+      "img": "../assets/filli_p08.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "IX. The Visions",
+      "text": "It began with dreams.\n\nNot the ordinary kind you forget when you wake.\nDreams that stay. Exact. Complete.\n\nA bridge over the river breaking — three days before it broke.\nA storm over the coast, two nights before it came.\nA lost child, found exactly where\nI had seen her in the dream, beneath an old oak.\n\nPeople said different things.\nWitch. Seer. Blessed.\n\nI said nothing.\nI wrote down what I saw.\nAnd waited.\n\nI was almost always right.\n\nThat was no joy.\nWho rejoices at foreseeing misfortune?\n\nAnd the visions had their price.\nThey came uninvited.\nThey left me exhausted, sometimes for days.\nSome left behind a pain that had no name.\n\nBut sometimes —\nsometimes I saw something before it was too late.\nThe bridge was closed.\nThe boats stayed on the shore.\nThe child slept at home that night.\n\nAnd I could act.\n\nThat was the point.\n\nNot to know what is coming.\nBut to be there\nwhen it comes.\n",
+      "img": "../assets/filli_p09.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "X. The Moonlight Stone",
+      "text": "I was eighteen.\n\nI had heard of the cave.\nWhisper-knowledge — the kind no one writes down.\nOld women said: there sleep those who came before us.\nNot evil. Only old.\n\nI found the cave in the depth of winter.\n\nThe spirits — if they were spirits — let me in.\nAs if they knew I would listen instead of asking.\n\nIn the center: a stone.\nIt did not burn like fire.\nIt did not glow gold.\nIt pulsed silver.\nCool. Calm. Like moonlight on water.\n\nThe second time fragment.\n\nI laid my hand on it.\n\nAnd I saw them.\n\nLilli. The warrior with the silver-white braids and the sword.\nMaya. The laughter. Curls like red fire.\nPiri. The flame on his palm —\nand his hand beside mine.\nNot as a tool. As closeness.\nI told no one about that for a long time.\n\nAnd myself.\nThe heart that holds them all together.\n\nI wept in that cave.\nAlone between the breath of spirits and old stone.\n\nNot from grief.\nFrom relief.\n\n\"I am not alone,\" I whispered.\n\nFor the first time since my mother.\n",
+      "img": "../assets/filli_p10.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XI. What I Hold Back",
+      "text": "People think I am gentle.\n\nI am.\nBut gentle does not mean empty.\n\nI hold back.\nNot because I feel little.\nBecause I feel too much.\n\nWhen I lay my hand on someone,\nI feel more than their wound.\nI feel their fear. Their lies. Their love.\nIf I spoke everything I see,\nno one would want to sit beside me anymore.\n\nSo I stay silent.\nAnd listen.\nStillness is a language too.\nPerhaps the most honest one.\n\nWhen I was small, my father once said:\n\"Do you know what the smith does when the steel is glowing?\nHe plunges it into oil. Not to weaken it.\nSo that it hardens. So that it holds.\"\n\nBack then I did not understand.\nToday I know: that is me.\nNot the blade. Not the fire.\nThe thing that makes them hold.\n\nBut I also know:\nOne day I will have to learn\nto call what I feel by its name.\nNot only carry it under my skin.\n\nNot today.\nNot yet.\n\nBut I have seen it, in a stone of moonlight:\nThere are people\nwith whom I will no longer have to hold back.\n",
+      "img": "../assets/filli_p11.jpg",
+      "wide": true
+    },
+    {
+      "type": "spread",
+      "title": "XII. Who I Am",
+      "text": "I am Filli.\n\nI am the child who listened instead of crying.\nI am the girl of five who found the warmth of the hearth in her hands.\nI am the ten-year-old who held her mother's hand until morning came.\nI am the fourteen-year-old who set out because less was not enough.\nI am the eighteen-year-old in the cave\nwho, for the first time in years, is not alone.\n\nI am the seer.\nThe healer.\nThe soul from the West.\n\nAnd someday — in a white chamber of light —\nI will stand before them.\n\nThe warrior who stands like a blade that may finally rest.\nThe redhead whose laughter heals something no one has named.\nAnd the one with the flame, standing a little apart.\n\nI will look at him.\nNot for long.\nBut long enough to see not his power —\nbut the boy in the forest.\n\nAnd he will lower his flame.\nI will nod once.\nBarely visible.\n\nThen I will lay my hands on their hearts\nand whisper:\n\n\"Now we are whole.\"\n\n\n\"She became our seer not through power.  \nShe became it through loss, through compassion, through choice.  \nAnd she will remain it — forever.\"\n\n\nWritten by Filli herself · for the pack.  \nThe Soul from the West.\n",
+      "img": "../assets/filli_p12.jpg",
+      "wide": true
+    }
+  ]
+};
+let lang = localStorage.getItem("filli_lang") || "de";
+let i = 0;
+const spread = document.getElementById("spread");
+const stage = document.getElementById("stage");
+const pager = document.getElementById("pager");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function applyUI() {
+  const u = UI[lang];
+  document.documentElement.lang = lang;
+  document.getElementById("doc-title").textContent = u.title;
+  document.getElementById("doc-sub").textContent = u.sub;
+  document.getElementById("doc-hint").textContent = u.hint;
+  prev.textContent = u.prev;
+  const bh = document.getElementById("back-home");
+  if (bh) bh.textContent = (lang === "de" ? "‹ Bücherwand" : "‹ Bookshelf");
+  next.textContent = u.next;
+  document.getElementById("lang-de").classList.toggle("active", lang === "de");
+  document.getElementById("lang-en").classList.toggle("active", lang === "en");
+}
+
+function render() {
+  const pages = PAGES[lang];
+  const p = pages[i];
+  if (p.type === "cover") {
+    stage.classList.remove("wide-mode");
+    spread.className = "spread";
+    spread.innerHTML = `<div class="page cover-wrap"><img src="${esc(p.img)}" alt="Cover"/></div>`;
+  } else {
+    const wide = !!p.wide;
+    stage.classList.toggle("wide-mode", wide);
+    spread.className = "spread" + (wide ? " landscape" : "");
+    spread.innerHTML = `
+      <div class="page left"><h2>${esc(p.title)}</h2><div class="body">${esc(p.text)}</div></div>
+      <div class="page right"><img src="${esc(p.img)}" alt="${esc(p.title)}"/></div>`;
+  }
+  pager.textContent = `${i + 1} / ${pages.length}`;
+  prev.disabled = i === 0;
+  next.disabled = i === pages.length - 1;
+}
+function setLang(l) {
+  lang = l;
+  localStorage.setItem("filli_lang", lang);
+  applyUI();
+  render();
+}
+document.getElementById("lang-de").onclick = () => setLang("de");
+document.getElementById("lang-en").onclick = () => setLang("en");
+prev.onclick = () => { if (i > 0) { i--; render(); } };
+next.onclick = () => { if (i < PAGES[lang].length - 1) { i++; render(); } };
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") prev.click();
+  if (e.key === "ArrowRight") next.click();
+});
+applyUI();
+render();
+</script>
+
+<footer class="site-footer">
+  © 2026 Lichtkrieger / das Rudel — Alle Rechte vorbehalten / All rights reserved
+</footer>
+
+</body>
+</html>

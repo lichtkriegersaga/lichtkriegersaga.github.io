@@ -259,6 +259,18 @@
     .nav { margin-top: .75rem; gap: .5rem; }
     .nav button { padding: .45rem .85rem; font-size: .8rem; }
   }
+
+  /* —— Hörspiel (Deutsch) – gelesen von Filli —— */
+  .hoerspiel {
+    margin: 0 0 .9rem; padding: .45rem .6rem .5rem;
+    border: 1px solid #c9a22766; border-radius: 4px;
+    background: linear-gradient(180deg, rgba(201,162,39,.10), rgba(90,58,24,.06));
+  }
+  .hoerspiel .hs-label {
+    display: block; font-size: .72rem; letter-spacing: .06em;
+    color: #5a3a18; margin: 0 0 .3rem; font-variant: small-caps;
+  }
+  .hoerspiel audio { display: block; width: 100%; height: 34px; }
 </style>
 </head>
 <body>
@@ -512,7 +524,33 @@ function applyUI() {
   document.getElementById("lang-en").classList.toggle("active", lang === "en");
 }
 
+// —— Hörspiel (Deutsch) – gelesen von Filli, nur in der deutschen Ansicht ——
+const HS_ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
+function hsChapterNo(p) {
+  const m = /^([IVX]+)\./.exec((p && p.title) || "");
+  return m ? HS_ROMAN.indexOf(m[1]) + 1 : 0;
+}
+function hsStop() {
+  document.querySelectorAll("#spread audio").forEach(a => { try { a.pause(); } catch (_) {} });
+}
+function hsMount(p) {
+  if (lang !== "de") return;
+  const n = hsChapterNo(p);
+  if (!n) return;
+  const h2 = document.querySelector("#spread .page.left h2");
+  if (!h2) return;
+  const box = document.createElement("div");
+  box.className = "hoerspiel";
+  const nn = String(n).padStart(2, "0");
+  box.innerHTML = `<span class="hs-label">🎧 Hörspiel (Deutsch) – gelesen von Filli</span>` +
+    `<audio controls preload="none" playsinline src="audio/hoerspiel/k${nn}_de.m4a" aria-label="Hörspiel Kapitel ${HS_ROMAN[n-1]}"></audio>`;
+  const a = box.querySelector("audio");
+  a.addEventListener("keydown", (e) => e.stopPropagation());
+  h2.insertAdjacentElement("afterend", box);
+}
+
 function render() {
+  hsStop();
   const pages = PAGES[lang];
   const p = pages[i];
   if (p.type === "cover") {
@@ -531,6 +569,7 @@ function render() {
   prev.disabled = i === 0;
   next.disabled = i === pages.length - 1;
   if (window.Sterne) Sterne.bookPage(document.getElementById("sterne-host"), "filli", lang, i === pages.length - 1);
+  hsMount(p);
 }
 function setLang(l) {
   lang = l;

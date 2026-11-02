@@ -569,10 +569,11 @@
        * Target: spines ≈ 55–65% of scene height (~260–320 CSS px at 390-wide).
        * crop centers the book cluster; plank edge + light frame still visible.
        */
-      --crop-x: 0.281;
-      --crop-w: 0.108;
-      --crop-y: 0.522;
-      --crop-h: 0.240;
+      /* Vorschau: 6 Bände (inkl. Band I + II) sichtbar */
+      --crop-x: 0.284;
+      --crop-w: 0.150;
+      --crop-y: 0.500;
+      --crop-h: 0.262;
       aspect-ratio: calc((16 * var(--crop-w)) / (9 * var(--crop-h)));
       width: 100%;
       border-radius: 8px 8px 0 0;
@@ -637,7 +638,7 @@
        * object-fit:contain reaches ~55–65% of scene height (~260–320px at 390).
        * Desktop --spine-w untouched.
        */
-      --spine-w: clamp(64px, 5.2%, 88px);
+      --spine-w: clamp(56px, 5.2%, 72px);
     }
     .spine-art {
       /* fill width; height follows art (capped by row) */
@@ -691,6 +692,33 @@
     .nav { margin-top: .75rem; gap: .45rem; }
     .nav button, .nav a { padding: .45rem .7rem; font-size: .8rem; }
   }
+
+  /* —— Hörbuch-Fach: CD-Hüllen (Vorschau) —— */
+  .cd-fach { padding: 1rem 1.2rem 1.3rem; background: linear-gradient(180deg,#2a1810 0%,#1a100a 70%,#0d0805 100%); border-top: 3px solid #6b4426; box-shadow: inset 0 8px 14px rgba(0,0,0,.55); }
+  .cd-fach h2 { margin: 0 0 .2rem; font-size: .95rem; letter-spacing: .14em; color: var(--brass, #c9a25a); font-weight: normal; text-align: center; }
+  .cd-fach .cd-hint { text-align: center; font-size: .72rem; opacity: .6; margin: 0 0 .8rem; }
+  .cd-row { display: flex; gap: 1.1rem; justify-content: center; flex-wrap: wrap; padding-bottom: .6rem; border-bottom: 10px solid #4a2c18; box-shadow: 0 6px 8px -4px #000; }
+  .cd { all: unset; cursor: pointer; width: 132px; display: flex; flex-direction: column; align-items: center; transition: transform .25s ease; }
+  .cd:hover, .cd:focus-visible { transform: translateY(-6px); }
+  .cd-case { position: relative; width: 132px; height: 118px; border-radius: 3px; background: linear-gradient(135deg,#3b2414,#1c110a); border: 1px solid #8a6a3a; box-shadow: 0 6px 14px rgba(0,0,0,.6), inset 0 0 0 4px #24160d, inset 0 0 0 5px #b8914e55; overflow: hidden; }
+  .cd-case::before { content:""; position:absolute; left:0; top:0; bottom:0; width:12px; background: repeating-linear-gradient(180deg,#5a3a20 0 3px,#3a2414 3px 6px); border-right:1px solid #b8914e88; z-index:2; }
+  .cd-case img { position:absolute; left:16px; top:6px; width:110px; height:84px; object-fit:cover; border:1px solid #c9a25a99; filter: sepia(.15) brightness(.92); }
+  .cd-case .cd-title { position:absolute; left:14px; right:4px; bottom:4px; text-align:center; font-size:.62rem; letter-spacing:.08em; color:#e8c27a; text-shadow:0 1px 2px #000; line-height:1.15; }
+  .cd-case::after { content:""; position:absolute; inset:0; background: linear-gradient(120deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,0) 35%,rgba(255,255,255,0) 70%,rgba(255,255,255,.06) 100%); z-index:3; pointer-events:none; }
+  .cd-label { margin-top:.35rem; font-size:.7rem; color:#d8c39a; text-align:center; line-height:1.2; }
+  .cd-label small { display:block; opacity:.65; font-size:.62rem; }
+  .cd-dl { margin: .8rem auto 0; max-width: 520px; background:#f1e6cc; color:#2a1c10; border:1px solid #b48a4a; border-radius:6px; padding:.7rem 1rem; font-size:.82rem; }
+  .cd-dl[hidden] { display:none; }
+  .cd-dl h3 { margin:0 0 .35rem; font-size:.9rem; font-weight:normal; color:#5a3a12; }
+  .cd-dl a { display:block; color:#7a4a10; margin:.25rem 0; }
+  .cd-dl .x { float:right; cursor:pointer; border:none; background:none; font-size:1rem; color:#5a3a12; }
+  @media (max-width: 720px) {
+    .cd-fach { padding: .8rem .5rem 1rem; }
+    .cd-row { gap: .55rem; }
+    .cd, .cd-case { width: 100px; } .cd-case { height: 92px; }
+    .cd-case img { left: 14px; width: 82px; height: 62px; }
+    .cd-case .cd-title { font-size: .54rem; }
+  }
 </style>
 </head>
 <body>
@@ -742,6 +770,12 @@
         <button type="button" class="folio-speak-btn" id="btn-folio-gruss" title="Folio sprechen lassen" aria-label="Folio sprechen lassen">🔊</button>
       </div>
     </aside>
+    <section class="cd-fach" aria-label="Hörbuch-Fach">
+      <h2 id="cd-head">HÖRBUCH-FACH</h2>
+      <p class="cd-hint" id="cd-hint">Tippe auf eine CD-Hülle, um das Hörbuch herunterzuladen</p>
+      <div class="cd-row" id="cd-row"></div>
+      <div class="cd-dl" id="cd-dl" hidden></div>
+    </section>
   </div>
 
   <div class="stage" id="stage-table">
@@ -1778,6 +1812,15 @@ const VOLUMES = [
     status: "ready",
     href: "band1/",
     heightScale: 1.0
+  },
+  {
+    id: "band2",
+    title: { de: "BAND II", en: "VOLUME II" },
+    subtitle: { de: "Die Stille zwischen den Sternen", en: "The Silence Between the Stars" },
+    spine: "assets/spines/spine_band2.png",
+    status: "ready",
+    href: "band2/",
+    heightScale: 0.99
   }
 ];
 /* Measured from bookshelf_bg.jpg (see CSS comment). Percents of shelf-scene. */
@@ -1856,6 +1899,45 @@ function renderSpines() {
   });
 }
 
+
+/* —— Hörbuch-Fach (CD-Hüllen). Audios als GitHub-Release-Assets (Pages-Limit 100 MB/Datei). —— */
+const CD_BASE = "https://github.com/lichtkriegersaga/lichtkriegersaga.github.io/releases/download/hoerbuecher-v1/";
+const CDS = [
+  { id: "band1", t: { de: "BAND I", en: "VOLUME I" }, s: { de: "Wo die Wege enden", en: "Where the Paths End" }, img: "band1/bilder/titel.png", dur: "4 h 58", parts: [{ f: "Lichtkrieger_Band1_Hoerspiel_Teil1.m4a", mb: 90 },{ f: "Lichtkrieger_Band1_Hoerspiel_Teil2.m4a", mb: 101 },{ f: "Lichtkrieger_Band1_Hoerspiel_Teil3.m4a", mb: 88 }] },
+  { id: "band2", t: { de: "BAND II", en: "VOLUME II" }, s: { de: "Die Stille zwischen den Sternen", en: "The Silence Between the Stars" }, img: "band2/bilder/titel.jpg", dur: "3 h 59", parts: [{ f: "Lichtkrieger_Band2_Hoerspiel_Teil1.m4a", mb: 77 },{ f: "Lichtkrieger_Band2_Hoerspiel_Teil2.m4a", mb: 73 },{ f: "Lichtkrieger_Band2_Hoerspiel_Teil3.m4a", mb: 78 }] },
+  { id: "lilli", t: { de: "LILLI", en: "LILLI" }, s: { de: "Die Klinge aus dem Norden", en: "The Blade from the North" }, img: "assets/lilli_cover.jpg", parts: [{ f: "Lichtkrieger_Lilli_Hoerspiel_Teil1.m4a", mb: 14 }] },
+  { id: "maya", t: { de: "MAYA", en: "MAYA" }, s: { de: "Das Feuer aus dem Süden", en: "The Fire from the South" }, img: "assets/maya_cover.jpg", parts: [{ f: "Lichtkrieger_Maya_Hoerspiel_Teil1.m4a", mb: 13 }] },
+  { id: "piri", t: { de: "PIRI", en: "PIRI" }, s: { de: "Die Flamme aus dem Osten", en: "The Flame from the East" }, img: "assets/piri_cover.jpg", parts: [{ f: "Lichtkrieger_Piri_Hoerspiel_Teil1.m4a", mb: 14 }] },
+  { id: "filli", t: { de: "FILLI", en: "FILLI" }, s: { de: "Die Seele aus dem Westen", en: "The Soul from the West" }, img: "assets/filli_cover.jpg", parts: [{ f: "Lichtkrieger_Filli_Hoerspiel_Teil1.m4a", mb: 15 }] }
+];
+function renderCDs() {
+  const row = document.getElementById("cd-row"); if (!row) return;
+  const de = lang !== "en";
+  document.getElementById("cd-head").textContent = de ? "HÖRBUCH-FACH" : "AUDIOBOOK SHELF";
+  document.getElementById("cd-hint").textContent = de ? "Tippe auf eine CD-Hülle, um das Hörbuch herunterzuladen (Hörspiel, Deutsch)" : "Tap a CD case to download the audiobook (radio play, German)";
+  row.innerHTML = "";
+  CDS.forEach(cd => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "cd";
+    const mb = cd.parts.reduce((a, p) => a + p.mb, 0);
+    const n = cd.parts.length;
+    b.innerHTML = `<div class="cd-case"><img src="${cd.img}" alt="" loading="lazy"><div class="cd-title">${cd.t[lang] || cd.t.de}</div></div>
+      <div class="cd-label">${cd.s[lang] || cd.s.de}<small>${n > 1 ? n + (de ? " Teile · " : " parts · ") : ""}${mb} MB</small></div>`;
+    b.title = (cd.t[lang] || cd.t.de) + " · " + (cd.s[lang] || cd.s.de);
+    b.addEventListener("click", () => openCD(cd));
+    row.appendChild(b);
+  });
+}
+function openCD(cd) {
+  const de = lang !== "en", box = document.getElementById("cd-dl");
+  const links = cd.parts.map((p, i) => `<a href="${CD_BASE + p.f}" download>⬇ ${cd.parts.length > 1 ? (de ? "Teil " : "Part ") + (i + 1) : (de ? "Hörbuch" : "Audiobook")} · ${p.mb} MB (m4a)</a>`).join("");
+  const all = cd.parts.length > 1 ? `<a href="#" id="cd-all">⬇ ${de ? "Alle Teile nacheinander laden" : "Download all parts"}</a>` : "";
+  box.innerHTML = `<button class="x" aria-label="Schliessen">✕</button><h3>${cd.t[lang] || cd.t.de} · ${cd.s[lang] || cd.s.de}</h3>${links}${all}`;
+  box.hidden = false;
+  box.querySelector(".x").onclick = () => { box.hidden = true; };
+  const a = box.querySelector("#cd-all");
+  if (a) a.onclick = (e) => { e.preventDefault(); cd.parts.forEach((p, i) => setTimeout(() => { const l = document.createElement("a"); l.href = CD_BASE + p.f; l.download = p.f; document.body.appendChild(l); l.click(); l.remove(); }, i * 1200)); };
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
 const FOLIO_AUDIO = {
   prolog: { de: "assets/folio_prolog_de.m4a", en: "assets/folio_prolog_en.m4a" },
   gruss:  { de: "assets/folio_gruss_de.m4a",  en: "assets/folio_gruss_en.m4a" }
@@ -2013,6 +2095,7 @@ function applyUI() {
   document.getElementById("lang-en").classList.toggle("active", lang === "en");
   syncFolioLabels();
   renderSpines();
+  renderCDs();
   const active = document.querySelector(".stage.active");
   if (active) show(active.id);
 }
@@ -2093,6 +2176,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") show("stage-shelf");
 });
 applyUI();
+if (location.hash === "#regal") show("stage-shelf");
 ensureFolioProbes();
 let _spineResizeTimer;
 window.addEventListener("resize", () => {

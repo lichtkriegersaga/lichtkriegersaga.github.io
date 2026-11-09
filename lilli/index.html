@@ -271,6 +271,28 @@
     color: #5a3a18; margin: 0 0 .3rem; font-variant: small-caps;
   }
   .hoerspiel audio { display: block; width: 100%; height: 34px; }
+
+  .site-footer .ki-line {
+    display: block;
+    margin-top: .55rem;
+    opacity: .95;
+    font-size: .78rem;
+    letter-spacing: .03em;
+  }
+  .site-footer a {
+    color: var(--gold, #c9a227);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .site-footer a:hover { filter: brightness(1.15); }
+  .ai-caption {
+    text-align: center;
+    font-size: .7rem;
+    opacity: .7;
+    margin: .45rem 0 0;
+    letter-spacing: .04em;
+    color: var(--brass, #8a6a3a);
+  }
 </style>
 </head>
 <body>
@@ -1268,7 +1290,7 @@ function hsMount(p) {
   const box = document.createElement("div");
   box.className = "hoerspiel";
   const nn = String(n).padStart(2, "0");
-  box.innerHTML = `<span class="hs-label">🎧 Hörspiel (Deutsch) – gelesen von Lilli</span>` +
+  box.innerHTML = `<span class="hs-label">🎧 Hörspiel (Deutsch) – Gelesen von einer KI-Stimme</span>` +
     `<audio controls preload="none" playsinline src="audio/hoerspiel/k${nn}_de.m4a" aria-label="Hörspiel Kapitel ${HS_ROMAN[n-1]}"></audio>`;
   const a = box.querySelector("audio");
   a.addEventListener("keydown", (e) => e.stopPropagation());
@@ -1282,14 +1304,14 @@ function render() {
   if (p.type === "cover") {
     stage.classList.remove("wide-mode");
     spread.className = "spread";
-    spread.innerHTML = `<div class="page cover-wrap"><img src="${p.img}" alt="Cover"/></div>`;
+    spread.innerHTML = `<div class="page cover-wrap"><img src="${p.img}" alt="Cover – Created with Grok"/><p class="ai-caption">Created with Grok</p></div>`;
   } else {
     const wide = !!p.wide;
     stage.classList.toggle("wide-mode", wide);
     spread.className = "spread" + (wide ? " landscape" : "");
     spread.innerHTML = `
       <div class="page left"><h2>${p.title}</h2><div class="body">${p.text}</div></div>
-      <div class="page right"><img src="${p.img}" alt="${p.title}"/></div>`;
+      <div class="page right"><img src="${p.img}" alt="${p.title} – Created with Grok"/><p class="ai-caption">Created with Grok</p></div>`;
   }
   pager.textContent = `${i + 1} / ${pages.length}`;
   prev.disabled = i === 0;
@@ -1317,6 +1339,7 @@ render();
 
 <footer class="site-footer">
   © 2026 Lichtkrieger / das Rudel — Alle Rechte vorbehalten / All rights reserved
+  <span class="ki-line">KI-Hinweis · Created with Grok · <a href="../ueber-ki/">Über KI</a></span>
 </footer>
 
 </body>

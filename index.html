@@ -719,6 +719,28 @@
     .cd-case img { left: 14px; width: 82px; height: 62px; }
     .cd-case .cd-title { font-size: .54rem; }
   }
+
+  .site-footer .ki-line {
+    display: block;
+    margin-top: .55rem;
+    opacity: .95;
+    font-size: .78rem;
+    letter-spacing: .03em;
+  }
+  .site-footer a {
+    color: var(--gold, #c9a227);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .site-footer a:hover { filter: brightness(1.15); }
+  .ai-caption {
+    text-align: center;
+    font-size: .7rem;
+    opacity: .7;
+    margin: .45rem 0 0;
+    letter-spacing: .04em;
+    color: var(--brass, #8a6a3a);
+  }
 </style>
 </head>
 <body>
@@ -736,7 +758,7 @@
   <div class="stage active" id="stage-prolog">
     <div class="prolog-frame">
       <div class="prolog-portrait">
-        <img src="assets/folio_portrait.jpg" alt="Folio"/>
+        <img src="assets/folio_portrait.jpg" alt="Folio – Created with Grok"/>
       </div>
       <div class="prolog-text">
         <h2 id="prolog-title">Prolog — Folio, der Bibliothekar</h2>
@@ -757,13 +779,13 @@
   <div class="stage" id="stage-shelf">
     <div class="shelf-scene">
       <div class="shelf-scene-zoom">
-        <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand" width="2560" height="1440"/>
+        <img class="bg" src="assets/bookshelf_bg.jpg" alt="Bücherwand – Created with Grok" width="2560" height="1440"/>
         <div class="shelf-rows" id="shelf-rows" aria-label="Bücherwand"></div>
       </div>
     </div>
     <aside class="folio-keeper" aria-label="Folio">
       <div class="folio-medallion">
-        <img src="assets/folio_portrait.jpg" alt="Folio"/>
+        <img src="assets/folio_portrait.jpg" alt="Folio – Created with Grok"/>
       </div>
       <div class="folio-speech">
         <p class="folio-line" id="folio-gruss-text"></p>
@@ -779,9 +801,9 @@
   </div>
 
   <div class="stage" id="stage-table">
-    <img class="bg" src="assets/table_bg.jpg" alt="Alter Tisch"/>
+    <img class="bg" src="assets/table_bg.jpg" alt="Alter Tisch – Created with Grok"/>
     <div id="book-on-table" title="Aufschlagen">
-      <img src="assets/lilli_cover_cut.png" alt="Lilli auf dem Tisch"/>
+      <img src="assets/lilli_cover_cut.png" alt="Lilli auf dem Tisch – Created with Grok"/>
     </div>
     <div class="table-caption" id="table-caption">Tippe zum Aufschlagen</div>
   </div>
@@ -1882,7 +1904,7 @@ function renderSpines() {
       const img = document.createElement("img");
       img.className = "spine-art";
       img.src = vol.spine;
-      img.alt = "";
+      img.alt = (title || vol.id) + " – Created with Grok";
       img.draggable = false;
       btn.appendChild(img);
       if (window.Sterne) Sterne.decorateSpine(btn, vol.id, lang);
@@ -1920,8 +1942,8 @@ function renderCDs() {
     const b = document.createElement("button"); b.type = "button"; b.className = "cd";
     const mb = cd.parts.reduce((a, p) => a + p.mb, 0);
     const n = cd.parts.length;
-    b.innerHTML = `<div class="cd-case"><img src="${cd.img}" alt="" loading="lazy"><div class="cd-title">${cd.t[lang] || cd.t.de}</div></div>
-      <div class="cd-label">${cd.s[lang] || cd.s.de}<small>${n > 1 ? n + (de ? " Teile · " : " parts · ") : ""}${mb} MB</small></div>`;
+    b.innerHTML = `<div class="cd-case"><img src="${cd.img}" alt="Created with Grok" loading="lazy"><div class="cd-title">${cd.t[lang] || cd.t.de}</div></div>
+      <div class="cd-label">${cd.s[lang] || cd.s.de}<small>${de ? "Gelesen von einer KI-Stimme" : "Read by an AI voice"}${n > 1 ? " · " + n + (de ? " Teile" : " parts") : ""} · ${mb} MB</small></div>`;
     b.title = (cd.t[lang] || cd.t.de) + " · " + (cd.s[lang] || cd.s.de);
     b.addEventListener("click", () => openCD(cd));
     row.appendChild(b);
@@ -1931,7 +1953,7 @@ function openCD(cd) {
   const de = lang !== "en", box = document.getElementById("cd-dl");
   const links = cd.parts.map((p, i) => `<a href="${CD_BASE + p.f}" download>⬇ ${cd.parts.length > 1 ? (de ? "Teil " : "Part ") + (i + 1) : (de ? "Hörbuch" : "Audiobook")} · ${p.mb} MB (m4a)</a>`).join("");
   const all = cd.parts.length > 1 ? `<a href="#" id="cd-all">⬇ ${de ? "Alle Teile nacheinander laden" : "Download all parts"}</a>` : "";
-  box.innerHTML = `<button class="x" aria-label="Schliessen">✕</button><h3>${cd.t[lang] || cd.t.de} · ${cd.s[lang] || cd.s.de}</h3>${links}${all}`;
+  box.innerHTML = `<button class="x" aria-label="Schliessen">✕</button><h3>${cd.t[lang] || cd.t.de} · ${cd.s[lang] || cd.s.de}</h3><p style="margin:.2rem 0 .55rem;opacity:.8;font-size:.8rem">${de ? "Gelesen von einer KI-Stimme" : "Read by an AI voice"}</p>${links}${all}`;
   box.hidden = false;
   box.querySelector(".x").onclick = () => { box.hidden = true; };
   const a = box.querySelector("#cd-all");
@@ -2150,7 +2172,7 @@ function renderPage() {
   spread.className = "spread" + (wide ? " landscape" : "");
   spread.innerHTML = `
     <div class="page left"><h2>${p.title}</h2><div class="body">${p.text}</div></div>
-    <div class="page right"><img src="${p.img}" alt="${p.title}"/></div>`;
+    <div class="page right"><img src="${p.img}" alt="${p.title} – Created with Grok"/><p class="ai-caption">Created with Grok</p></div>`;
   pager.textContent = `${pageIndex + 1} / ${pages.length}`;
   prev.disabled = pageIndex === 0;
   next.disabled = pageIndex === pages.length - 1;
@@ -2187,6 +2209,7 @@ window.addEventListener("resize", () => {
 
 <footer class="site-footer">
   © 2026 Lichtkrieger / das Rudel — Alle Rechte vorbehalten / All rights reserved
+  <span class="ki-line">KI-Hinweis · Created with Grok · <a href="ueber-ki/">Über KI</a></span>
 </footer>
 
 </body>
